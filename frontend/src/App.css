@@ -107,6 +107,22 @@ select:focus {
   margin-top: 1.5rem;
 }
 
+.dl-btn {
+  margin-top: 1.5rem;
+  padding: 10px 24px;
+  background: transparent;
+  color: #d4af37;
+  border: 0.5px solid #d4af37;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.dl-btn:hover { opacity: 0.75; }
+.dl-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
 .tag {
   font-size: 12px;
   padding: 4px 12px;
