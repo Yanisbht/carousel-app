@@ -14,7 +14,7 @@ public class CarouselService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
     public String generate(String theme, String style) throws Exception {
         String prompt = buildPrompt(theme, style);
@@ -56,17 +56,47 @@ public class CarouselService {
     }
 
     private String extractContent(String responseBody) {
-        int start = responseBody.indexOf("\"text\": \"");
-        if (start == -1) start = responseBody.indexOf("\"text\":\"");
-        if (start == -1) throw new RuntimeException("Champ text introuvable: " + responseBody.substring(0, Math.min(300, responseBody.length())));
-        start = responseBody.indexOf("\"", start + 7) + 1;
-        int end = responseBody.lastIndexOf("\"");
-        String raw = responseBody.substring(start, end);
-        raw = raw.replace("\\n", "").replace("\\\"", "\"").replace("\\\\", "\\").trim();
-        int firstBrace = raw.indexOf('{');
-        int lastBrace = raw.lastIndexOf('}');
-        if (firstBrace == -1 || lastBrace == -1) throw new RuntimeException("JSON introuvable dans: " + raw.substring(0, Math.min(200, raw.length())));
-        return raw.substring(firstBrace, lastBrace + 1);
+        int firstBrace = responseBody.indexOf("\"text\": \"{");
+        if (firstBrace == -1) firstBrace = responseBody.indexOf("\"text\":\"{");
+        
+        if (firstBrace != -1) {
+            int jsonStart = responseBody.indexOf('{', firstBrace + 7);
+            int depth = 0;
+            int jsonEnd = -1;
+            for (int i = jsonStart; i < responseBody.length(); i++) {
+                char c = responseBody.charAt(i);
+                if (c == '{') depth++;
+                else if (c == '}') {
+                    depth--;
+                    if (depth == 0) { jsonEnd = i; break; }
+                }
+            }
+            if (jsonEnd != -1) {
+                String escaped = responseBody.substring(jsonStart, jsonEnd + 1);
+                return escaped.replace("\\\"", "\"").replace("\\n", " ").replace("\\\\", "\\");
+            }
+        }
+
+        int jsonStart = responseBody.indexOf('{');
+        int depth = 0;
+        int jsonEnd = -1;
+        boolean inString = false;
+        boolean escape = false;
+        for (int i = jsonStart; i < responseBody.length(); i++) {
+            char c = responseBody.charAt(i);
+            if (escape) { escape = false; continue; }
+            if (c == '\\') { escape = true; continue; }
+            if (c == '"') { inString = !inString; continue; }
+            if (!inString) {
+                if (c == '{') depth++;
+                else if (c == '}') {
+                    depth--;
+                    if (depth == 0) { jsonEnd = i; break; }
+                }
+            }
+        }
+        if (jsonEnd == -1) throw new RuntimeException("JSON introuvable dans: " + responseBody.substring(0, Math.min(300, responseBody.length())));
+        return responseBody.substring(jsonStart, jsonEnd + 1);
     }
 
     private String escapeJson(String text) {
