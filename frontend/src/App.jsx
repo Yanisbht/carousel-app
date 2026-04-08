@@ -12,19 +12,24 @@ const THEMES = [
   'philosophie stoïcienne',
   'sagesse africaine',
   'philosophie orientale',
-  'rap français (Nekfeu, PNL, Damso)',
   'leaders et révolutionnaires',
   'philosophie arabe et islamique',
   'développement personnel moderne',
+  'sagesse amérindienne',
+  'philosophie japonaise (Musashi, Mishima)',
+  'citations de prison et résilience (Mandela, Malcolm X)',
+  'femmes philosophes (Beauvoir, Angelou)',
+  'sagesse berbère et maghrébine',
+  'citations de guerriers (Sun Tzu, Spartiate)',
+  'spiritualité soufie (Rumi, Ibn Arabi)',
+  'philosophie grecque antique (Socrate, Platon)',
 ]
 
 const STYLES = Object.keys(PALETTES)
-
 const SLIDE_LABELS = ['intro', 'citation', 'contexte', 'leçon', 'cta']
-
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
-function Slide({ slide, index, palette }) {
+function Slide({ slide, index, palette, id }) {
   const p = palette
   const label = SLIDE_LABELS[index] || slide.type
 
@@ -57,7 +62,7 @@ function Slide({ slide, index, palette }) {
   }
 
   return (
-    <div style={{
+    <div id={id} style={{
       flexShrink: 0, width: 200, height: 355, borderRadius: 12,
       display: 'flex', flexDirection: 'column', justifyContent: 'center',
       alignItems: 'center', padding: '20px 16px', textAlign: 'center',
@@ -79,6 +84,7 @@ export default function App() {
   const [theme, setTheme] = useState(THEMES[0])
   const [style, setStyle] = useState(STYLES[0])
   const [loading, setLoading] = useState(false)
+  const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
@@ -100,6 +106,26 @@ export default function App() {
       setError(e.message)
     }
     setLoading(false)
+  }
+
+  const downloadAll = async () => {
+    setExporting(true)
+    try {
+      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
+      for (let i = 0; i < 5; i++) {
+        const el = document.getElementById(`slide-${i}`)
+        if (!el) continue
+        const canvas = await html2canvas(el, { scale: 3, backgroundColor: null, useCORS: true })
+        const link = document.createElement('a')
+        link.download = `slide-${i + 1}.png`
+        link.href = canvas.toDataURL('image/png')
+        link.click()
+        await new Promise(r => setTimeout(r, 400))
+      }
+    } catch (e) {
+      alert('Erreur export: ' + e.message)
+    }
+    setExporting(false)
   }
 
   useEffect(() => { generate() }, [])
@@ -132,21 +158,23 @@ export default function App() {
       </div>
 
       {error && <div className="error">{error}</div>}
-
       {loading && <div className="status">L'agent crée ton carrousel...</div>}
 
       {data && (
         <>
           <div className="slides-row">
             {(data.slides || []).map((slide, i) => (
-              <Slide key={i} slide={slide} index={i} palette={palette} />
+              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} palette={palette} />
             ))}
           </div>
           <div className="hashtags">
             {(data.hashtags || []).map(tag => (
-              <span key={tag} className="tag">#{tag}</span>
+              <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
             ))}
           </div>
+          <button className="dl-btn" onClick={downloadAll} disabled={exporting}>
+            {exporting ? 'Export en cours...' : 'Télécharger les slides (PNG)'}
+          </button>
         </>
       )}
     </div>
