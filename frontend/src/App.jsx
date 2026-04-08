@@ -26,55 +26,70 @@ const THEMES = [
 ]
 
 const STYLES = Object.keys(PALETTES)
-const SLIDE_LABELS = ['intro', 'citation', 'contexte', 'leçon', 'cta']
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
-function Slide({ slide, index, palette, id }) {
+function Slide({ slide, index, total, palette, id }) {
   const p = palette
-  const label = SLIDE_LABELS[index] || slide.type
+
+  const containerStyle = {
+    flexShrink: 0,
+    width: 180,
+    height: 320,
+    borderRadius: 12,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '24px 16px',
+    textAlign: 'center',
+    position: 'relative',
+    background: p.bg,
+    border: '0.5px solid rgba(128,128,128,0.15)',
+  }
+
+  const numStyle = { position: 'absolute', top: 12, left: 14, fontSize: 10, color: p.sub }
+  const accentLine = { position: 'absolute', bottom: 0, left: '20%', width: '60%', height: 2, background: p.accent, borderRadius: 2 }
 
   const content = () => {
-    if (slide.type === 'cover') return (
+    if (slide.type === 'hook') return (
       <>
-        <p style={{ fontSize: 17, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.titre}</p>
-        <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5 }}>{slide.soustitre}</p>
+        <p style={{ fontSize: 11, color: p.sub, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{slide.origine}</p>
+        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.45, marginBottom: 12 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 11, color: p.sub }}>— {slide.auteur}</p>
+        <div style={accentLine}></div>
       </>
     )
-    if (slide.type === 'quote') return (
+    if (slide.type === 'intrigue') return (
       <>
-        <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic', lineHeight: 1.6, marginBottom: 10 }}>"{slide.texte}"</p>
-        <p style={{ fontSize: 11, color: p.sub, fontWeight: 500 }}>— {slide.auteur}</p>
+        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 12 }}>{slide.question}</p>
+        <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5 }}>{slide.teaser}</p>
       </>
     )
-    if (slide.type === 'context' || slide.type === 'lesson') return (
+    if (slide.type === 'context') return (
       <>
-        <p style={{ fontSize: 13, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.titre}</p>
-        <p style={{ fontSize: 11, color: p.text, lineHeight: 1.6, opacity: 0.85 }}>{slide.corps}</p>
+        <p style={{ fontSize: 12, fontWeight: 500, color: p.accent, marginBottom: 10, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{slide.titre}</p>
+        <p style={{ fontSize: 13, color: p.text, lineHeight: 1.65 }}>{slide.corps}</p>
+      </>
+    )
+    if (slide.type === 'lesson') return (
+      <>
+        <p style={{ fontSize: 12, fontWeight: 500, color: p.accent, marginBottom: 10, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{slide.titre}</p>
+        <p style={{ fontSize: 13, color: p.text, lineHeight: 1.65 }}>{slide.corps}</p>
       </>
     )
     if (slide.type === 'cta') return (
       <>
-        <p style={{ fontSize: 15, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
-        <p style={{ fontSize: 11, color: p.accent }}>{slide.sub}</p>
+        <p style={{ fontSize: 20, fontWeight: 500, color: p.text, lineHeight: 1.35, marginBottom: 14 }}>{slide.texte}</p>
+        <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
+        <div style={accentLine}></div>
       </>
     )
     return null
   }
 
   return (
-    <div id={id} style={{
-      flexShrink: 0, width: 200, height: 355, borderRadius: 12,
-      display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      alignItems: 'center', padding: '20px 16px', textAlign: 'center',
-      position: 'relative', background: p.bg,
-      border: '0.5px solid rgba(128,128,128,0.2)',
-    }}>
-      <span style={{ position: 'absolute', top: 12, left: 16, fontSize: 11, color: p.sub, fontWeight: 500 }}>{index + 1}/5</span>
-      <span style={{
-        position: 'absolute', top: 12, right: 12, fontSize: 10,
-        padding: '2px 8px', borderRadius: 20,
-        background: p.badge, color: p.badgeText, fontWeight: 500,
-      }}>{label}</span>
+    <div id={id} style={containerStyle}>
+      <span style={numStyle}>{index + 1}/{total}</span>
       {content()}
     </div>
   )
@@ -112,10 +127,11 @@ export default function App() {
     setExporting(true)
     try {
       const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
-      for (let i = 0; i < 5; i++) {
+      const slides = data?.slides || []
+      for (let i = 0; i < slides.length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await html2canvas(el, { scale: 3, backgroundColor: null, useCORS: true })
+        const canvas = await html2canvas(el, { scale: 4, backgroundColor: null, useCORS: true })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
         link.href = canvas.toDataURL('image/png')
@@ -131,12 +147,13 @@ export default function App() {
   useEffect(() => { generate() }, [])
 
   const palette = PALETTES[style] || PALETTES['sombre et épuré']
+  const slides = data?.slides || []
 
   return (
     <div className="app">
       <header>
         <h1>Carousel Generator</h1>
-        <p className="subtitle">Citations du monde — TikTok</p>
+        <p className="subtitle">@citationmonde5 — optimisé TikTok</p>
       </header>
 
       <div className="controls">
@@ -158,13 +175,13 @@ export default function App() {
       </div>
 
       {error && <div className="error">{error}</div>}
-      {loading && <div className="status">L'agent crée ton carrousel...</div>}
+      {loading && <div className="status">Création du carrousel optimisé TikTok...</div>}
 
       {data && (
         <>
           <div className="slides-row">
-            {(data.slides || []).map((slide, i) => (
-              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} palette={palette} />
+            {slides.map((slide, i) => (
+              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} total={slides.length} palette={palette} />
             ))}
           </div>
           <div className="hashtags">

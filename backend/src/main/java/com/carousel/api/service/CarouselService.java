@@ -14,7 +14,7 @@ public class CarouselService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
     public String generate(String theme, String style) throws Exception {
         String prompt = buildPrompt(theme, style);
@@ -48,10 +48,14 @@ public class CarouselService {
 
     private String buildPrompt(String theme, String style) {
         return """
-            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
+            Tu es un expert en croissance TikTok et carrousels viraux sur les citations du monde.
+            Règle 1 : slide 1 = citation directe percutante, accroche en 1 seconde.
+            Règle 2 : slide 2 = question mystère pour forcer le scroll.
+            Règle 3 : slides 3-4 = valeur et contexte.
+            Règle 4 : slide 5 = CTA avec question pour provoquer les commentaires.
             Crée un carrousel TikTok de 5 slides sur le thème : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks :
-            {"citation":"citation courte percutante","auteur":"Nom, contexte","slides":[{"type":"cover","titre":"titre max 6 mots","soustitre":"sous-titre max 8 mots"},{"type":"quote","texte":"citation complète","auteur":"auteur"},{"type":"context","titre":"titre court","corps":"2-3 phrases contexte historique"},{"type":"lesson","titre":"titre court","corps":"2-3 phrases applicables aujourd'hui"},{"type":"cta","texte":"phrase d'accroche finale","sub":"question courte pour engager"}],"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"]}
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"hook","citation":"citation courte et percutante max 15 mots","auteur":"Prénom Nom","origine":"pays ou culture"},{"type":"intrigue","question":"question mystérieuse max 8 mots","teaser":"1 phrase qui donne envie d'en savoir plus"},{"type":"context","titre":"contexte","corps":"2 phrases courtes sur le contexte historique"},{"type":"lesson","titre":"aujourd'hui","corps":"2 phrases sur comment appliquer maintenant"},{"type":"cta","texte":"phrase finale impactante max 8 mots","question":"question courte pour provoquer des commentaires"}]}
             """.formatted(theme, style);
     }
 
