@@ -1,0 +1,16 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #0a0a0a;
+  color: #f5f5f5;
+  min-height: 100vh;
+}
+
+:root {
+  --accent: #d4af37;
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --border: rgba(255,255,255,0.08);
+  --muted: #666;
+}
