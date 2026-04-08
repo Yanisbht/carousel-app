@@ -14,7 +14,7 @@ public class CarouselService {
     @Value("${gemini.api.key}")
     private String apiKey;
 
-    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
 
     public String generate(String theme, String style) throws Exception {
         String prompt = buildPrompt(theme, style);
