@@ -48,7 +48,7 @@ const THEME_KEYWORDS = {
   'développement personnel moderne': 'dramatic sunrise mountain',
   'sagesse amérindienne': 'native american forest dramatic',
   'philosophie japonaise (Musashi, Mishima)': 'japan forest fog samurai',
-  'citations de prison et résilience (Mandela, Malcolm X)': 'dramatic light prison bars',
+  'citations de prison et résilience (Mandela, Malcolm X)': 'dramatic light strength',
   'femmes philosophes (Beauvoir, Angelou)': 'woman dramatic portrait light',
   'sagesse berbère et maghrébine': 'sahara desert dramatic dusk',
   'citations de guerriers (Sun Tzu, Spartiate)': 'battle warrior dramatic fog',
@@ -70,24 +70,29 @@ async function fetchPexelsImage(query) {
   return null
 }
 
+function truncate(text, max) {
+  if (!text) return ''
+  const words = text.split(' ')
+  return words.length > max ? words.slice(0, max).join(' ') + '…' : text
+}
+
 function getSlideText(slide) {
-  if (slide.type === 'hook') return { top: slide.origine?.toUpperCase(), bottom: `"${slide.citation}"`, author: `— ${slide.auteur}` }
-  if (slide.type === 'intrigue') return { bottom: slide.question, sub: slide.teaser }
-  if (slide.type === 'context' || slide.type === 'lesson') return { top: slide.titre?.toUpperCase(), bottom: slide.corps }
-  if (slide.type === 'cta') return { bottom: slide.texte, sub: slide.question }
-  if (slide.type === 'devine_question') return { top: slide.intro, bottom: slide.question }
-  if (slide.type === 'devine_citation') return { top: 'QUI A DIT...', bottom: `"${slide.citation}"`, sub: slide.indice }
-  if (slide.type === 'devine_revelation') return { top: "C'ÉTAIT...", bottom: slide.auteur, sub: slide.bio }
-  if (slide.type === 'philo_question') return { top: 'LA QUESTION', bottom: slide.question, sub: slide.teaser }
-  if (slide.type === 'philo_citation') return { top: slide.penseur?.toUpperCase(), bottom: `"${slide.citation}"`, sub: slide.explication }
-  if (slide.type === 'context') return { top: 'SA PENSÉE', bottom: slide.corps }
-  if (slide.type === 'philo_conclusion') return { top: 'LA RÉPONSE', bottom: slide.conclusion, sub: slide.question_cta }
-  if (slide.type === 'moderne_original') return { top: `${slide.auteur} DISAIT...`, bottom: `"${slide.citation}"` }
-  if (slide.type === 'moderne_traduction') return { top: 'EN 2024 ÇA DONNE...', bottom: `"${slide.moderne}"`, sub: slide.contexte }
-  if (slide.type === 'moderne_cta') return { bottom: slide.texte, sub: slide.question }
-  if (slide.type === 'top3_intro') return { top: 'TOP 3', bottom: slide.auteur, sub: slide.description }
-  if (slide.type === 'top3_citation') return { top: `#${slide.numero}`, bottom: `"${slide.citation}"`, sub: slide.explication }
-  if (slide.type === 'top3_cta') return { bottom: slide.texte, sub: slide.question }
+  if (slide.type === 'hook') return { top: slide.origine?.toUpperCase(), bottom: `"${truncate(slide.citation, 10)}"`, author: `— ${slide.auteur}` }
+  if (slide.type === 'intrigue') return { bottom: truncate(slide.question, 7), sub: truncate(slide.teaser, 8) }
+  if (slide.type === 'context' || slide.type === 'lesson') return { top: slide.titre?.toUpperCase(), bottom: truncate(slide.corps, 10) }
+  if (slide.type === 'cta') return { bottom: truncate(slide.texte, 8), sub: truncate(slide.question, 8) }
+  if (slide.type === 'devine_question') return { top: truncate(slide.intro, 6), bottom: truncate(slide.question, 7) }
+  if (slide.type === 'devine_citation') return { top: 'QUI A DIT...', bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.indice, 8) }
+  if (slide.type === 'devine_revelation') return { top: "C'ÉTAIT...", bottom: slide.auteur, sub: truncate(slide.bio, 14) }
+  if (slide.type === 'philo_question') return { top: 'LA QUESTION', bottom: truncate(slide.question, 8), sub: truncate(slide.teaser, 7) }
+  if (slide.type === 'philo_citation') return { top: slide.penseur?.toUpperCase(), bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.explication, 8) }
+  if (slide.type === 'philo_conclusion') return { top: 'LA RÉPONSE', bottom: truncate(slide.conclusion, 8), sub: truncate(slide.question_cta, 7) }
+  if (slide.type === 'moderne_original') return { top: `${slide.auteur?.toUpperCase()} DISAIT`, bottom: `"${truncate(slide.citation, 10)}"` }
+  if (slide.type === 'moderne_traduction') return { top: 'EN 2024 ÇA DONNE...', bottom: `"${truncate(slide.moderne, 12)}"`, sub: truncate(slide.contexte, 7) }
+  if (slide.type === 'moderne_cta') return { bottom: truncate(slide.texte, 7), sub: truncate(slide.question, 7) }
+  if (slide.type === 'top3_intro') return { top: 'TOP 3', bottom: slide.auteur, sub: truncate(slide.description, 10) }
+  if (slide.type === 'top3_citation') return { top: `#${slide.numero}`, bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.explication, 7) }
+  if (slide.type === 'top3_cta') return { bottom: truncate(slide.texte, 7), sub: slide.question }
   return { bottom: '' }
 }
 
@@ -110,23 +115,35 @@ function Slide({ slide, index, total, bgImage, id }) {
       )}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.75) 75%, rgba(0,0,0,0.92) 100%)',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.93) 100%)',
         zIndex: 1,
       }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.5)', zIndex: 3 }}>{index + 1}/{total}</span>
 
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 14px 18px', zIndex: 2, textAlign: 'center' }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '12px 14px 16px', zIndex: 2, textAlign: 'center',
+      }}>
         {top && (
-          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.15em', marginBottom: 6, fontWeight: 400 }}>{top}</p>
+          <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.15em', marginBottom: 5, fontWeight: 400 }}>{top}</p>
         )}
         {bottom && (
-          <p style={{ fontSize: 13, fontWeight: 500, color: '#f0e040', lineHeight: 1.4, marginBottom: author || sub ? 6 : 0, textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>{bottom}</p>
+          <p style={{
+            fontSize: 13, fontWeight: 600, color: '#f0e040', lineHeight: 1.35,
+            marginBottom: author || sub ? 5 : 0,
+            textShadow: '0 1px 6px rgba(0,0,0,0.9)',
+            wordBreak: 'break-word', hyphens: 'auto',
+            maxHeight: 80, overflow: 'hidden',
+          }}>{bottom}</p>
         )}
         {author && (
-          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontStyle: 'italic' }}>{author}</p>
+          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.65)', fontStyle: 'italic', marginBottom: sub ? 3 : 0 }}>{author}</p>
         )}
         {sub && (
-          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4, marginTop: 4 }}>{sub}</p>
+          <p style={{
+            fontSize: 9, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4,
+            maxHeight: 36, overflow: 'hidden', wordBreak: 'break-word',
+          }}>{sub}</p>
         )}
       </div>
     </div>
