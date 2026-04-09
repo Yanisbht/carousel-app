@@ -41,7 +41,7 @@ public class CarouselService {
             {
               "contents": [{"parts": [{"text": "%s"}]}],
               "generationConfig": {
-                "temperature": 0.7,
+                "temperature": 0.9,
                 "maxOutputTokens": 8192,
                 "responseMimeType": "application/json"
               }
@@ -66,52 +66,94 @@ public class CarouselService {
 
     private String buildPrompt(String theme, String style) {
         return """
-            Tu crées des carrousels TikTok viraux sur les citations du monde.
-            RÈGLE ABSOLUE : chaque champ texte = MAX 6 MOTS. Jamais plus. Compte les mots.
-            Slide 1 = citation courte percutante. Slide 2 = question mystère 5 mots max. Slides 3-4 = contexte ultra court. Slide 5 = CTA court.
+            Tu es expert en algorithme TikTok. Objectif : maximiser le taux de completion et les commentaires.
+            
+            RÈGLES ALGO TIKTOK :
+            - Slide 1 (HOOK) : stat choc OU affirmation controversée + citation. MAX 8 MOTS pour la citation. Doit choquer en 1 seconde.
+            - Slide 2 (SUSPENSE) : question clivante qui crée du manque. MAX 6 MOTS. Les gens DOIVENT scroller pour avoir la réponse.
+            - Slide 3 (VALEUR) : contexte historique ultra court. MAX 8 MOTS. Info surprenante.
+            - Slide 4 (LEÇON) : application aujourd'hui. MAX 8 MOTS. Concret et direct.
+            - Slide 5 (CTA) : question clivante qui force les commentaires. MAX 8 MOTS. Doit diviser les opinions.
+            - HASHTAGS : 2 gros (#citation #philosophie) + 2 moyens (#sagesse #mindset) + 2 ultra niche spécifiques au thème.
+            
+            RÈGLE ABSOLUE : chaque champ = MAX 8 MOTS. Compte les mots avant d'écrire.
+            
             Thème : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"hook","citation":"MAX 8 MOTS","auteur":"Prénom Nom","origine":"pays"},{"type":"intrigue","question":"MAX 5 MOTS ?","teaser":"MAX 6 MOTS"},{"type":"context","titre":"2 MOTS MAX","corps":"MAX 8 MOTS"},{"type":"lesson","titre":"2 MOTS MAX","corps":"MAX 8 MOTS"},{"type":"cta","texte":"MAX 6 MOTS","question":"MAX 6 MOTS ?"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"hook","accroche":"stat choc ou affirmation controversée MAX 6 MOTS","citation":"MAX 8 MOTS","auteur":"Prénom Nom","origine":"pays"},{"type":"intrigue","question":"question suspense MAX 6 MOTS ?"},{"type":"context","titre":"2 MOTS","corps":"info surprenante MAX 8 MOTS"},{"type":"lesson","titre":"2 MOTS","corps":"leçon concrète MAX 8 MOTS"},{"type":"cta","question":"question clivante MAX 8 MOTS ?"}]}
             """.formatted(theme);
     }
 
     private String buildPromptDevine(String theme, String style) {
         return """
-            Tu crées des carrousels TikTok viraux sur les citations du monde.
-            RÈGLE ABSOLUE : chaque champ texte = MAX 8 MOTS. Jamais plus. Compte les mots.
+            Tu es expert en algorithme TikTok. Objectif : maximiser l'engagement et les commentaires.
+            
+            RÈGLES ALGO TIKTOK pour "Devine l'auteur" :
+            - Slide 1 : accroche courte + question qui donne envie de deviner. MAX 6 MOTS.
+            - Slide 2 : citation célèbre SANS l'auteur + indice subtil. MAX 10 MOTS pour la citation.
+            - Slide 3 : révélation de l'auteur + fait surprenant sur lui. MAX 12 MOTS pour la bio.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
+            
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Compte les mots.
+            
             Thème : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"MAX 6 MOTS","question":"MAX 5 MOTS ?"},{"type":"devine_citation","citation":"MAX 10 MOTS","indice":"MAX 6 MOTS"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"MAX 12 MOTS"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"devine_question","intro":"MAX 5 MOTS","question":"MAX 6 MOTS ?"},{"type":"devine_citation","citation":"MAX 10 MOTS","indice":"indice MAX 6 MOTS"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"fait surprenant MAX 12 MOTS"}]}
             """.formatted(theme);
     }
 
     private String buildPromptPhilo(String question, String style) {
         return """
-            Tu crées des carrousels TikTok viraux sur la philosophie.
-            RÈGLE ABSOLUE : chaque champ texte = MAX 8 MOTS. Jamais plus. Compte les mots.
+            Tu es expert en algorithme TikTok. Objectif : maximiser le taux de completion et les commentaires.
+            
+            RÈGLES ALGO TIKTOK pour "Philo Express" :
+            - Slide 1 : question reformulée de façon provocatrice. MAX 7 MOTS.
+            - Slide 2 : citation d'un penseur + explication choc. MAX 10 MOTS citation, MAX 8 MOTS explication.
+            - Slide 3 : développement court et surprenant. MAX 8 MOTS.
+            - Slide 4 : réponse finale + question clivante pour les commentaires. MAX 8 MOTS.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
+            
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Compte les mots.
+            
             Question : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"MAX 6 MOTS ?","teaser":"MAX 6 MOTS"},{"type":"philo_citation","penseur":"Nom époque","citation":"MAX 10 MOTS","explication":"MAX 8 MOTS"},{"type":"context","titre":"2 MOTS","corps":"MAX 8 MOTS"},{"type":"philo_conclusion","conclusion":"MAX 8 MOTS","question_cta":"MAX 6 MOTS ?"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"philo_question","question":"MAX 7 MOTS ?","teaser":"MAX 6 MOTS"},{"type":"philo_citation","penseur":"Nom époque","citation":"MAX 10 MOTS","explication":"MAX 8 MOTS"},{"type":"context","titre":"2 MOTS","corps":"MAX 8 MOTS"},{"type":"philo_conclusion","conclusion":"MAX 8 MOTS","question_cta":"question clivante MAX 8 MOTS ?"}]}
             """.formatted(question);
     }
 
     private String buildPromptModerne(String theme, String style) {
         return """
-            Tu crées des carrousels TikTok viraux sur les citations du monde.
-            RÈGLE ABSOLUE : chaque champ texte = MAX 10 MOTS. Jamais plus. Compte les mots.
+            Tu es expert en algorithme TikTok. Objectif : viral grâce au côté drôle et inattendu.
+            
+            RÈGLES ALGO TIKTOK pour "Citation moderne" :
+            - Slide 1 : citation originale courte d'un philosophe. MAX 10 MOTS.
+            - Slide 2 : traduction en argot gen Z, drôle et authentique. MAX 10 MOTS. Doit faire sourire.
+            - Slide 3 : CTA fun qui demande aux gens leur avis. MAX 7 MOTS.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
+            
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Compte les mots.
+            
             Thème : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"MAX 10 MOTS"},{"type":"moderne_traduction","moderne":"MAX 10 MOTS en argot gen Z","contexte":"MAX 6 MOTS"},{"type":"moderne_cta","texte":"MAX 6 MOTS","question":"MAX 6 MOTS ?"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"MAX 10 MOTS"},{"type":"moderne_traduction","moderne":"argot gen Z MAX 10 MOTS","contexte":"MAX 6 MOTS"},{"type":"moderne_cta","texte":"MAX 7 MOTS","question":"MAX 7 MOTS ?"}]}
             """.formatted(theme);
     }
 
     private String buildPromptTop3(String auteur, String style) {
         return """
-            Tu crées des carrousels TikTok viraux sur les citations du monde.
-            RÈGLE ABSOLUE : chaque champ texte = MAX 10 MOTS. Jamais plus. Compte les mots.
+            Tu es expert en algorithme TikTok. Objectif : maximiser le taux de completion.
+            
+            RÈGLES ALGO TIKTOK pour "Top 3" :
+            - Slide 1 : intro auteur avec fait surprenant. MAX 10 MOTS.
+            - Slides 2-4 : top 3 citations percutantes + explication ultra courte. MAX 10 MOTS citation, MAX 6 MOTS explication.
+            - Slide 5 : question qui force les gens à choisir leur préférée en commentaire. MAX 8 MOTS.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
+            
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Compte les mots.
+            
             Auteur : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"top3_intro","auteur":"%s","description":"MAX 8 MOTS"},{"type":"top3_citation","numero":"1","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_citation","numero":"2","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_citation","numero":"3","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_cta","texte":"MAX 6 MOTS","question":"ta citation préférée ?"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"top3_intro","auteur":"%s","description":"fait surprenant MAX 10 MOTS"},{"type":"top3_citation","numero":"1","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_citation","numero":"2","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_citation","numero":"3","citation":"MAX 10 MOTS","explication":"MAX 6 MOTS"},{"type":"top3_cta","texte":"MAX 6 MOTS","question":"laquelle te parle le plus ?"}]}
             """.formatted(auteur, auteur);
     }
 
@@ -146,7 +188,7 @@ public class CarouselService {
                 else if (c == '}') { depth--; if (depth == 0) { jsonEnd = i; break; } }
             }
         }
-        if (jsonEnd == -1) throw new RuntimeException("JSON introuvable dans: " + responseBody.substring(0, Math.min(300, responseBody.length())));
+        if (jsonEnd == -1) throw new RuntimeException("JSON introuvable: " + responseBody.substring(0, Math.min(300, responseBody.length())));
         return responseBody.substring(jsonStart, jsonEnd + 1);
     }
 
