@@ -55,6 +55,7 @@ const THEME_STYLE = {
 const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword: 'dramatic cinematic landscape' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
+const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
 
@@ -70,6 +71,35 @@ async function fetchPexelsImages(query, count) {
     }
   } catch (e) {}
   return Array(count).fill(null)
+}
+
+async function fetchUnsplashImages(query, count) {
+  try {
+    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, {
+      headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` }
+    })
+    const data = await res.json()
+    if (data.results && data.results.length > 0) {
+      const shuffled = [...data.results].sort(() => Math.random() - 0.5)
+      return shuffled.slice(0, count).map(p => p.urls.regular)
+    }
+  } catch (e) {}
+  return Array(count).fill(null)
+}
+
+async function fetchImages(query, count) {
+  const useUnsplash = Math.random() > 0.5
+  const imgs = useUnsplash
+    ? await fetchUnsplashImages(query, count)
+    : await fetchPexelsImages(query, count)
+  const hasNulls = imgs.some(i => i === null)
+  if (hasNulls) {
+    const fallback = useUnsplash
+      ? await fetchPexelsImages(query, count)
+      : await fetchUnsplashImages(query, count)
+    return imgs.map((img, i) => img || fallback[i] || null)
+  }
+  return imgs
 }
 
 function cap(text, max) {
@@ -124,7 +154,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       <div style={{ position: 'absolute', inset: 0, background: colorOverlay, zIndex: 1 }} />
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.3) 100%)',
+        background: 'rgba(0,0,0,0.2)',
         zIndex: 2,
       }} />
 
@@ -136,8 +166,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
-        padding: '28px 14px', textAlign: 'center',
-        gap: 6,
+        padding: '20px 16px', textAlign: 'center',
+        gap: 8, boxSizing: 'border-box',
       }}>
         {badge && (
           <p style={{ fontSize: 7, color: `${accent}cc`, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>
@@ -201,7 +231,7 @@ export default function App() {
       else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
 
       setData(result)
-      const imgs = await fetchPexelsImages(themeStyle.keyword, (result.slides || []).length)
+      const imgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
