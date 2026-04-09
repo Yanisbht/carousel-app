@@ -35,26 +35,28 @@ const AUTEURS = [
   'Simone de Beauvoir', 'Maya Angelou', 'Nietzsche', 'Camus', 'Sartre',
 ]
 
+const THEME_STYLE = {
+  'philosophie stoïcienne':                              { color: 'rgba(30,60,120,0.55)',  accent: '#a8c8ff', keyword: 'ancient greece ruins dramatic' },
+  'sagesse africaine':                                   { color: 'rgba(120,60,10,0.55)',  accent: '#ffb347', keyword: 'africa savanna golden hour' },
+  'philosophie orientale':                               { color: 'rgba(10,80,60,0.55)',   accent: '#7fffd4', keyword: 'japan misty mountain temple' },
+  'leaders et révolutionnaires':                         { color: 'rgba(100,10,10,0.55)',  accent: '#ff6b6b', keyword: 'dramatic crowd protest light' },
+  'philosophie arabe et islamique':                      { color: 'rgba(60,30,100,0.55)',  accent: '#c9a0ff', keyword: 'arabic mosque dramatic light' },
+  'développement personnel moderne':                     { color: 'rgba(10,60,80,0.55)',   accent: '#80d8ff', keyword: 'dramatic sunrise mountain' },
+  'sagesse amérindienne':                                { color: 'rgba(60,80,10,0.55)',   accent: '#b8e986', keyword: 'native american forest dramatic' },
+  'philosophie japonaise (Musashi, Mishima)':            { color: 'rgba(60,10,10,0.55)',   accent: '#ff8a80', keyword: 'japan forest fog samurai' },
+  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(20,20,20,0.60)', accent: '#e0e0e0', keyword: 'dramatic light strength' },
+  'femmes philosophes (Beauvoir, Angelou)':              { color: 'rgba(100,20,60,0.55)', accent: '#f48fb1', keyword: 'woman dramatic portrait light' },
+  'sagesse berbère et maghrébine':                       { color: 'rgba(100,70,10,0.55)', accent: '#ffd54f', keyword: 'sahara desert dramatic dusk' },
+  'citations de guerriers (Sun Tzu, Spartiate)':         { color: 'rgba(40,40,10,0.55)',  accent: '#e6ee9c', keyword: 'warrior battle dramatic fog' },
+  'spiritualité soufie (Rumi, Ibn Arabi)':               { color: 'rgba(60,10,80,0.55)',  accent: '#ce93d8', keyword: 'mystical light spiritual fog' },
+  'philosophie grecque antique (Socrate, Platon)':       { color: 'rgba(10,50,80,0.55)',  accent: '#90caf9', keyword: 'ancient ruins dramatic sky' },
+}
+
+const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword: 'dramatic cinematic landscape' }
+
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
-
-const THEME_KEYWORDS = {
-  'philosophie stoïcienne': 'ancient greece ruins dramatic',
-  'sagesse africaine': 'africa savanna golden hour',
-  'philosophie orientale': 'japan misty mountain temple',
-  'leaders et révolutionnaires': 'dramatic crowd protest light',
-  'philosophie arabe et islamique': 'arabic mosque dramatic light',
-  'développement personnel moderne': 'dramatic sunrise mountain',
-  'sagesse amérindienne': 'native american forest dramatic',
-  'philosophie japonaise (Musashi, Mishima)': 'japan forest fog samurai',
-  'citations de prison et résilience (Mandela, Malcolm X)': 'dramatic light strength',
-  'femmes philosophes (Beauvoir, Angelou)': 'woman dramatic portrait light',
-  'sagesse berbère et maghrébine': 'sahara desert dramatic dusk',
-  'citations de guerriers (Sun Tzu, Spartiate)': 'warrior battle dramatic fog',
-  'spiritualité soufie (Rumi, Ibn Arabi)': 'mystical light spiritual fog',
-  'philosophie grecque antique (Socrate, Platon)': 'ancient ruins dramatic sky',
-}
 
 async function fetchPexelsImage(query) {
   try {
@@ -78,94 +80,31 @@ function cap(text, max) {
 
 function getSlideContent(slide) {
   switch (slide.type) {
-    case 'hook': return {
-      badge: slide.origine?.toUpperCase(),
-      top: slide.accroche,
-      main: `"${cap(slide.citation, 10)}"`,
-      sub: `— ${slide.auteur}`,
-    }
-    case 'intrigue': return {
-      badge: 'SUSPENSE',
-      main: cap(slide.question, 8),
-    }
-    case 'context': return {
-      badge: slide.titre?.toUpperCase(),
-      main: cap(slide.corps, 10),
-    }
-    case 'lesson': return {
-      badge: slide.titre?.toUpperCase(),
-      main: cap(slide.corps, 10),
-    }
-    case 'cta': return {
-      badge: 'TOI',
-      main: cap(slide.question, 10),
-    }
-    case 'devine_question': return {
-      badge: "DEVINE",
-      top: cap(slide.intro, 6),
-      main: cap(slide.question, 8),
-    }
-    case 'devine_citation': return {
-      badge: 'QUI A DIT...',
-      main: `"${cap(slide.citation, 12)}"`,
-      sub: cap(slide.indice, 8),
-    }
-    case 'devine_revelation': return {
-      badge: "C'ÉTAIT...",
-      main: slide.auteur,
-      sub: cap(slide.bio, 14),
-    }
-    case 'philo_question': return {
-      badge: 'LA QUESTION',
-      main: cap(slide.question, 8),
-      sub: cap(slide.teaser, 7),
-    }
-    case 'philo_citation': return {
-      badge: slide.penseur?.toUpperCase(),
-      main: `"${cap(slide.citation, 12)}"`,
-      sub: cap(slide.explication, 8),
-    }
-    case 'philo_conclusion': return {
-      badge: 'LA RÉPONSE',
-      main: cap(slide.conclusion, 8),
-      sub: cap(slide.question_cta, 8),
-    }
-    case 'moderne_original': return {
-      badge: slide.auteur?.toUpperCase(),
-      top: 'VERSION ORIGINALE',
-      main: `"${cap(slide.citation, 10)}"`,
-    }
-    case 'moderne_traduction': return {
-      badge: 'EN 2024...',
-      main: `"${cap(slide.moderne, 12)}"`,
-      sub: cap(slide.contexte, 7),
-    }
-    case 'moderne_cta': return {
-      badge: 'TOI',
-      main: cap(slide.texte, 7),
-      sub: cap(slide.question, 7),
-    }
-    case 'top3_intro': return {
-      badge: 'TOP 3',
-      main: slide.auteur,
-      sub: cap(slide.description, 10),
-    }
-    case 'top3_citation': return {
-      badge: `#${slide.numero}`,
-      main: `"${cap(slide.citation, 12)}"`,
-      sub: cap(slide.explication, 7),
-    }
-    case 'top3_cta': return {
-      badge: 'TOI',
-      main: cap(slide.texte, 7),
-      sub: slide.question,
-    }
+    case 'hook': return { badge: slide.origine?.toUpperCase(), top: slide.accroche, main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
+    case 'intrigue': return { badge: 'SUSPENSE', main: cap(slide.question, 8) }
+    case 'context': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
+    case 'lesson': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
+    case 'cta': return { badge: 'TOI', main: cap(slide.question, 10) }
+    case 'devine_question': return { badge: 'DEVINE', top: cap(slide.intro, 6), main: cap(slide.question, 8) }
+    case 'devine_citation': return { badge: 'QUI A DIT...', main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.indice, 8) }
+    case 'devine_revelation': return { badge: "C'ÉTAIT...", main: slide.auteur, sub: cap(slide.bio, 14) }
+    case 'philo_question': return { badge: 'LA QUESTION', main: cap(slide.question, 8), sub: cap(slide.teaser, 7) }
+    case 'philo_citation': return { badge: slide.penseur?.toUpperCase(), main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 8) }
+    case 'philo_conclusion': return { badge: 'LA RÉPONSE', main: cap(slide.conclusion, 8), sub: cap(slide.question_cta, 8) }
+    case 'moderne_original': return { badge: slide.auteur?.toUpperCase(), top: 'VERSION ORIGINALE', main: `"${cap(slide.citation, 10)}"` }
+    case 'moderne_traduction': return { badge: 'EN 2024...', main: `"${cap(slide.moderne, 12)}"`, sub: cap(slide.contexte, 7) }
+    case 'moderne_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: cap(slide.question, 7) }
+    case 'top3_intro': return { badge: 'TOP 3', main: slide.auteur, sub: cap(slide.description, 10) }
+    case 'top3_citation': return { badge: `#${slide.numero}`, main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
+    case 'top3_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: slide.question }
     default: return { main: '' }
   }
 }
 
-function Slide({ slide, index, total, bgImage, id }) {
+function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { badge, top, main, sub } = getSlideContent(slide)
+  const accent = themeStyle?.accent || '#f0e040'
+  const colorOverlay = themeStyle?.color || 'rgba(20,20,20,0.55)'
 
   return (
     <div id={id} style={{
@@ -180,46 +119,45 @@ function Slide({ slide, index, total, bgImage, id }) {
           backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0,
         }} />
       )}
+      <div style={{ position: 'absolute', inset: 0, background: colorOverlay, zIndex: 1 }} />
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.65) 65%, rgba(0,0,0,0.94) 100%)',
-        zIndex: 1,
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.3) 100%)',
+        zIndex: 2,
       }} />
 
-      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.45)', zIndex: 3 }}>
+      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.4)', zIndex: 4 }}>
         {index + 1}/{total}
       </span>
 
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        padding: '10px 14px 16px', zIndex: 2, textAlign: 'center',
+        position: 'absolute', inset: 0, zIndex: 3,
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', alignItems: 'center',
+        padding: '28px 14px', textAlign: 'center',
+        gap: 6,
       }}>
         {badge && (
-          <p style={{ fontSize: 7, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.18em', marginBottom: 4, textTransform: 'uppercase' }}>
+          <p style={{ fontSize: 7, color: `${accent}cc`, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>
             {badge}
           </p>
         )}
         {top && (
-          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', marginBottom: 4, letterSpacing: '0.1em' }}>
-            {top}
-          </p>
+          <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em' }}>{top}</p>
         )}
         {main && (
           <p style={{
-            fontSize: 12, fontWeight: 700, color: '#f0e040',
-            lineHeight: 1.3, marginBottom: sub ? 5 : 0,
-            textShadow: '0 1px 8px rgba(0,0,0,0.95)',
+            fontSize: 12, fontWeight: 700, color: accent,
+            lineHeight: 1.35, textShadow: '0 1px 8px rgba(0,0,0,0.9)',
             wordBreak: 'break-word', overflow: 'hidden',
-            display: '-webkit-box', WebkitLineClamp: 4,
-            WebkitBoxOrient: 'vertical',
+            display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
           }}>{main}</p>
         )}
         {sub && (
           <p style={{
-            fontSize: 9, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4,
+            fontSize: 9, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4,
             overflow: 'hidden', display: '-webkit-box',
             WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-            wordBreak: 'break-word',
           }}>{sub}</p>
         )}
       </div>
@@ -229,8 +167,7 @@ function Slide({ slide, index, total, bgImage, id }) {
 
 async function callAPI(endpoint, body) {
   const res = await fetch(`${API_BASE}${endpoint}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })
   const json = await res.json()
@@ -249,11 +186,10 @@ export default function App() {
   const [bgImages, setBgImages] = useState([])
   const [error, setError] = useState(null)
 
+  const themeStyle = THEME_STYLE[theme] || DEFAULT_STYLE
+
   const generate = async () => {
-    setLoading(true)
-    setError(null)
-    setData(null)
-    setBgImages([])
+    setLoading(true); setError(null); setData(null); setBgImages([])
     try {
       let result
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
@@ -263,12 +199,9 @@ export default function App() {
       else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
 
       setData(result)
-      const keyword = THEME_KEYWORDS[theme] || theme
-      const imgs = await Promise.all((result.slides || []).map(() => fetchPexelsImage(keyword)))
+      const imgs = await Promise.all((result.slides || []).map(() => fetchPexelsImage(themeStyle.keyword)))
       setBgImages(imgs)
-    } catch (e) {
-      setError(e.message)
-    }
+    } catch (e) { setError(e.message) }
     setLoading(false)
   }
 
@@ -276,8 +209,7 @@ export default function App() {
     setExporting(true)
     try {
       const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
-      const slides = data?.slides || []
-      for (let i = 0; i < slides.length; i++) {
+      for (let i = 0; i < (data?.slides || []).length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
         const canvas = await html2canvas(el, { scale: 3, useCORS: true, allowTaint: true })
@@ -345,10 +277,14 @@ export default function App() {
 
       {data && (
         <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 12px' }}>
+            <div style={{ width: 12, height: 12, borderRadius: '50%', background: themeStyle.accent }}></div>
+            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{theme}</span>
+          </div>
           <div className="slides-row">
             {slides.map((slide, i) => (
               <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
-                total={slides.length} bgImage={bgImages[i]} />
+                total={slides.length} bgImage={bgImages[i]} themeStyle={themeStyle} />
             ))}
           </div>
           <div className="hashtags">
