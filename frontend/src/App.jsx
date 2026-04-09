@@ -51,7 +51,7 @@ const THEME_KEYWORDS = {
   'citations de prison et résilience (Mandela, Malcolm X)': 'dramatic light strength',
   'femmes philosophes (Beauvoir, Angelou)': 'woman dramatic portrait light',
   'sagesse berbère et maghrébine': 'sahara desert dramatic dusk',
-  'citations de guerriers (Sun Tzu, Spartiate)': 'battle warrior dramatic fog',
+  'citations de guerriers (Sun Tzu, Spartiate)': 'warrior battle dramatic fog',
   'spiritualité soufie (Rumi, Ibn Arabi)': 'mystical light spiritual fog',
   'philosophie grecque antique (Socrate, Platon)': 'ancient ruins dramatic sky',
 }
@@ -70,79 +70,156 @@ async function fetchPexelsImage(query) {
   return null
 }
 
-function truncate(text, max) {
+function cap(text, max) {
   if (!text) return ''
-  const words = text.split(' ')
-  return words.length > max ? words.slice(0, max).join(' ') + '…' : text
+  const w = text.split(' ')
+  return w.length > max ? w.slice(0, max).join(' ') + '…' : text
 }
 
-function getSlideText(slide) {
-  if (slide.type === 'hook') return { top: slide.origine?.toUpperCase(), bottom: `"${truncate(slide.citation, 10)}"`, author: `— ${slide.auteur}` }
-  if (slide.type === 'intrigue') return { bottom: truncate(slide.question, 7), sub: truncate(slide.teaser, 8) }
-  if (slide.type === 'context' || slide.type === 'lesson') return { top: slide.titre?.toUpperCase(), bottom: truncate(slide.corps, 10) }
-  if (slide.type === 'cta') return { bottom: truncate(slide.texte, 8), sub: truncate(slide.question, 8) }
-  if (slide.type === 'devine_question') return { top: truncate(slide.intro, 6), bottom: truncate(slide.question, 7) }
-  if (slide.type === 'devine_citation') return { top: 'QUI A DIT...', bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.indice, 8) }
-  if (slide.type === 'devine_revelation') return { top: "C'ÉTAIT...", bottom: slide.auteur, sub: truncate(slide.bio, 14) }
-  if (slide.type === 'philo_question') return { top: 'LA QUESTION', bottom: truncate(slide.question, 8), sub: truncate(slide.teaser, 7) }
-  if (slide.type === 'philo_citation') return { top: slide.penseur?.toUpperCase(), bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.explication, 8) }
-  if (slide.type === 'philo_conclusion') return { top: 'LA RÉPONSE', bottom: truncate(slide.conclusion, 8), sub: truncate(slide.question_cta, 7) }
-  if (slide.type === 'moderne_original') return { top: `${slide.auteur?.toUpperCase()} DISAIT`, bottom: `"${truncate(slide.citation, 10)}"` }
-  if (slide.type === 'moderne_traduction') return { top: 'EN 2024 ÇA DONNE...', bottom: `"${truncate(slide.moderne, 12)}"`, sub: truncate(slide.contexte, 7) }
-  if (slide.type === 'moderne_cta') return { bottom: truncate(slide.texte, 7), sub: truncate(slide.question, 7) }
-  if (slide.type === 'top3_intro') return { top: 'TOP 3', bottom: slide.auteur, sub: truncate(slide.description, 10) }
-  if (slide.type === 'top3_citation') return { top: `#${slide.numero}`, bottom: `"${truncate(slide.citation, 12)}"`, sub: truncate(slide.explication, 7) }
-  if (slide.type === 'top3_cta') return { bottom: truncate(slide.texte, 7), sub: slide.question }
-  return { bottom: '' }
+function getSlideContent(slide) {
+  switch (slide.type) {
+    case 'hook': return {
+      badge: slide.origine?.toUpperCase(),
+      top: slide.accroche,
+      main: `"${cap(slide.citation, 10)}"`,
+      sub: `— ${slide.auteur}`,
+    }
+    case 'intrigue': return {
+      badge: 'SUSPENSE',
+      main: cap(slide.question, 8),
+    }
+    case 'context': return {
+      badge: slide.titre?.toUpperCase(),
+      main: cap(slide.corps, 10),
+    }
+    case 'lesson': return {
+      badge: slide.titre?.toUpperCase(),
+      main: cap(slide.corps, 10),
+    }
+    case 'cta': return {
+      badge: 'TOI',
+      main: cap(slide.question, 10),
+    }
+    case 'devine_question': return {
+      badge: "DEVINE",
+      top: cap(slide.intro, 6),
+      main: cap(slide.question, 8),
+    }
+    case 'devine_citation': return {
+      badge: 'QUI A DIT...',
+      main: `"${cap(slide.citation, 12)}"`,
+      sub: cap(slide.indice, 8),
+    }
+    case 'devine_revelation': return {
+      badge: "C'ÉTAIT...",
+      main: slide.auteur,
+      sub: cap(slide.bio, 14),
+    }
+    case 'philo_question': return {
+      badge: 'LA QUESTION',
+      main: cap(slide.question, 8),
+      sub: cap(slide.teaser, 7),
+    }
+    case 'philo_citation': return {
+      badge: slide.penseur?.toUpperCase(),
+      main: `"${cap(slide.citation, 12)}"`,
+      sub: cap(slide.explication, 8),
+    }
+    case 'philo_conclusion': return {
+      badge: 'LA RÉPONSE',
+      main: cap(slide.conclusion, 8),
+      sub: cap(slide.question_cta, 8),
+    }
+    case 'moderne_original': return {
+      badge: slide.auteur?.toUpperCase(),
+      top: 'VERSION ORIGINALE',
+      main: `"${cap(slide.citation, 10)}"`,
+    }
+    case 'moderne_traduction': return {
+      badge: 'EN 2024...',
+      main: `"${cap(slide.moderne, 12)}"`,
+      sub: cap(slide.contexte, 7),
+    }
+    case 'moderne_cta': return {
+      badge: 'TOI',
+      main: cap(slide.texte, 7),
+      sub: cap(slide.question, 7),
+    }
+    case 'top3_intro': return {
+      badge: 'TOP 3',
+      main: slide.auteur,
+      sub: cap(slide.description, 10),
+    }
+    case 'top3_citation': return {
+      badge: `#${slide.numero}`,
+      main: `"${cap(slide.citation, 12)}"`,
+      sub: cap(slide.explication, 7),
+    }
+    case 'top3_cta': return {
+      badge: 'TOI',
+      main: cap(slide.texte, 7),
+      sub: slide.question,
+    }
+    default: return { main: '' }
+  }
 }
 
 function Slide({ slide, index, total, bgImage, id }) {
-  const { top, bottom, sub, author } = getSlideText(slide)
+  const { badge, top, main, sub } = getSlideContent(slide)
 
   return (
     <div id={id} style={{
       flexShrink: 0, width: 180, height: 320, borderRadius: 10,
       position: 'relative', overflow: 'hidden', background: '#0a0a0a',
-      border: '0.5px solid rgba(255,255,255,0.1)',
+      border: '0.5px solid rgba(255,255,255,0.08)',
     }}>
       {bgImage && (
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `url(${bgImage})`,
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          zIndex: 0,
+          backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0,
         }} />
       )}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.93) 100%)',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.65) 65%, rgba(0,0,0,0.94) 100%)',
         zIndex: 1,
       }} />
-      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.5)', zIndex: 3 }}>{index + 1}/{total}</span>
+
+      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.45)', zIndex: 3 }}>
+        {index + 1}/{total}
+      </span>
 
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
-        padding: '12px 14px 16px', zIndex: 2, textAlign: 'center',
+        padding: '10px 14px 16px', zIndex: 2, textAlign: 'center',
       }}>
+        {badge && (
+          <p style={{ fontSize: 7, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.18em', marginBottom: 4, textTransform: 'uppercase' }}>
+            {badge}
+          </p>
+        )}
         {top && (
-          <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.15em', marginBottom: 5, fontWeight: 400 }}>{top}</p>
+          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', marginBottom: 4, letterSpacing: '0.1em' }}>
+            {top}
+          </p>
         )}
-        {bottom && (
+        {main && (
           <p style={{
-            fontSize: 13, fontWeight: 600, color: '#f0e040', lineHeight: 1.35,
-            marginBottom: author || sub ? 5 : 0,
-            textShadow: '0 1px 6px rgba(0,0,0,0.9)',
-            wordBreak: 'break-word', hyphens: 'auto',
-            maxHeight: 80, overflow: 'hidden',
-          }}>{bottom}</p>
-        )}
-        {author && (
-          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.65)', fontStyle: 'italic', marginBottom: sub ? 3 : 0 }}>{author}</p>
+            fontSize: 12, fontWeight: 700, color: '#f0e040',
+            lineHeight: 1.3, marginBottom: sub ? 5 : 0,
+            textShadow: '0 1px 8px rgba(0,0,0,0.95)',
+            wordBreak: 'break-word', overflow: 'hidden',
+            display: '-webkit-box', WebkitLineClamp: 4,
+            WebkitBoxOrient: 'vertical',
+          }}>{main}</p>
         )}
         {sub && (
           <p style={{
-            fontSize: 9, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4,
-            maxHeight: 36, overflow: 'hidden', wordBreak: 'break-word',
+            fontSize: 9, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4,
+            overflow: 'hidden', display: '-webkit-box',
+            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+            wordBreak: 'break-word',
           }}>{sub}</p>
         )}
       </div>
@@ -179,11 +256,11 @@ export default function App() {
     setBgImages([])
     try {
       let result
-      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre et épuré' })
-      else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre et épuré' })
-      else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style: 'sombre et épuré' })
-      else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style: 'sombre et épuré' })
-      else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre et épuré' })
+      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
+      else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre' })
+      else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style: 'sombre' })
+      else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style: 'sombre' })
+      else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
 
       setData(result)
       const keyword = THEME_KEYWORDS[theme] || theme
@@ -203,7 +280,7 @@ export default function App() {
       for (let i = 0; i < slides.length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await html2canvas(el, { scale: 2, useCORS: true, allowTaint: true })
+        const canvas = await html2canvas(el, { scale: 3, useCORS: true, allowTaint: true })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
         link.href = canvas.toDataURL('image/png')
@@ -215,7 +292,6 @@ export default function App() {
   }
 
   useEffect(() => { generate() }, [])
-
   const slides = data?.slides || []
 
   return (
