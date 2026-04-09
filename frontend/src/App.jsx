@@ -58,18 +58,18 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
 
-async function fetchPexelsImage(query) {
+async function fetchPexelsImages(query, count) {
   try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=8&orientation=portrait`, {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, {
       headers: { Authorization: PEXELS_KEY }
     })
     const data = await res.json()
     if (data.photos && data.photos.length > 0) {
-      const idx = Math.floor(Math.random() * data.photos.length)
-      return data.photos[idx].src.large
+      const shuffled = [...data.photos].sort(() => Math.random() - 0.5)
+      return shuffled.slice(0, count).map(p => p.src.large)
     }
   } catch (e) {}
-  return null
+  return Array(count).fill(null)
 }
 
 function cap(text, max) {
@@ -199,7 +199,7 @@ export default function App() {
       else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
 
       setData(result)
-      const imgs = await Promise.all((result.slides || []).map(() => fetchPexelsImage(themeStyle.keyword)))
+      const imgs = await fetchPexelsImages(themeStyle.keyword, (result.slides || []).length)
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
