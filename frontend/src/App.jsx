@@ -107,68 +107,68 @@ function Slide({ slide, index, total, palette, bgImage, id }) {
   const content = () => {
     if (slide.type === 'hook') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.origine}</p>
-        <p style={{ fontSize: 20, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.4, marginBottom: 14 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.origine}</p>
+        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
         <p style={{ fontSize: 11, color: p.sub }}>— {slide.auteur}</p>
       </div>
     )
     if (slide.type === 'intrigue') return (
       <div style={inner}>
-        <p style={{ fontSize: 24, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 12 }}>{slide.question}</p>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.question}</p>
         <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5, fontStyle: 'italic' }}>{slide.teaser}</p>
       </div>
     )
     if (slide.type === 'context' || slide.type === 'lesson') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.accent, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>{slide.titre}</p>
-        <p style={{ fontSize: 13, color: p.text, lineHeight: 1.7 }}>{slide.corps}</p>
+        <p style={{ fontSize: 10, color: p.accent, marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>{slide.titre}</p>
+        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.7 }}>{slide.corps}</p>
       </div>
     )
     if (slide.type === 'cta') return (
       <div style={inner}>
-        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 14 }}>{slide.texte}</p>
-        <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
+        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
       </div>
     )
     if (slide.type === 'devine_question') return (
       <div style={inner}>
-        <p style={{ fontSize: 13, color: p.sub, marginBottom: 14, lineHeight: 1.5 }}>{slide.intro}</p>
-        <p style={{ fontSize: 24, fontWeight: 500, color: p.text, lineHeight: 1.3 }}>{slide.question}</p>
+        <p style={{ fontSize: 12, color: p.sub, marginBottom: 10, lineHeight: 1.5 }}>{slide.intro}</p>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4 }}>{slide.question}</p>
       </div>
     )
     if (slide.type === 'devine_citation') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Qui a dit...</p>
-        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 14 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 12, color: p.sub, fontStyle: 'italic' }}>{slide.indice}</p>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Qui a dit...</p>
+        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 11, color: p.sub, fontStyle: 'italic' }}>{slide.indice}</p>
       </div>
     )
     if (slide.type === 'devine_revelation') return (
       <div style={inner}>
         <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>C'était...</p>
-        <p style={{ fontSize: 26, fontWeight: 500, color: p.accent, marginBottom: 12 }}>{slide.auteur}</p>
+        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.auteur}</p>
         <p style={{ fontSize: 12, color: p.text, lineHeight: 1.65 }}>{slide.bio}</p>
       </div>
     )
     if (slide.type === 'philo_question') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La question</p>
-        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.35, marginBottom: 12 }}>{slide.question}</p>
-        <p style={{ fontSize: 12, color: p.sub, fontStyle: 'italic' }}>{slide.teaser}</p>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La question</p>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.question}</p>
+        <p style={{ fontSize: 11, color: p.sub, fontStyle: 'italic' }}>{slide.teaser}</p>
       </div>
     )
     if (slide.type === 'philo_citation') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.penseur}</p>
-        <p style={{ fontSize: 17, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.6 }}>{slide.explication}</p>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.penseur}</p>
+        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 8 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 11, color: p.text, lineHeight: 1.6 }}>{slide.explication}</p>
       </div>
     )
     if (slide.type === 'philo_conclusion') return (
       <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La réponse</p>
-        <p style={{ fontSize: 19, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 12 }}>{slide.conclusion}</p>
-        <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic' }}>{slide.question_cta}</p>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La réponse</p>
+        <p style={{ fontSize: 15, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.conclusion}</p>
+        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question_cta}</p>
       </div>
     )
     return null
