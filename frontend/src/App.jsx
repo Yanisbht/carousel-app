@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-const PALETTES = {
-  'sombre et épuré':    { overlay: 'rgba(0,0,0,0.72)', text: '#f5f5f5', accent: '#d4af37', sub: 'rgba(255,255,255,0.55)' },
-  'minimaliste blanc':  { overlay: 'rgba(255,255,255,0.82)', text: '#111', accent: '#333', sub: 'rgba(0,0,0,0.45)' },
-  'doré et luxueux':    { overlay: 'rgba(10,7,0,0.78)', text: '#f5e6a0', accent: '#d4af37', sub: 'rgba(212,175,55,0.6)' },
-  'coloré et énergique':{ overlay: 'rgba(26,5,51,0.80)', text: '#fff', accent: '#b24bf3', sub: 'rgba(178,75,243,0.6)' },
-}
-
 const THEMES = [
   'philosophie stoïcienne',
   'sagesse africaine',
@@ -43,30 +36,29 @@ const AUTEURS = [
 ]
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
-const STYLES = Object.keys(PALETTES)
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
 
 const THEME_KEYWORDS = {
-  'philosophie stoïcienne': 'ancient greece philosophy',
-  'sagesse africaine': 'africa landscape sunset',
-  'philosophie orientale': 'japan zen temple',
-  'leaders et révolutionnaires': 'revolution crowd power',
-  'philosophie arabe et islamique': 'arabic architecture mosque',
-  'développement personnel moderne': 'mindset motivation sunrise',
-  'sagesse amérindienne': 'native nature forest',
-  'philosophie japonaise (Musashi, Mishima)': 'japan samurai mountain',
-  'citations de prison et résilience (Mandela, Malcolm X)': 'strength resilience light',
-  'femmes philosophes (Beauvoir, Angelou)': 'woman strength poetry',
-  'sagesse berbère et maghrébine': 'sahara desert morocco',
-  'citations de guerriers (Sun Tzu, Spartiate)': 'warrior battle strength',
-  'spiritualité soufie (Rumi, Ibn Arabi)': 'sufi spiritual light',
-  'philosophie grecque antique (Socrate, Platon)': 'ancient greece columns',
+  'philosophie stoïcienne': 'ancient greece ruins dramatic',
+  'sagesse africaine': 'africa savanna golden hour',
+  'philosophie orientale': 'japan misty mountain temple',
+  'leaders et révolutionnaires': 'dramatic crowd protest light',
+  'philosophie arabe et islamique': 'arabic mosque dramatic light',
+  'développement personnel moderne': 'dramatic sunrise mountain',
+  'sagesse amérindienne': 'native american forest dramatic',
+  'philosophie japonaise (Musashi, Mishima)': 'japan forest fog samurai',
+  'citations de prison et résilience (Mandela, Malcolm X)': 'dramatic light prison bars',
+  'femmes philosophes (Beauvoir, Angelou)': 'woman dramatic portrait light',
+  'sagesse berbère et maghrébine': 'sahara desert dramatic dusk',
+  'citations de guerriers (Sun Tzu, Spartiate)': 'battle warrior dramatic fog',
+  'spiritualité soufie (Rumi, Ibn Arabi)': 'mystical light spiritual fog',
+  'philosophie grecque antique (Socrate, Platon)': 'ancient ruins dramatic sky',
 }
 
 async function fetchPexelsImage(query) {
   try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=5&orientation=portrait`, {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=8&orientation=portrait`, {
       headers: { Authorization: PEXELS_KEY }
     })
     const data = await res.json()
@@ -78,145 +70,65 @@ async function fetchPexelsImage(query) {
   return null
 }
 
-function Slide({ slide, index, total, palette, bgImage, id }) {
-  const p = palette
-  const base = {
-    flexShrink: 0, width: 180, height: 320, borderRadius: 12,
-    display: 'flex', flexDirection: 'column', justifyContent: 'center',
-    alignItems: 'center', padding: '24px 14px', textAlign: 'center',
-    position: 'relative', overflow: 'hidden',
-    border: '0.5px solid rgba(128,128,128,0.2)', background: '#111',
-  }
-  const bgStyle = bgImage ? {
-    position: 'absolute', inset: 0,
-    backgroundImage: `url(${bgImage})`,
-    backgroundSize: 'cover', backgroundPosition: 'center',
-    filter: 'blur(2px) brightness(0.7)', transform: 'scale(1.05)', zIndex: 0,
-  } : { position: 'absolute', inset: 0, background: '#111', zIndex: 0 }
-  const overlayStyle = { position: 'absolute', inset: 0, background: p.overlay, zIndex: 1 }
-  const inner = { position: 'relative', zIndex: 2, width: '100%' }
-  const num = { position: 'absolute', top: 10, left: 12, fontSize: 10, color: p.sub, zIndex: 3 }
-  const line = { position: 'absolute', bottom: 14, left: '25%', width: '50%', height: 1.5, background: p.accent, borderRadius: 2, zIndex: 3 }
+function getSlideText(slide) {
+  if (slide.type === 'hook') return { top: slide.origine?.toUpperCase(), bottom: `"${slide.citation}"`, author: `— ${slide.auteur}` }
+  if (slide.type === 'intrigue') return { bottom: slide.question, sub: slide.teaser }
+  if (slide.type === 'context' || slide.type === 'lesson') return { top: slide.titre?.toUpperCase(), bottom: slide.corps }
+  if (slide.type === 'cta') return { bottom: slide.texte, sub: slide.question }
+  if (slide.type === 'devine_question') return { top: slide.intro, bottom: slide.question }
+  if (slide.type === 'devine_citation') return { top: 'QUI A DIT...', bottom: `"${slide.citation}"`, sub: slide.indice }
+  if (slide.type === 'devine_revelation') return { top: "C'ÉTAIT...", bottom: slide.auteur, sub: slide.bio }
+  if (slide.type === 'philo_question') return { top: 'LA QUESTION', bottom: slide.question, sub: slide.teaser }
+  if (slide.type === 'philo_citation') return { top: slide.penseur?.toUpperCase(), bottom: `"${slide.citation}"`, sub: slide.explication }
+  if (slide.type === 'context') return { top: 'SA PENSÉE', bottom: slide.corps }
+  if (slide.type === 'philo_conclusion') return { top: 'LA RÉPONSE', bottom: slide.conclusion, sub: slide.question_cta }
+  if (slide.type === 'moderne_original') return { top: `${slide.auteur} DISAIT...`, bottom: `"${slide.citation}"` }
+  if (slide.type === 'moderne_traduction') return { top: 'EN 2024 ÇA DONNE...', bottom: `"${slide.moderne}"`, sub: slide.contexte }
+  if (slide.type === 'moderne_cta') return { bottom: slide.texte, sub: slide.question }
+  if (slide.type === 'top3_intro') return { top: 'TOP 3', bottom: slide.auteur, sub: slide.description }
+  if (slide.type === 'top3_citation') return { top: `#${slide.numero}`, bottom: `"${slide.citation}"`, sub: slide.explication }
+  if (slide.type === 'top3_cta') return { bottom: slide.texte, sub: slide.question }
+  return { bottom: '' }
+}
 
-  const content = () => {
-    if (slide.type === 'hook') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.origine}</p>
-        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 11, color: p.sub }}>— {slide.auteur}</p>
-      </div>
-    )
-    if (slide.type === 'intrigue') return (
-      <div style={inner}>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.question}</p>
-        <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5, fontStyle: 'italic' }}>{slide.teaser}</p>
-      </div>
-    )
-    if (slide.type === 'context' || slide.type === 'lesson') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.accent, marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>{slide.titre}</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.7 }}>{slide.corps}</p>
-      </div>
-    )
-    if (slide.type === 'cta') return (
-      <div style={inner}>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
-        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
-      </div>
-    )
-    if (slide.type === 'devine_question') return (
-      <div style={inner}>
-        <p style={{ fontSize: 12, color: p.sub, marginBottom: 10, lineHeight: 1.5 }}>{slide.intro}</p>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4 }}>{slide.question}</p>
-      </div>
-    )
-    if (slide.type === 'devine_citation') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Qui a dit...</p>
-        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 11, color: p.sub, fontStyle: 'italic' }}>{slide.indice}</p>
-      </div>
-    )
-    if (slide.type === 'devine_revelation') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>C'était...</p>
-        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.auteur}</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.65 }}>{slide.bio}</p>
-      </div>
-    )
-    if (slide.type === 'philo_question') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La question</p>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.question}</p>
-        <p style={{ fontSize: 11, color: p.sub, fontStyle: 'italic' }}>{slide.teaser}</p>
-      </div>
-    )
-    if (slide.type === 'philo_citation') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.penseur}</p>
-        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 8 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 11, color: p.text, lineHeight: 1.6 }}>{slide.explication}</p>
-      </div>
-    )
-    if (slide.type === 'philo_conclusion') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La réponse</p>
-        <p style={{ fontSize: 15, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.conclusion}</p>
-        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question_cta}</p>
-      </div>
-    )
-    // Citation moderne
-    if (slide.type === 'moderne_original') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.auteur} disait...</p>
-        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 11, color: p.sub }}>Version originale</p>
-      </div>
-    )
-    if (slide.type === 'moderne_traduction') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>En 2024 ça donne...</p>
-        <p style={{ fontSize: 15, fontWeight: 500, color: p.text, lineHeight: 1.5, marginBottom: 10 }}>"{slide.moderne}"</p>
-        <p style={{ fontSize: 11, color: p.accent }}>{slide.contexte}</p>
-      </div>
-    )
-    if (slide.type === 'moderne_cta') return (
-      <div style={inner}>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
-        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
-      </div>
-    )
-    // Top 3
-    if (slide.type === 'top3_intro') return (
-      <div style={inner}>
-        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Top 3</p>
-        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.auteur}</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.5 }}>{slide.description}</p>
-      </div>
-    )
-    if (slide.type === 'top3_citation') return (
-      <div style={inner}>
-        <p style={{ fontSize: 11, color: p.accent, marginBottom: 8, fontWeight: 500 }}>#{slide.numero}</p>
-        <p style={{ fontSize: 14, fontWeight: 500, color: p.text, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 11, color: p.sub, lineHeight: 1.5 }}>{slide.explication}</p>
-      </div>
-    )
-    if (slide.type === 'top3_cta') return (
-      <div style={inner}>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
-        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
-      </div>
-    )
-    return null
-  }
+function Slide({ slide, index, total, bgImage, id }) {
+  const { top, bottom, sub, author } = getSlideText(slide)
 
   return (
-    <div id={id} style={base}>
-      <div style={bgStyle}></div>
-      <div style={overlayStyle}></div>
-      <span style={num}>{index + 1}/{total}</span>
-      {content()}
-      <div style={line}></div>
+    <div id={id} style={{
+      flexShrink: 0, width: 180, height: 320, borderRadius: 10,
+      position: 'relative', overflow: 'hidden', background: '#0a0a0a',
+      border: '0.5px solid rgba(255,255,255,0.1)',
+    }}>
+      {bgImage && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          zIndex: 0,
+        }} />
+      )}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.75) 75%, rgba(0,0,0,0.92) 100%)',
+        zIndex: 1,
+      }} />
+      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.5)', zIndex: 3 }}>{index + 1}/{total}</span>
+
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 14px 18px', zIndex: 2, textAlign: 'center' }}>
+        {top && (
+          <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.15em', marginBottom: 6, fontWeight: 400 }}>{top}</p>
+        )}
+        {bottom && (
+          <p style={{ fontSize: 13, fontWeight: 500, color: '#f0e040', lineHeight: 1.4, marginBottom: author || sub ? 6 : 0, textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>{bottom}</p>
+        )}
+        {author && (
+          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontStyle: 'italic' }}>{author}</p>
+        )}
+        {sub && (
+          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4, marginTop: 4 }}>{sub}</p>
+        )}
+      </div>
     </div>
   )
 }
@@ -237,7 +149,6 @@ export default function App() {
   const [theme, setTheme] = useState(THEMES[0])
   const [philoQ, setPhiloQ] = useState(PHILO_QUESTIONS[0])
   const [auteur, setAuteur] = useState(AUTEURS[0])
-  const [style, setStyle] = useState(STYLES[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -251,11 +162,11 @@ export default function App() {
     setBgImages([])
     try {
       let result
-      if (format === 0) result = await callAPI('/api/generate', { theme, style })
-      else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style })
-      else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style })
-      else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style })
-      else result = await callAPI('/api/generate-top3', { auteur, style })
+      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre et épuré' })
+      else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre et épuré' })
+      else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style: 'sombre et épuré' })
+      else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style: 'sombre et épuré' })
+      else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre et épuré' })
 
       setData(result)
       const keyword = THEME_KEYWORDS[theme] || theme
@@ -288,7 +199,6 @@ export default function App() {
 
   useEffect(() => { generate() }, [])
 
-  const palette = PALETTES[style] || PALETTES['sombre et épuré']
   const slides = data?.slides || []
 
   return (
@@ -332,12 +242,6 @@ export default function App() {
             </select>
           </div>
         )}
-        <div className="ctrl">
-          <label>Style visuel</label>
-          <select value={style} onChange={e => setStyle(e.target.value)}>
-            {STYLES.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </div>
         <button className="gen-btn" onClick={generate} disabled={loading}>
           {loading ? 'Génération...' : 'Générer'}
         </button>
@@ -351,7 +255,7 @@ export default function App() {
           <div className="slides-row">
             {slides.map((slide, i) => (
               <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
-                total={slides.length} palette={palette} bgImage={bgImages[i]} />
+                total={slides.length} bgImage={bgImages[i]} />
             ))}
           </div>
           <div className="hashtags">
