@@ -80,14 +80,14 @@ public class CarouselService {
     }
 
     private String buildPromptPhilo(String question, String style) {
-        return """
-            Tu es un expert en carrousels TikTok viraux sur la philosophie.
-            Format "Philo Express" : slide 1 = la question universelle posée de façon percutante, slides 2-3 = deux penseurs différents qui répondent via une citation + explication courte, slide 4 = conclusion synthèse percutante avec CTA.
-            Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"philo_citation","penseur":"Nom d'un autre penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer les commentaires"}]}
-            """.formatted(question, style);
-    }
+    return """
+        Tu es un expert en carrousels TikTok viraux sur la philosophie.
+        Format "Philo Express" : slide 1 = question universelle percutante, slide 2 = un penseur avec sa citation sur le sujet, slide 3 = développement et explication de sa pensée, slide 4 = conclusion synthèse + CTA.
+        Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
+        Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+        {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"context","titre":"sa pensée","corps":"2-3 phrases de développement sur cette philosophie"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer des commentaires"}]}
+        """.formatted(question, style);
+}
 
     private String extractContent(String responseBody) {
         int firstBrace = responseBody.indexOf("\"text\": \"{");
