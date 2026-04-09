@@ -28,6 +28,14 @@ public class CarouselService {
         return callGemini(buildPromptPhilo(question, style));
     }
 
+    public String generateModerne(String theme, String style) throws Exception {
+        return callGemini(buildPromptModerne(theme, style));
+    }
+
+    public String generateTop3(String auteur, String style) throws Exception {
+        return callGemini(buildPromptTop3(auteur, style));
+    }
+
     private String callGemini(String prompt) throws Exception {
         String requestBody = """
             {
@@ -72,22 +80,43 @@ public class CarouselService {
     private String buildPromptDevine(String theme, String style) {
         return """
             Tu es un expert en carrousels TikTok viraux sur les citations du monde.
-            Format "Devine l'auteur" : slide 1 = question d'accroche pour engager, slide 2 = citation sans révéler l'auteur avec un indice, slide 3 = révélation de l'auteur avec mini biographie.
+            Format "Devine l'auteur" : slide 1 = accroche engageante, slide 2 = citation sans révéler l'auteur avec un indice, slide 3 = révélation auteur + mini bio.
             Crée un carrousel "Devine l'auteur" sur le thème : %s. Style visuel : %s.
             Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"phrase d'accroche courte type D'où viennent tes citations préférées","question":"question engageante max 8 mots"},{"type":"devine_citation","citation":"citation célèbre et percutante","indice":"indice subtil sur l'auteur sans révéler son nom"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"2-3 phrases sur qui est cet auteur et pourquoi sa pensée est importante"}]}
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"phrase d'accroche courte","question":"question engageante max 8 mots"},{"type":"devine_citation","citation":"citation célèbre et percutante","indice":"indice subtil sur l'auteur sans révéler son nom"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"2-3 phrases sur qui est cet auteur et pourquoi sa pensée est importante"}]}
             """.formatted(theme, style);
     }
 
     private String buildPromptPhilo(String question, String style) {
-    return """
-        Tu es un expert en carrousels TikTok viraux sur la philosophie.
-        Format "Philo Express" : slide 1 = question universelle percutante, slide 2 = un penseur avec sa citation sur le sujet, slide 3 = développement et explication de sa pensée, slide 4 = conclusion synthèse + CTA.
-        Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
-        Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-        {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"context","titre":"sa pensée","corps":"2-3 phrases de développement sur cette philosophie"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer des commentaires"}]}
-        """.formatted(question, style);
-}
+        return """
+            Tu es un expert en carrousels TikTok viraux sur la philosophie.
+            Format "Philo Express" : slide 1 = question universelle percutante, slide 2 = un penseur avec sa citation, slide 3 = développement de sa pensée, slide 4 = conclusion + CTA.
+            Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"context","titre":"sa pensée","corps":"2-3 phrases de développement sur cette philosophie"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer des commentaires"}]}
+            """.formatted(question, style);
+    }
+
+    private String buildPromptModerne(String theme, String style) {
+        return """
+            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
+            Format "Citation en moderne" : slide 1 = citation originale d'un philosophe, slide 2 = traduction en langage moderne/argot actuel, slide 3 = CTA qui demande si les gens kiffent ce format.
+            Crée un carrousel "Citation en moderne" sur le thème : %s. Style visuel : %s.
+            La traduction doit être drôle, authentique, en langage de la génération Z française (pas vulgaire).
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"citation originale courte et connue"},{"type":"moderne_traduction","moderne":"la même idée en langage moderne/argot gen Z","contexte":"en 1 phrase pourquoi c'est toujours vrai"},{"type":"moderne_cta","texte":"phrase d'accroche finale fun max 8 mots","question":"question pour les commentaires"}]}
+            """.formatted(theme, style);
+    }
+
+    private String buildPromptTop3(String auteur, String style) {
+        return """
+            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
+            Format "Top 3 citations" : slide 1 = intro sur l'auteur, slides 2-4 = les 3 meilleures citations avec explication courte, slide 5 = CTA.
+            Crée un carrousel "Top 3 citations" pour : %s. Style visuel : %s.
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"top3_intro","auteur":"%s","description":"1-2 phrases percutantes sur qui est cet auteur et son impact"},{"type":"top3_citation","numero":"1","citation":"première citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_citation","numero":"2","citation":"deuxième citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_citation","numero":"3","citation":"troisième citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_cta","texte":"phrase finale max 8 mots","question":"ta citation préférée c'est laquelle ?"}]}
+            """.formatted(auteur, style, auteur);
+    }
 
     private String extractContent(String responseBody) {
         int firstBrace = responseBody.indexOf("\"text\": \"{");
@@ -95,27 +124,21 @@ public class CarouselService {
 
         if (firstBrace != -1) {
             int jsonStart = responseBody.indexOf('{', firstBrace + 7);
-            int depth = 0;
-            int jsonEnd = -1;
+            int depth = 0, jsonEnd = -1;
             for (int i = jsonStart; i < responseBody.length(); i++) {
                 char c = responseBody.charAt(i);
                 if (c == '{') depth++;
-                else if (c == '}') {
-                    depth--;
-                    if (depth == 0) { jsonEnd = i; break; }
-                }
+                else if (c == '}') { depth--; if (depth == 0) { jsonEnd = i; break; } }
             }
             if (jsonEnd != -1) {
-                String escaped = responseBody.substring(jsonStart, jsonEnd + 1);
-                return escaped.replace("\\\"", "\"").replace("\\n", " ").replace("\\\\", "\\");
+                return responseBody.substring(jsonStart, jsonEnd + 1)
+                    .replace("\\\"", "\"").replace("\\n", " ").replace("\\\\", "\\");
             }
         }
 
         int jsonStart = responseBody.indexOf('{');
-        int depth = 0;
-        int jsonEnd = -1;
-        boolean inString = false;
-        boolean escape = false;
+        int depth = 0, jsonEnd = -1;
+        boolean inString = false, escape = false;
         for (int i = jsonStart; i < responseBody.length(); i++) {
             char c = responseBody.charAt(i);
             if (escape) { escape = false; continue; }
@@ -123,10 +146,7 @@ public class CarouselService {
             if (c == '"') { inString = !inString; continue; }
             if (!inString) {
                 if (c == '{') depth++;
-                else if (c == '}') {
-                    depth--;
-                    if (depth == 0) { jsonEnd = i; break; }
-                }
+                else if (c == '}') { depth--; if (depth == 0) { jsonEnd = i; break; } }
             }
         }
         if (jsonEnd == -1) throw new RuntimeException("JSON introuvable dans: " + responseBody.substring(0, Math.min(300, responseBody.length())));
@@ -134,10 +154,7 @@ public class CarouselService {
     }
 
     private String escapeJson(String text) {
-        return text.replace("\\", "\\\\")
-                   .replace("\"", "\\\"")
-                   .replace("\n", "\\n")
-                   .replace("\r", "\\r")
-                   .replace("\t", "\\t");
+        return text.replace("\\", "\\\\").replace("\"", "\\\"")
+                   .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
     }
 }
