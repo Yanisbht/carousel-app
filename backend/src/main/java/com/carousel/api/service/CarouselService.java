@@ -104,20 +104,21 @@ public class CarouselService {
 
     private String buildPromptPhilo(String question, String style) {
         return """
-            Tu es expert en algorithme TikTok. Objectif : maximiser le taux de completion et les commentaires.
+            Tu es expert en vulgarisation philosophique et algorithme TikTok.
+            Format : prendre une question que tout le monde se pose et expliquer simplement et court ce qu'un philosophe répond.
             
-            RÈGLES ALGO TIKTOK pour "Philo Express" :
-            - Slide 1 : question reformulée de façon provocatrice. MAX 7 MOTS.
-            - Slide 2 : citation d'un penseur + explication choc. MAX 10 MOTS citation, MAX 8 MOTS explication.
-            - Slide 3 : développement court et surprenant. MAX 8 MOTS.
-            - Slide 4 : réponse finale + question clivante pour les commentaires. MAX 8 MOTS.
-            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
+            STRUCTURE :
+            - Slide 1 : la question universelle reformulée simplement. MAX 7 MOTS.
+            - Slide 2 : la réponse vulgarisée du philosophe, simple et directe. MAX 10 MOTS. Pas de jargon.
+            - Slide 3 : qui est ce philosophe, 1 fait surprenant sur lui. MAX 10 MOTS.
+            - Slide 4 : ce qu'on retient concrètement aujourd'hui + question clivante. MAX 8 MOTS.
+            - HASHTAGS : 2 gros (#philosophie #citation) + 2 moyens + 2 niche sur le philosophe.
             
-            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Compte les mots.
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Langage simple, pas de termes philosophiques complexes.
             
             Question : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"philo_question","question":"MAX 7 MOTS ?","teaser":"MAX 6 MOTS"},{"type":"philo_citation","penseur":"Nom époque","citation":"MAX 10 MOTS","explication":"MAX 8 MOTS"},{"type":"context","titre":"2 MOTS","corps":"MAX 8 MOTS"},{"type":"philo_conclusion","conclusion":"MAX 8 MOTS","question_cta":"question clivante MAX 8 MOTS ?"}]}
+            {"hashtags":["philosophie","citation","sagesse","mindset","tag5","tag6"],"slides":[{"type":"philo_question","question":"question simple MAX 7 MOTS ?","teaser":"accroche MAX 6 MOTS"},{"type":"philo_reponse","penseur":"Prénom Nom","reponse":"réponse vulgarisée MAX 10 MOTS","citation":"citation courte MAX 8 MOTS"},{"type":"philo_qui","penseur":"Prénom Nom","epoque":"époque courte","fait":"fait surprenant MAX 10 MOTS"},{"type":"philo_conclusion","lecon":"leçon concrète MAX 8 MOTS","question_cta":"question clivante MAX 7 MOTS ?"}]}
             """.formatted(question);
     }
 
