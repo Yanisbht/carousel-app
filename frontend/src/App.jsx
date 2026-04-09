@@ -131,7 +131,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       </span>
 
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 3,
+        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
         padding: '28px 14px', textAlign: 'center',
