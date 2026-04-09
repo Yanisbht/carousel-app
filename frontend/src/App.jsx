@@ -94,6 +94,8 @@ function getSlideContent(slide) {
     case 'moderne_original': return { badge: slide.auteur?.toUpperCase(), top: 'VERSION ORIGINALE', main: `"${cap(slide.citation, 10)}"` }
     case 'moderne_traduction': return { badge: 'EN 2024...', main: `"${cap(slide.moderne, 12)}"`, sub: cap(slide.contexte, 7) }
     case 'moderne_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: cap(slide.question, 7) }
+    case 'philo_reponse': return { badge: slide.penseur?.toUpperCase(), top: 'SA RÉPONSE', main: cap(slide.reponse, 10), sub: null }
+    case 'philo_qui': return { badge: slide.epoque?.toUpperCase(), main: slide.penseur, sub: cap(slide.fait, 10) }
     case 'top3_intro': return { badge: 'TOP 3', main: slide.auteur, sub: cap(slide.description, 10) }
     case 'top3_citation': return { badge: `#${slide.numero}`, main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
     case 'top3_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: slide.question }
