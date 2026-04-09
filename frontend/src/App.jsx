@@ -275,7 +275,7 @@ export default function App() {
       for (let i = 0; i < slides.length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await html2canvas(el, { scale: 4, useCORS: true, allowTaint: true })
+        const canvas = await html2canvas(el, { scale: 2, useCORS: true, allowTaint: true })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
         link.href = canvas.toDataURL('image/png')
