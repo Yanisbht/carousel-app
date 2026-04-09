@@ -19,11 +19,10 @@ public class CarouselController {
 
     @PostMapping("/generate")
     public ResponseEntity<?> generate(@RequestBody Map<String, String> body) {
-        String theme = body.getOrDefault("theme", "philosophie stoïcienne");
-        String style = body.getOrDefault("style", "sombre et épuré");
         try {
-            String result = carouselService.generate(theme, style);
-            return ResponseEntity.ok(Map.of("data", result));
+            return ResponseEntity.ok(Map.of("data", carouselService.generate(
+                body.getOrDefault("theme", "philosophie stoïcienne"),
+                body.getOrDefault("style", "sombre et épuré"))));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
@@ -31,11 +30,10 @@ public class CarouselController {
 
     @PostMapping("/generate-devine")
     public ResponseEntity<?> generateDevine(@RequestBody Map<String, String> body) {
-        String theme = body.getOrDefault("theme", "philosophie stoïcienne");
-        String style = body.getOrDefault("style", "sombre et épuré");
         try {
-            String result = carouselService.generateDevine(theme, style);
-            return ResponseEntity.ok(Map.of("data", result));
+            return ResponseEntity.ok(Map.of("data", carouselService.generateDevine(
+                body.getOrDefault("theme", "philosophie stoïcienne"),
+                body.getOrDefault("style", "sombre et épuré"))));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
@@ -43,11 +41,32 @@ public class CarouselController {
 
     @PostMapping("/generate-philo")
     public ResponseEntity<?> generatePhilo(@RequestBody Map<String, String> body) {
-        String question = body.getOrDefault("question", "Pourquoi le monde n'a pas de sens");
-        String style = body.getOrDefault("style", "sombre et épuré");
         try {
-            String result = carouselService.generatePhilo(question, style);
-            return ResponseEntity.ok(Map.of("data", result));
+            return ResponseEntity.ok(Map.of("data", carouselService.generatePhilo(
+                body.getOrDefault("question", "Pourquoi le monde n'a pas de sens"),
+                body.getOrDefault("style", "sombre et épuré"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/generate-moderne")
+    public ResponseEntity<?> generateModerne(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generateModerne(
+                body.getOrDefault("theme", "philosophie stoïcienne"),
+                body.getOrDefault("style", "sombre et épuré"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/generate-top3")
+    public ResponseEntity<?> generateTop3(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generateTop3(
+                body.getOrDefault("auteur", "Marc Aurèle"),
+                body.getOrDefault("style", "sombre et épuré"))));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
