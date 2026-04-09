@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 const PALETTES = {
-  'sombre et épuré':    { bg: '#0f0f0f', text: '#f5f5f5', accent: '#d4af37', sub: '#888', badge: '#1a1a1a', badgeText: '#d4af37' },
-  'minimaliste blanc':  { bg: '#fafafa', text: '#111',    accent: '#333',    sub: '#777', badge: '#e8e8e8', badgeText: '#444'    },
-  'doré et luxueux':    { bg: '#1a1200', text: '#f5e6a0', accent: '#d4af37', sub: '#a08c40', badge: '#2a1e00', badgeText: '#d4af37' },
-  'coloré et énergique':{ bg: '#1a0533', text: '#fff',    accent: '#b24bf3', sub: '#c9a0f7', badge: '#2a0a4a', badgeText: '#e0b0ff' },
+  'sombre et épuré':    { overlay: 'rgba(0,0,0,0.72)', text: '#f5f5f5', accent: '#d4af37', sub: 'rgba(255,255,255,0.55)' },
+  'minimaliste blanc':  { overlay: 'rgba(255,255,255,0.82)', text: '#111', accent: '#333', sub: 'rgba(0,0,0,0.45)' },
+  'doré et luxueux':    { overlay: 'rgba(10,7,0,0.78)', text: '#f5e6a0', accent: '#d4af37', sub: 'rgba(212,175,55,0.6)' },
+  'coloré et énergique':{ overlay: 'rgba(26,5,51,0.80)', text: '#fff', accent: '#b24bf3', sub: 'rgba(178,75,243,0.6)' },
 }
 
 const THEMES = [
@@ -33,106 +33,154 @@ const PHILO_QUESTIONS = [
   'Pourquoi on a peur de la mort — selon Marc Aurèle',
   'C\'est quoi l\'amour selon les Grecs',
   'Pourquoi l\'homme cherche toujours plus — selon les bouddhistes',
-  'Qu\'est-ce que le temps — selon Augustin',
 ]
 
+const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const STYLES = Object.keys(PALETTES)
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', 'Devine l\'auteur', 'Philo Express']
 
-function Slide({ slide, index, total, palette, id }) {
+const THEME_KEYWORDS = {
+  'philosophie stoïcienne': 'ancient greece philosophy',
+  'sagesse africaine': 'africa landscape sunset',
+  'philosophie orientale': 'japan zen temple',
+  'leaders et révolutionnaires': 'revolution crowd power',
+  'philosophie arabe et islamique': 'arabic architecture mosque',
+  'développement personnel moderne': 'mindset motivation sunrise',
+  'sagesse amérindienne': 'native nature forest',
+  'philosophie japonaise (Musashi, Mishima)': 'japan samurai mountain',
+  'citations de prison et résilience (Mandela, Malcolm X)': 'strength resilience light',
+  'femmes philosophes (Beauvoir, Angelou)': 'woman strength poetry',
+  'sagesse berbère et maghrébine': 'sahara desert morocco',
+  'citations de guerriers (Sun Tzu, Spartiate)': 'warrior battle strength',
+  'spiritualité soufie (Rumi, Ibn Arabi)': 'sufi spiritual light',
+  'philosophie grecque antique (Socrate, Platon)': 'ancient greece columns',
+}
+
+async function fetchPexelsImage(query) {
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=5&orientation=portrait`, {
+      headers: { Authorization: PEXELS_KEY }
+    })
+    const data = await res.json()
+    if (data.photos && data.photos.length > 0) {
+      const idx = Math.floor(Math.random() * data.photos.length)
+      return data.photos[idx].src.large
+    }
+  } catch (e) {}
+  return null
+}
+
+function Slide({ slide, index, total, palette, bgImage, id }) {
   const p = palette
+
   const base = {
     flexShrink: 0, width: 180, height: 320, borderRadius: 12,
     display: 'flex', flexDirection: 'column', justifyContent: 'center',
-    alignItems: 'center', padding: '24px 16px', textAlign: 'center',
-    position: 'relative', background: p.bg,
-    border: '0.5px solid rgba(128,128,128,0.15)',
+    alignItems: 'center', padding: '24px 14px', textAlign: 'center',
+    position: 'relative', overflow: 'hidden',
+    border: '0.5px solid rgba(128,128,128,0.2)',
+    background: '#111',
   }
-  const num = { position: 'absolute', top: 12, left: 14, fontSize: 10, color: p.sub }
-  const line = { position: 'absolute', bottom: 0, left: '20%', width: '60%', height: 2, background: p.accent, borderRadius: 2 }
+
+  const bgStyle = bgImage ? {
+    position: 'absolute', inset: 0,
+    backgroundImage: `url(${bgImage})`,
+    backgroundSize: 'cover', backgroundPosition: 'center',
+    filter: 'blur(2px) brightness(0.7)',
+    transform: 'scale(1.05)',
+    zIndex: 0,
+  } : { position: 'absolute', inset: 0, background: '#111', zIndex: 0 }
+
+  const overlayStyle = {
+    position: 'absolute', inset: 0,
+    background: p.overlay, zIndex: 1,
+  }
+
+  const inner = { position: 'relative', zIndex: 2, width: '100%' }
+  const num = { position: 'absolute', top: 10, left: 12, fontSize: 10, color: p.sub, zIndex: 3 }
+  const line = {
+    position: 'absolute', bottom: 14, left: '25%', width: '50%',
+    height: 1.5, background: p.accent, borderRadius: 2, zIndex: 3,
+  }
 
   const content = () => {
     if (slide.type === 'hook') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{slide.origine}</p>
-        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.45, marginBottom: 12 }}>"{slide.citation}"</p>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.origine}</p>
+        <p style={{ fontSize: 20, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.4, marginBottom: 14 }}>"{slide.citation}"</p>
         <p style={{ fontSize: 11, color: p.sub }}>— {slide.auteur}</p>
-        <div style={line}></div>
-      </>
+      </div>
     )
     if (slide.type === 'intrigue') return (
-      <>
-        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 12 }}>{slide.question}</p>
-        <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5 }}>{slide.teaser}</p>
-      </>
+      <div style={inner}>
+        <p style={{ fontSize: 24, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 12 }}>{slide.question}</p>
+        <p style={{ fontSize: 12, color: p.sub, lineHeight: 1.5, fontStyle: 'italic' }}>{slide.teaser}</p>
+      </div>
     )
     if (slide.type === 'context' || slide.type === 'lesson') return (
-      <>
-        <p style={{ fontSize: 12, fontWeight: 500, color: p.accent, marginBottom: 10, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{slide.titre}</p>
-        <p style={{ fontSize: 13, color: p.text, lineHeight: 1.65 }}>{slide.corps}</p>
-      </>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.accent, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500 }}>{slide.titre}</p>
+        <p style={{ fontSize: 13, color: p.text, lineHeight: 1.7 }}>{slide.corps}</p>
+      </div>
     )
     if (slide.type === 'cta') return (
-      <>
-        <p style={{ fontSize: 20, fontWeight: 500, color: p.text, lineHeight: 1.35, marginBottom: 14 }}>{slide.texte}</p>
+      <div style={inner}>
+        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.3, marginBottom: 14 }}>{slide.texte}</p>
         <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
-        <div style={line}></div>
-      </>
+      </div>
     )
-    // Format Devine
     if (slide.type === 'devine_question') return (
-      <>
+      <div style={inner}>
         <p style={{ fontSize: 13, color: p.sub, marginBottom: 14, lineHeight: 1.5 }}>{slide.intro}</p>
-        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.3 }}>{slide.question}</p>
-      </>
+        <p style={{ fontSize: 24, fontWeight: 500, color: p.text, lineHeight: 1.3 }}>{slide.question}</p>
+      </div>
     )
     if (slide.type === 'devine_citation') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 12, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Qui a dit...</p>
-        <p style={{ fontSize: 17, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 14 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 13, color: p.sub }}>{slide.indice}</p>
-        <div style={line}></div>
-      </>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Qui a dit...</p>
+        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 14 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 12, color: p.sub, fontStyle: 'italic' }}>{slide.indice}</p>
+      </div>
     )
     if (slide.type === 'devine_revelation') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 8, letterSpacing: '0.1em', textTransform: 'uppercase' }}>C'était...</p>
-        <p style={{ fontSize: 22, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.auteur}</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.6 }}>{slide.bio}</p>
-        <div style={line}></div>
-      </>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>C'était...</p>
+        <p style={{ fontSize: 26, fontWeight: 500, color: p.accent, marginBottom: 12 }}>{slide.auteur}</p>
+        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.65 }}>{slide.bio}</p>
+      </div>
     )
-    // Format Philo Express
     if (slide.type === 'philo_question') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}>La question</p>
-        <p style={{ fontSize: 20, fontWeight: 500, color: p.text, lineHeight: 1.35, marginBottom: 12 }}>{slide.question}</p>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La question</p>
+        <p style={{ fontSize: 22, fontWeight: 500, color: p.text, lineHeight: 1.35, marginBottom: 12 }}>{slide.question}</p>
         <p style={{ fontSize: 12, color: p.sub, fontStyle: 'italic' }}>{slide.teaser}</p>
-      </>
+      </div>
     )
     if (slide.type === 'philo_citation') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{slide.penseur}</p>
-        <p style={{ fontSize: 16, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
-        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.55 }}>{slide.explication}</p>
-      </>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.penseur}</p>
+        <p style={{ fontSize: 17, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.6 }}>{slide.explication}</p>
+      </div>
     )
     if (slide.type === 'philo_conclusion') return (
-      <>
-        <p style={{ fontSize: 11, color: p.sub, marginBottom: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}>La réponse</p>
-        <p style={{ fontSize: 17, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 12 }}>{slide.conclusion}</p>
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 10, letterSpacing: '0.12em', textTransform: 'uppercase' }}>La réponse</p>
+        <p style={{ fontSize: 19, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 12 }}>{slide.conclusion}</p>
         <p style={{ fontSize: 13, color: p.accent, fontStyle: 'italic' }}>{slide.question_cta}</p>
-        <div style={line}></div>
-      </>
+      </div>
     )
     return null
   }
 
   return (
     <div id={id} style={base}>
+      <div style={bgStyle}></div>
+      <div style={overlayStyle}></div>
       <span style={num}>{index + 1}/{total}</span>
       {content()}
+      <div style={line}></div>
     </div>
   )
 }
@@ -156,18 +204,27 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
+  const [bgImages, setBgImages] = useState([])
   const [error, setError] = useState(null)
 
   const generate = async () => {
     setLoading(true)
     setError(null)
     setData(null)
+    setBgImages([])
     try {
       let result
       if (format === 0) result = await callAPI('/api/generate', { theme, style })
       else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style })
       else result = await callAPI('/api/generate-philo', { question: philoQ, style })
+
       setData(result)
+
+      const keyword = THEME_KEYWORDS[theme] || theme
+      const imgs = await Promise.all(
+        (result.slides || []).map(() => fetchPexelsImage(keyword))
+      )
+      setBgImages(imgs)
     } catch (e) {
       setError(e.message)
     }
@@ -182,7 +239,7 @@ export default function App() {
       for (let i = 0; i < slides.length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await html2canvas(el, { scale: 4, backgroundColor: null, useCORS: true })
+        const canvas = await html2canvas(el, { scale: 4, useCORS: true, allowTaint: true })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
         link.href = canvas.toDataURL('image/png')
@@ -209,22 +266,15 @@ export default function App() {
 
       <div className="format-tabs">
         {FORMATS.map((f, i) => (
-          <button key={i} className={`ftab${format === i ? ' active' : ''}`} onClick={() => { setFormat(i); setData(null); setError(null); }}>
+          <button key={i} className={`ftab${format === i ? ' active' : ''}`}
+            onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]); }}>
             {f}
           </button>
         ))}
       </div>
 
       <div className="controls">
-        {format === 0 && (
-          <div className="ctrl">
-            <label>Thème</label>
-            <select value={theme} onChange={e => setTheme(e.target.value)}>
-              {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-        )}
-        {format === 1 && (
+        {format !== 2 && (
           <div className="ctrl">
             <label>Thème</label>
             <select value={theme} onChange={e => setTheme(e.target.value)}>
@@ -258,7 +308,8 @@ export default function App() {
         <>
           <div className="slides-row">
             {slides.map((slide, i) => (
-              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} total={slides.length} palette={palette} />
+              <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
+                total={slides.length} palette={palette} bgImage={bgImages[i]} />
             ))}
           </div>
           <div className="hashtags">
