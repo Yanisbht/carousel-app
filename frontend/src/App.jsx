@@ -26,19 +26,26 @@ const THEMES = [
 ]
 
 const PHILO_QUESTIONS = [
-  'Pourquoi le monde n\'a pas de sens — selon Camus',
-  'Pourquoi souffrons-nous — selon les stoïciens',
-  'C\'est quoi la liberté vraiment — selon Sartre',
-  'Pourquoi l\'argent ne rend pas heureux — selon Épictète',
-  'Pourquoi on a peur de la mort — selon Marc Aurèle',
-  'C\'est quoi l\'amour selon les Grecs',
-  'Pourquoi l\'homme cherche toujours plus — selon les bouddhistes',
+  "Pourquoi le monde n'a pas de sens — selon Camus",
+  "Pourquoi souffrons-nous — selon les stoïciens",
+  "C'est quoi la liberté vraiment — selon Sartre",
+  "Pourquoi l'argent ne rend pas heureux — selon Épictète",
+  "Pourquoi on a peur de la mort — selon Marc Aurèle",
+  "C'est quoi l'amour selon les Grecs",
+  "Pourquoi l'homme cherche toujours plus — selon les bouddhistes",
+]
+
+const AUTEURS = [
+  'Marc Aurèle', 'Épictète', 'Sénèque', 'Socrate', 'Platon',
+  'Aristote', 'Rumi', 'Ibn Khaldoun', 'Confucius', 'Lao Tseu',
+  'Sun Tzu', 'Miyamoto Musashi', 'Nelson Mandela', 'Malcolm X',
+  'Simone de Beauvoir', 'Maya Angelou', 'Nietzsche', 'Camus', 'Sartre',
 ]
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const STYLES = Object.keys(PALETTES)
 const API_BASE = import.meta.env.VITE_API_URL || ''
-const FORMATS = ['Carrousel', 'Devine l\'auteur', 'Philo Express']
+const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
 
 const THEME_KEYWORDS = {
   'philosophie stoïcienne': 'ancient greece philosophy',
@@ -73,36 +80,23 @@ async function fetchPexelsImage(query) {
 
 function Slide({ slide, index, total, palette, bgImage, id }) {
   const p = palette
-
   const base = {
     flexShrink: 0, width: 180, height: 320, borderRadius: 12,
     display: 'flex', flexDirection: 'column', justifyContent: 'center',
     alignItems: 'center', padding: '24px 14px', textAlign: 'center',
     position: 'relative', overflow: 'hidden',
-    border: '0.5px solid rgba(128,128,128,0.2)',
-    background: '#111',
+    border: '0.5px solid rgba(128,128,128,0.2)', background: '#111',
   }
-
   const bgStyle = bgImage ? {
     position: 'absolute', inset: 0,
     backgroundImage: `url(${bgImage})`,
     backgroundSize: 'cover', backgroundPosition: 'center',
-    filter: 'blur(2px) brightness(0.7)',
-    transform: 'scale(1.05)',
-    zIndex: 0,
+    filter: 'blur(2px) brightness(0.7)', transform: 'scale(1.05)', zIndex: 0,
   } : { position: 'absolute', inset: 0, background: '#111', zIndex: 0 }
-
-  const overlayStyle = {
-    position: 'absolute', inset: 0,
-    background: p.overlay, zIndex: 1,
-  }
-
+  const overlayStyle = { position: 'absolute', inset: 0, background: p.overlay, zIndex: 1 }
   const inner = { position: 'relative', zIndex: 2, width: '100%' }
   const num = { position: 'absolute', top: 10, left: 12, fontSize: 10, color: p.sub, zIndex: 3 }
-  const line = {
-    position: 'absolute', bottom: 14, left: '25%', width: '50%',
-    height: 1.5, background: p.accent, borderRadius: 2, zIndex: 3,
-  }
+  const line = { position: 'absolute', bottom: 14, left: '25%', width: '50%', height: 1.5, background: p.accent, borderRadius: 2, zIndex: 3 }
 
   const content = () => {
     if (slide.type === 'hook') return (
@@ -171,6 +165,48 @@ function Slide({ slide, index, total, palette, bgImage, id }) {
         <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question_cta}</p>
       </div>
     )
+    // Citation moderne
+    if (slide.type === 'moderne_original') return (
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{slide.auteur} disait...</p>
+        <p style={{ fontSize: 14, fontWeight: 500, color: p.accent, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 11, color: p.sub }}>Version originale</p>
+      </div>
+    )
+    if (slide.type === 'moderne_traduction') return (
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>En 2024 ça donne...</p>
+        <p style={{ fontSize: 15, fontWeight: 500, color: p.text, lineHeight: 1.5, marginBottom: 10 }}>"{slide.moderne}"</p>
+        <p style={{ fontSize: 11, color: p.accent }}>{slide.contexte}</p>
+      </div>
+    )
+    if (slide.type === 'moderne_cta') return (
+      <div style={inner}>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
+        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
+      </div>
+    )
+    // Top 3
+    if (slide.type === 'top3_intro') return (
+      <div style={inner}>
+        <p style={{ fontSize: 10, color: p.sub, marginBottom: 8, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Top 3</p>
+        <p style={{ fontSize: 18, fontWeight: 500, color: p.accent, marginBottom: 10 }}>{slide.auteur}</p>
+        <p style={{ fontSize: 12, color: p.text, lineHeight: 1.5 }}>{slide.description}</p>
+      </div>
+    )
+    if (slide.type === 'top3_citation') return (
+      <div style={inner}>
+        <p style={{ fontSize: 11, color: p.accent, marginBottom: 8, fontWeight: 500 }}>#{slide.numero}</p>
+        <p style={{ fontSize: 14, fontWeight: 500, color: p.text, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10 }}>"{slide.citation}"</p>
+        <p style={{ fontSize: 11, color: p.sub, lineHeight: 1.5 }}>{slide.explication}</p>
+      </div>
+    )
+    if (slide.type === 'top3_cta') return (
+      <div style={inner}>
+        <p style={{ fontSize: 16, fontWeight: 500, color: p.text, lineHeight: 1.4, marginBottom: 10 }}>{slide.texte}</p>
+        <p style={{ fontSize: 12, color: p.accent, fontStyle: 'italic' }}>{slide.question}</p>
+      </div>
+    )
     return null
   }
 
@@ -200,6 +236,7 @@ export default function App() {
   const [format, setFormat] = useState(0)
   const [theme, setTheme] = useState(THEMES[0])
   const [philoQ, setPhiloQ] = useState(PHILO_QUESTIONS[0])
+  const [auteur, setAuteur] = useState(AUTEURS[0])
   const [style, setStyle] = useState(STYLES[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -216,14 +253,13 @@ export default function App() {
       let result
       if (format === 0) result = await callAPI('/api/generate', { theme, style })
       else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style })
-      else result = await callAPI('/api/generate-philo', { question: philoQ, style })
+      else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style })
+      else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style })
+      else result = await callAPI('/api/generate-top3', { auteur, style })
 
       setData(result)
-
       const keyword = THEME_KEYWORDS[theme] || theme
-      const imgs = await Promise.all(
-        (result.slides || []).map(() => fetchPexelsImage(keyword))
-      )
+      const imgs = await Promise.all((result.slides || []).map(() => fetchPexelsImage(keyword)))
       setBgImages(imgs)
     } catch (e) {
       setError(e.message)
@@ -246,9 +282,7 @@ export default function App() {
         link.click()
         await new Promise(r => setTimeout(r, 400))
       }
-    } catch (e) {
-      alert('Erreur export: ' + e.message)
-    }
+    } catch (e) { alert('Erreur export: ' + e.message) }
     setExporting(false)
   }
 
@@ -267,14 +301,14 @@ export default function App() {
       <div className="format-tabs">
         {FORMATS.map((f, i) => (
           <button key={i} className={`ftab${format === i ? ' active' : ''}`}
-            onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]); }}>
+            onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>
             {f}
           </button>
         ))}
       </div>
 
       <div className="controls">
-        {format !== 2 && (
+        {(format === 0 || format === 1 || format === 3) && (
           <div className="ctrl">
             <label>Thème</label>
             <select value={theme} onChange={e => setTheme(e.target.value)}>
@@ -287,6 +321,14 @@ export default function App() {
             <label>Question philo</label>
             <select value={philoQ} onChange={e => setPhiloQ(e.target.value)}>
               {PHILO_QUESTIONS.map(q => <option key={q} value={q}>{q}</option>)}
+            </select>
+          </div>
+        )}
+        {format === 4 && (
+          <div className="ctrl">
+            <label>Auteur</label>
+            <select value={auteur} onChange={e => setAuteur(e.target.value)}>
+              {AUTEURS.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
           </div>
         )}
