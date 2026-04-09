@@ -17,8 +17,18 @@ public class CarouselService {
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     public String generate(String theme, String style) throws Exception {
-        String prompt = buildPrompt(theme, style);
+        return callGemini(buildPrompt(theme, style));
+    }
 
+    public String generateDevine(String theme, String style) throws Exception {
+        return callGemini(buildPromptDevine(theme, style));
+    }
+
+    public String generatePhilo(String question, String style) throws Exception {
+        return callGemini(buildPromptPhilo(question, style));
+    }
+
+    private String callGemini(String prompt) throws Exception {
         String requestBody = """
             {
               "contents": [{"parts": [{"text": "%s"}]}],
@@ -59,10 +69,30 @@ public class CarouselService {
             """.formatted(theme, style);
     }
 
+    private String buildPromptDevine(String theme, String style) {
+        return """
+            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
+            Format "Devine l'auteur" : slide 1 = question d'accroche pour engager, slide 2 = citation sans révéler l'auteur avec un indice, slide 3 = révélation de l'auteur avec mini biographie.
+            Crée un carrousel "Devine l'auteur" sur le thème : %s. Style visuel : %s.
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"phrase d'accroche courte type D'où viennent tes citations préférées","question":"question engageante max 8 mots"},{"type":"devine_citation","citation":"citation célèbre et percutante","indice":"indice subtil sur l'auteur sans révéler son nom"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"2-3 phrases sur qui est cet auteur et pourquoi sa pensée est importante"}]}
+            """.formatted(theme, style);
+    }
+
+    private String buildPromptPhilo(String question, String style) {
+        return """
+            Tu es un expert en carrousels TikTok viraux sur la philosophie.
+            Format "Philo Express" : slide 1 = la question universelle posée de façon percutante, slides 2-3 = deux penseurs différents qui répondent via une citation + explication courte, slide 4 = conclusion synthèse percutante avec CTA.
+            Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
+            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"philo_citation","penseur":"Nom d'un autre penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer les commentaires"}]}
+            """.formatted(question, style);
+    }
+
     private String extractContent(String responseBody) {
         int firstBrace = responseBody.indexOf("\"text\": \"{");
         if (firstBrace == -1) firstBrace = responseBody.indexOf("\"text\":\"{");
-        
+
         if (firstBrace != -1) {
             int jsonStart = responseBody.indexOf('{', firstBrace + 7);
             int depth = 0;
