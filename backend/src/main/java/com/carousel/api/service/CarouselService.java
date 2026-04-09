@@ -66,55 +66,56 @@ public class CarouselService {
 
     private String buildPrompt(String theme, String style) {
         return """
-            Tu es un expert en croissance TikTok et carrousels viraux sur les citations du monde.
-            Règle 1 : slide 1 = citation directe percutante, accroche en 1 seconde.
-            Règle 2 : slide 2 = question mystère pour forcer le scroll.
-            Règle 3 : slides 3-4 = valeur et contexte.
-            Règle 4 : slide 5 = CTA avec question pour provoquer les commentaires.
-            Crée un carrousel TikTok de 5 slides sur le thème : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"hook","citation":"citation courte et percutante max 15 mots","auteur":"Prénom Nom","origine":"pays ou culture"},{"type":"intrigue","question":"question mystérieuse max 8 mots","teaser":"1 phrase qui donne envie d'en savoir plus"},{"type":"context","titre":"contexte","corps":"2 phrases courtes sur le contexte historique"},{"type":"lesson","titre":"aujourd'hui","corps":"2 phrases sur comment appliquer maintenant"},{"type":"cta","texte":"phrase finale impactante max 8 mots","question":"question courte pour provoquer des commentaires"}]}
+            IMPORTANT : maximum 10 mots par champ texte, phrases très courtes et percutantes.
+            Tu es un expert TikTok en carrousels viraux sur les citations du monde.
+            Slide 1 = citation directe percutante. Slide 2 = question mystère courte. Slides 3-4 = contexte court. Slide 5 = CTA court.
+            Thème : %s. Style : %s.
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"hook","citation":"citation max 10 mots","auteur":"Prénom Nom","origine":"pays"},{"type":"intrigue","question":"question max 7 mots","teaser":"phrase max 8 mots"},{"type":"context","titre":"mot ou deux","corps":"max 15 mots"},{"type":"lesson","titre":"mot ou deux","corps":"max 15 mots"},{"type":"cta","texte":"phrase max 7 mots","question":"question max 8 mots"}]}
             """.formatted(theme, style);
     }
 
     private String buildPromptDevine(String theme, String style) {
         return """
-            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
-            Format "Devine l'auteur" : slide 1 = accroche engageante, slide 2 = citation sans révéler l'auteur avec un indice, slide 3 = révélation auteur + mini bio.
-            Crée un carrousel "Devine l'auteur" sur le thème : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"phrase d'accroche courte","question":"question engageante max 8 mots"},{"type":"devine_citation","citation":"citation célèbre et percutante","indice":"indice subtil sur l'auteur sans révéler son nom"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"2-3 phrases sur qui est cet auteur et pourquoi sa pensée est importante"}]}
+            IMPORTANT : maximum 10 mots par champ texte, phrases très courtes.
+            Tu es un expert TikTok en carrousels viraux sur les citations du monde.
+            Format Devine l'auteur : slide 1 = accroche courte, slide 2 = citation sans auteur + indice, slide 3 = révélation + bio courte.
+            Thème : %s. Style : %s.
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"devine_question","intro":"phrase max 8 mots","question":"question max 7 mots"},{"type":"devine_citation","citation":"citation max 12 mots","indice":"indice max 8 mots"},{"type":"devine_revelation","auteur":"Prénom Nom","bio":"max 20 mots sur cet auteur"}]}
             """.formatted(theme, style);
     }
 
     private String buildPromptPhilo(String question, String style) {
         return """
-            Tu es un expert en carrousels TikTok viraux sur la philosophie.
-            Format "Philo Express" : slide 1 = question universelle percutante, slide 2 = un penseur avec sa citation, slide 3 = développement de sa pensée, slide 4 = conclusion + CTA.
-            Crée un carrousel "Philo Express" sur cette question : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"la question reformulée de façon percutante","teaser":"phrase mystérieuse qui donne envie de lire la suite"},{"type":"philo_citation","penseur":"Nom du penseur, époque","citation":"citation courte et percutante","explication":"1-2 phrases d'explication simple"},{"type":"context","titre":"sa pensée","corps":"2-3 phrases de développement sur cette philosophie"},{"type":"philo_conclusion","conclusion":"réponse synthèse en 1 phrase forte","question_cta":"question courte pour provoquer des commentaires"}]}
+            IMPORTANT : maximum 10 mots par champ texte, phrases très courtes.
+            Tu es un expert TikTok en carrousels viraux sur la philosophie.
+            Format Philo Express : slide 1 = question percutante, slide 2 = citation d'un penseur, slide 3 = développement court, slide 4 = conclusion + CTA.
+            Question : %s. Style : %s.
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"philo_question","question":"question max 8 mots","teaser":"phrase max 8 mots"},{"type":"philo_citation","penseur":"Nom, époque","citation":"citation max 12 mots","explication":"max 12 mots"},{"type":"context","titre":"mot ou deux","corps":"max 15 mots"},{"type":"philo_conclusion","conclusion":"phrase max 10 mots","question_cta":"question max 8 mots"}]}
             """.formatted(question, style);
     }
 
     private String buildPromptModerne(String theme, String style) {
         return """
-            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
-            Format "Citation en moderne" : slide 1 = citation originale d'un philosophe, slide 2 = traduction en langage moderne/argot actuel, slide 3 = CTA qui demande si les gens kiffent ce format.
-            Crée un carrousel "Citation en moderne" sur le thème : %s. Style visuel : %s.
-            La traduction doit être drôle, authentique, en langage de la génération Z française (pas vulgaire).
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"citation originale courte et connue"},{"type":"moderne_traduction","moderne":"la même idée en langage moderne/argot gen Z","contexte":"en 1 phrase pourquoi c'est toujours vrai"},{"type":"moderne_cta","texte":"phrase d'accroche finale fun max 8 mots","question":"question pour les commentaires"}]}
+            IMPORTANT : maximum 10 mots par champ texte, phrases très courtes.
+            Tu es un expert TikTok en carrousels viraux sur les citations du monde.
+            Format Citation moderne : slide 1 = citation originale courte, slide 2 = traduction en argot gen Z courte et drôle, slide 3 = CTA.
+            Thème : %s. Style : %s.
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"citation max 10 mots"},{"type":"moderne_traduction","moderne":"traduction argot max 12 mots","contexte":"max 8 mots"},{"type":"moderne_cta","texte":"phrase fun max 7 mots","question":"question max 8 mots"}]}
             """.formatted(theme, style);
     }
 
     private String buildPromptTop3(String auteur, String style) {
         return """
-            Tu es un expert en carrousels TikTok viraux sur les citations du monde.
-            Format "Top 3 citations" : slide 1 = intro sur l'auteur, slides 2-4 = les 3 meilleures citations avec explication courte, slide 5 = CTA.
-            Crée un carrousel "Top 3 citations" pour : %s. Style visuel : %s.
-            Retourne UNIQUEMENT ce JSON sans rien d'autre, sans backticks, sans markdown :
-            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"top3_intro","auteur":"%s","description":"1-2 phrases percutantes sur qui est cet auteur et son impact"},{"type":"top3_citation","numero":"1","citation":"première citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_citation","numero":"2","citation":"deuxième citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_citation","numero":"3","citation":"troisième citation marquante","explication":"1 phrase sur ce qu'elle signifie"},{"type":"top3_cta","texte":"phrase finale max 8 mots","question":"ta citation préférée c'est laquelle ?"}]}
+            IMPORTANT : maximum 10 mots par champ texte, phrases très courtes.
+            Tu es un expert TikTok en carrousels viraux sur les citations du monde.
+            Format Top 3 : slide 1 = intro auteur, slides 2-4 = top 3 citations avec explication courte, slide 5 = CTA.
+            Auteur : %s. Style : %s.
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["tag1","tag2","tag3","tag4","tag5","tag6"],"slides":[{"type":"top3_intro","auteur":"%s","description":"max 15 mots sur cet auteur"},{"type":"top3_citation","numero":"1","citation":"citation max 12 mots","explication":"max 8 mots"},{"type":"top3_citation","numero":"2","citation":"citation max 12 mots","explication":"max 8 mots"},{"type":"top3_citation","numero":"3","citation":"citation max 12 mots","explication":"max 8 mots"},{"type":"top3_cta","texte":"phrase max 7 mots","question":"ta citation préférée ?"}]}
             """.formatted(auteur, style, auteur);
     }
 
