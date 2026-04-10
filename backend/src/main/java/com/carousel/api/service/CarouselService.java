@@ -66,21 +66,23 @@ public class CarouselService {
 
     private String buildPrompt(String theme, String style) {
         return """
-            Tu es expert en algorithme TikTok. Objectif : maximiser le taux de completion et les commentaires.
+            Tu crées des carrousels TikTok viraux sur les citations du monde.
+            Ton style : fond philosophique sérieux, forme simple et naturelle comme si un ami t'expliquait.
+            Pas de jargon. Pas académique. Court, direct, percutant.
             
-            RÈGLES ALGO TIKTOK :
-            - Slide 1 (HOOK) : stat choc OU affirmation controversée + citation. MAX 8 MOTS pour la citation. Doit choquer en 1 seconde.
-            - Slide 2 (SUSPENSE) : question clivante qui crée du manque. MAX 6 MOTS. Les gens DOIVENT scroller pour avoir la réponse.
-            - Slide 3 (VALEUR) : contexte historique ultra court. MAX 8 MOTS. Info surprenante.
-            - Slide 4 (LEÇON) : application aujourd'hui. MAX 8 MOTS. Concret et direct.
-            - Slide 5 (CTA) : question clivante qui force les commentaires. MAX 8 MOTS. Doit diviser les opinions.
-            - HASHTAGS : 2 gros (#citation #philosophie) + 2 moyens (#sagesse #mindset) + 2 ultra niche spécifiques au thème.
+            STRUCTURE :
+            - Slide 1 (HOOK) : citation courte et percutante qui claque. MAX 8 MOTS. Choisir une citation connue.
+            - Slide 2 (SUSPENSE) : question courte qui donne envie de scroller. Formulée simplement. MAX 6 MOTS.
+            - Slide 3 (VALEUR) : contexte historique surprenant. Simple. MAX 8 MOTS.
+            - Slide 4 (LEÇON) : comment appliquer ça aujourd'hui. Concret. MAX 8 MOTS.
+            - Slide 5 (CTA) : question simple qui divise les opinions. MAX 8 MOTS.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche.
             
-            RÈGLE ABSOLUE : chaque champ = MAX 8 MOTS. Compte les mots avant d'écrire.
+            RÈGLE ABSOLUE : MAX 8 MOTS par champ. Langage simple et naturel.
             
             Thème : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"hook","accroche":"stat choc ou affirmation controversée MAX 6 MOTS","citation":"MAX 8 MOTS","auteur":"Prénom Nom","origine":"pays"},{"type":"intrigue","question":"question suspense MAX 6 MOTS ?"},{"type":"context","titre":"2 MOTS","corps":"info surprenante MAX 8 MOTS"},{"type":"lesson","titre":"2 MOTS","corps":"leçon concrète MAX 8 MOTS"},{"type":"cta","question":"question clivante MAX 8 MOTS ?"}]}
+            {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"hook","citation":"citation percutante MAX 8 MOTS","auteur":"Prénom Nom","origine":"pays ou époque"},{"type":"intrigue","question":"question simple MAX 6 MOTS ?"},{"type":"context","titre":"2 MOTS","corps":"info surprenante MAX 8 MOTS"},{"type":"lesson","titre":"2 MOTS","corps":"leçon concrète MAX 8 MOTS"},{"type":"cta","question":"question qui divise MAX 8 MOTS ?"}]}
             """.formatted(theme);
     }
 
@@ -104,21 +106,21 @@ public class CarouselService {
 
     private String buildPromptPhilo(String question, String style) {
         return """
-            Tu es expert en vulgarisation philosophique et algorithme TikTok.
-            Format : prendre une question que tout le monde se pose et expliquer simplement et court ce qu'un philosophe répond.
+            Tu vulgarises la philosophie pour TikTok. Ton style : comme un ami qui explique, pas un prof.
+            Simple, court, naturel. Le fond est sérieux, la forme est accessible à tous.
             
             STRUCTURE :
-            - Slide 1 : la question universelle reformulée simplement. MAX 7 MOTS.
-            - Slide 2 : la réponse vulgarisée du philosophe, simple et directe. MAX 10 MOTS. Pas de jargon.
-            - Slide 3 : qui est ce philosophe, 1 fait surprenant sur lui. MAX 10 MOTS.
-            - Slide 4 : ce qu'on retient concrètement aujourd'hui + question clivante. MAX 8 MOTS.
-            - HASHTAGS : 2 gros (#philosophie #citation) + 2 moyens + 2 niche sur le philosophe.
+            - Slide 1 : la question reformulée comme on se la pose vraiment dans la vie. MAX 7 MOTS. Familier et direct.
+            - Slide 2 : la réponse du philosophe vulgarisée en langage simple. MAX 10 MOTS. + sa citation courte.
+            - Slide 3 : qui est ce philosophe, 1 fait surprenant qui étonne. MAX 10 MOTS. Simple.
+            - Slide 4 : ce qu'on peut retenir dans sa vie aujourd'hui. MAX 8 MOTS. + question simple pour les commentaires.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche sur ce philosophe.
             
-            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Langage simple, pas de termes philosophiques complexes.
+            RÈGLE ABSOLUE : MAX 10 MOTS par champ. Pas de jargon philosophique. Parle comme à un ami.
             
             Question : %s.
             Retourne UNIQUEMENT ce JSON sans backticks :
-            {"hashtags":["philosophie","citation","sagesse","mindset","tag5","tag6"],"slides":[{"type":"philo_question","question":"question simple MAX 7 MOTS ?","teaser":"accroche MAX 6 MOTS"},{"type":"philo_reponse","penseur":"Prénom Nom","reponse":"réponse vulgarisée MAX 10 MOTS","citation":"citation courte MAX 8 MOTS"},{"type":"philo_qui","penseur":"Prénom Nom","epoque":"époque courte","fait":"fait surprenant MAX 10 MOTS"},{"type":"philo_conclusion","lecon":"leçon concrète MAX 8 MOTS","question_cta":"question clivante MAX 7 MOTS ?"}]}
+            {"hashtags":["philosophie","citation","sagesse","mindset","tag5","tag6"],"slides":[{"type":"philo_question","question":"question naturelle MAX 7 MOTS ?","teaser":"accroche simple MAX 6 MOTS"},{"type":"philo_reponse","penseur":"Prénom Nom","reponse":"réponse simple MAX 10 MOTS","citation":"citation courte MAX 8 MOTS"},{"type":"philo_qui","penseur":"Prénom Nom","epoque":"époque courte","fait":"fait étonnant MAX 10 MOTS"},{"type":"philo_conclusion","lecon":"leçon de vie MAX 8 MOTS","question_cta":"question simple MAX 7 MOTS ?"}]}
             """.formatted(question);
     }
 
