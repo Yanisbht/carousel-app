@@ -188,8 +188,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         )}
         {main && (
           <p style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontSize: 18, fontWeight: 900, color: '#FFFFFF',
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: 17, fontWeight: 800, color: '#FFFFFF',
             lineHeight: 1.3, textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
