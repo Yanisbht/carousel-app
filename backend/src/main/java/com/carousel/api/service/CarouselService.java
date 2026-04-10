@@ -32,6 +32,10 @@ public class CarouselService {
         return callGemini(buildPromptModerne(theme, style));
     }
 
+    public String generateVideo(String transcription, String style) throws Exception {
+        return callGemini(buildPromptVideo(transcription, style));
+    }
+
     public String generateTop3(String auteur, String style) throws Exception {
         return callGemini(buildPromptTop3(auteur, style));
     }
@@ -140,6 +144,30 @@ public class CarouselService {
             Retourne UNIQUEMENT ce JSON sans backticks :
             {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"MAX 10 MOTS"},{"type":"moderne_traduction","moderne":"argot gen Z MAX 10 MOTS","contexte":"MAX 6 MOTS"},{"type":"moderne_cta","texte":"MAX 7 MOTS","question":"MAX 7 MOTS ?"}]}
             """.formatted(theme);
+    }
+
+    private String buildPromptVideo(String transcription, String style) {
+        String excerpt = transcription.length() > 1500 ? transcription.substring(0, 1500) : transcription;
+        return """
+            Tu es expert en vulgarisation et carrousels TikTok viraux.
+            On t'a donné la transcription d'une vidéo éducative/philosophique.
+            Ton job : extraire l'idée principale et créer un carrousel TikTok dans la même vibe — fun, simple, accessible à tous.
+            Même énergie que la vidéo : naturel, pas académique, comme un ami qui explique.
+            
+            STRUCTURE :
+            - Slide 1 (HOOK) : accroche qui résume l'idée principale de façon intrigante. MAX 8 MOTS.
+            - Slide 2 (EXPLICATION 1) : première idée clé vulgarisée. MAX 8 MOTS.
+            - Slide 3 (EXPLICATION 2) : deuxième idée clé vulgarisée. MAX 8 MOTS.
+            - Slide 4 (EXEMPLE) : exemple concret tiré de la vidéo. MAX 8 MOTS.
+            - Slide 5 (CTA) : question simple qui donne envie de commenter. MAX 8 MOTS.
+            - HASHTAGS : 2 gros + 2 moyens + 2 niche sur le sujet.
+            
+            RÈGLE ABSOLUE : MAX 8 MOTS par champ. Ton naturel et accessible.
+            
+            Transcription : %s
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["philosophie","citation","sagesse","mindset","tag5","tag6"],"slides":[{"type":"video_hook","concept":"sujet en 2 mots","accroche":"accroche MAX 8 MOTS"},{"type":"video_explication","titre":"2 MOTS","corps":"idée vulgarisée MAX 8 MOTS"},{"type":"video_explication","titre":"2 MOTS","corps":"idée vulgarisée MAX 8 MOTS"},{"type":"video_exemple","exemple":"exemple concret MAX 8 MOTS"},{"type":"video_cta","texte":"phrase fun MAX 6 MOTS","question":"question MAX 7 MOTS ?"}]}
+            """.formatted(excerpt);
     }
 
     private String buildPromptTop3(String auteur, String style) {
