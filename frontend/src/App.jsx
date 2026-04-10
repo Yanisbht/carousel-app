@@ -184,16 +184,16 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         )}
         {main && (
           <p style={{
-            fontSize: 12, fontWeight: 700, color: accent,
+            fontSize: 16, fontWeight: 300, color: '#ffffff',
             lineHeight: 1.35, textShadow: '0 1px 8px rgba(0,0,0,0.9)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
-            textWrap: 'balance',
+            textWrap: 'balance', letterSpacing: '0.01em',
           }}>{main}</p>
         )}
         {sub && (
           <p style={{
-            fontSize: 9, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4,
+            fontSize: 10, color: 'rgba(255,255,255,0.75)', lineHeight: 1.4, fontStyle: 'italic',
             overflow: 'hidden', display: '-webkit-box',
             WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
           }}>{sub}</p>
