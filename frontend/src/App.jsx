@@ -175,8 +175,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
-        padding: '20px 16px', textAlign: 'center',
-        gap: 8, boxSizing: 'border-box',
+        padding: '40px 18px 24px', textAlign: 'center',
+        gap: 10, boxSizing: 'border-box',
       }}>
         {badge && (
           <p style={{ fontSize: 7, color: `${accent}cc`, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>
@@ -188,11 +188,12 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         )}
         {main && (
           <p style={{
-            fontSize: 16, fontWeight: 300, color: '#ffffff',
-            lineHeight: 1.35, textShadow: '0 1px 8px rgba(0,0,0,0.9)',
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 18, fontWeight: 700, color: '#FFFFFF',
+            lineHeight: 1.3, textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
-            textWrap: 'balance', letterSpacing: '0.01em',
+            textWrap: 'balance', textAlign: 'center',
           }}>{main}</p>
         )}
         {sub && (
