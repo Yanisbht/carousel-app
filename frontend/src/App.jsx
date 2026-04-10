@@ -19,13 +19,18 @@ const THEMES = [
 ]
 
 const PHILO_QUESTIONS = [
-  "Pourquoi le monde n'a pas de sens — selon Camus",
-  "Pourquoi souffrons-nous — selon les stoïciens",
-  "C'est quoi la liberté vraiment — selon Sartre",
-  "Pourquoi l'argent ne rend pas heureux — selon Épictète",
-  "Pourquoi on a peur de la mort — selon Marc Aurèle",
-  "C'est quoi l'amour selon les Grecs",
-  "Pourquoi l'homme cherche toujours plus — selon les bouddhistes",
+  "T'arrives pas à être heureux ? Camus avait la réponse",
+  "Pourquoi tu souffres autant ? Les stoïciens l'expliquent",
+  "C'est quoi vraiment être libre ? Sartre te répond",
+  "L'argent rend-il vraiment heureux ? Épictète dit non",
+  "T'as peur de mourir ? Marc Aurèle avait réglé ça",
+  "C'est quoi l'amour pour de vrai ? Les Grecs avaient 6 mots pour ça",
+  "Pourquoi t'en veux toujours plus ? Le bouddhisme explique",
+  "Tu te sens seul même entouré ? Épictète t'explique pourquoi",
+  "Pourquoi tu procrastines autant ? Les stoïciens avaient vu venir",
+  "C'est quoi le vrai courage ? Aristote t'étonnerait",
+  "Pourquoi les autres t'énervent ? Marc Aurèle avait la solution",
+  "T'as l'impression que ta vie a pas de sens ? Camus répond",
 ]
 
 const AUTEURS = [
@@ -110,7 +115,7 @@ function cap(text, max) {
 
 function getSlideContent(slide) {
   switch (slide.type) {
-    case 'hook': return { badge: slide.origine?.toUpperCase(), top: slide.accroche, main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
+    case 'hook': return { badge: slide.origine?.toUpperCase(), main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
     case 'intrigue': return { badge: 'SUSPENSE', main: cap(slide.question, 8) }
     case 'context': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
     case 'lesson': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
