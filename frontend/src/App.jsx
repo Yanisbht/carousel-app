@@ -62,7 +62,7 @@ const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
-const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur']
+const FORMATS = ['Carrousel', "Devine l'auteur", 'Philo Express', 'Citation moderne', 'Top 3 auteur', 'Depuis vidéo']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -134,6 +134,10 @@ function getSlideContent(slide) {
     case 'top3_intro': return { badge: 'TOP 3', main: slide.auteur, sub: cap(slide.description, 10) }
     case 'top3_citation': return { badge: `#${slide.numero}`, main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
     case 'top3_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: slide.question }
+    case 'video_hook': return { badge: slide.concept?.toUpperCase(), main: cap(slide.accroche, 10) }
+    case 'video_explication': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
+    case 'video_exemple': return { badge: 'PAR EXEMPLE', main: cap(slide.exemple, 10) }
+    case 'video_cta': return { badge: 'TOI', main: cap(slide.texte, 8), sub: cap(slide.question, 8) }
     default: return { main: '' }
   }
 }
@@ -218,6 +222,7 @@ export default function App() {
   const [theme, setTheme] = useState(THEMES[0])
   const [philoQ, setPhiloQ] = useState(PHILO_QUESTIONS[0])
   const [auteur, setAuteur] = useState(AUTEURS[0])
+  const [transcription, setTranscription] = useState('')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -234,7 +239,8 @@ export default function App() {
       else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-philo', { question: philoQ, style: 'sombre' })
       else if (format === 3) result = await callAPI('/api/generate-moderne', { theme, style: 'sombre' })
-      else result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
+      else if (format === 4) result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
+      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
 
       setData(result)
       const imgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
@@ -303,6 +309,12 @@ export default function App() {
             <select value={auteur} onChange={e => setAuteur(e.target.value)}>
               {AUTEURS.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
+          </div>
+        )}
+        {format === 5 && (
+          <div className="ctrl" style={{flex: '1 1 100%'}}>
+            <label>Colle ta transcription</label>
+            <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5} placeholder="Colle ici la transcription de ta vidéo YouTube..." style={{width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical'}} />
           </div>
         )}
         <button className="gen-btn" onClick={generate} disabled={loading}>
