@@ -188,6 +188,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
             lineHeight: 1.35, textShadow: '0 1px 8px rgba(0,0,0,0.9)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
+            textWrap: 'balance',
           }}>{main}</p>
         )}
         {sub && (
