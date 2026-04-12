@@ -116,14 +116,14 @@ function cap(text, max) {
 function getSlideContent(slide) {
   switch (slide.type) {
     case 'hook': return { badge: slide.origine?.toUpperCase(), main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
-    case 'intrigue': return { badge: 'SUSPENSE', main: cap(slide.question, 8) }
+    case 'intrigue': return { main: cap(slide.question, 8) }
     case 'context': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
     case 'lesson': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
     case 'cta': return { badge: 'TOI', main: cap(slide.question, 10) }
     case 'devine_question': return { badge: 'DEVINE', main: cap(slide.question, 8) }
     case 'devine_citation': return { badge: 'QUI A DIT...', main: `"${cap(slide.citation, 12)}"` }
     case 'devine_revelation': return { badge: "C'ÉTAIT...", main: slide.auteur, sub: cap(slide.bio, 14) }
-    case 'philo_question': return { badge: 'LA QUESTION', main: cap(slide.question, 8), sub: cap(slide.teaser, 7) }
+    case 'philo_question': return { main: cap(slide.question, 8) }
     case 'philo_citation': return { badge: slide.penseur?.toUpperCase(), main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 8) }
     case 'philo_conclusion': return { badge: 'LA RÉPONSE', main: cap(slide.conclusion, 8), sub: cap(slide.question_cta, 8) }
     case 'moderne_original': return { badge: slide.auteur?.toUpperCase(), top: 'VERSION ORIGINALE', main: `"${cap(slide.citation, 10)}"` }
