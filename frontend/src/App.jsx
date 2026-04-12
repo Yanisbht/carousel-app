@@ -120,8 +120,8 @@ function getSlideContent(slide) {
     case 'context': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
     case 'lesson': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
     case 'cta': return { badge: 'TOI', main: cap(slide.question, 10) }
-    case 'devine_question': return { badge: 'DEVINE', top: cap(slide.intro, 6), main: cap(slide.question, 8) }
-    case 'devine_citation': return { badge: 'QUI A DIT...', main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.indice, 8) }
+    case 'devine_question': return { badge: 'DEVINE', main: cap(slide.question, 8) }
+    case 'devine_citation': return { badge: 'QUI A DIT...', main: `"${cap(slide.citation, 12)}"` }
     case 'devine_revelation': return { badge: "C'ÉTAIT...", main: slide.auteur, sub: cap(slide.bio, 14) }
     case 'philo_question': return { badge: 'LA QUESTION', main: cap(slide.question, 8), sub: cap(slide.teaser, 7) }
     case 'philo_citation': return { badge: slide.penseur?.toUpperCase(), main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 8) }
@@ -178,14 +178,6 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         padding: '40px 18px 24px', textAlign: 'center',
         gap: 10, boxSizing: 'border-box',
       }}>
-        {badge && (
-          <p style={{ fontSize: 7, color: `${accent}cc`, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 500 }}>
-            {badge}
-          </p>
-        )}
-        {top && (
-          <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.1em' }}>{top}</p>
-        )}
         {main && (
           <p style={{
             fontFamily: "'Montserrat', sans-serif",
