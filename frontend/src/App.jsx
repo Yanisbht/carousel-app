@@ -311,23 +311,31 @@ export default function App() {
 
       {data && data.scenes && (
         <div style={{marginTop: '1rem'}}>
+          {data.citation_principale && (
+            <div style={{background: 'var(--color-background-secondary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 16, textAlign: 'center'}}>
+              <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', letterSpacing: '0.1em', marginBottom: 6}}>CITATION PRINCIPALE</p>
+              <p style={{fontSize: 16, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 4}}>"{data.citation_principale}"</p>
+              <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic'}}>— {data.auteur}</p>
+            </div>
+          )}
           {data.scenes.map((scene, i) => (
             <div key={i} style={{background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 12}}>
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8}}>
-                <span style={{fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)'}}>SCÈNE {i + 1} — {scene.duree}</span>
-                <span style={{fontSize: 10, color: 'var(--color-text-tertiary)'}}>{scene.type?.toUpperCase()}</span>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10}}>
+                <span style={{fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)'}}>MOMENT {scene.moment} — {scene.duree}</span>
               </div>
-              <p style={{fontSize: 14, fontWeight: 500, color: 'var(--color-text-primary)', marginBottom: 8, lineHeight: 1.5}}>{scene.texte}</p>
-              <p style={{fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: scene.prompt_visuel ? 8 : 0}}>{scene.narration}</p>
-              {scene.prompt_visuel && (
-                <div style={{background: 'var(--color-background-tertiary)', borderRadius: 8, padding: '8px 12px', marginTop: 8}}>
-                  <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4}}>PROMPT KLING AI</p>
-                  <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic'}}>{scene.prompt_visuel}</p>
-                </div>
-              )}
+              <p style={{fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 8}}>"{scene.citation}"</p>
+              <p style={{fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: 8}}>{scene.scene}</p>
+              <div style={{display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap'}}>
+                <span style={{fontSize: 11, background: 'var(--color-background-tertiary)', padding: '3px 8px', borderRadius: 6, color: 'var(--color-text-secondary)'}}>🎬 {scene.action}</span>
+                <span style={{fontSize: 11, background: 'var(--color-background-tertiary)', padding: '3px 8px', borderRadius: 6, color: 'var(--color-text-secondary)'}}>🎨 {scene.ambiance}</span>
+              </div>
+              <div style={{background: 'var(--color-background-tertiary)', borderRadius: 8, padding: '10px 12px'}}>
+                <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4, letterSpacing: '0.1em'}}>PROMPT KLING AI</p>
+                <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic', lineHeight: 1.5}}>{scene.prompt_kling}</p>
+              </div>
             </div>
           ))}
-          <div className="hashtags">
+          <div className="hashtags" style={{marginTop: 12}}>
             {(data.hashtags || []).map(tag => (
               <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
             ))}
