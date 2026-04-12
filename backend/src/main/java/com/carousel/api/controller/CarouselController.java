@@ -61,6 +61,17 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-script")
+    public ResponseEntity<?> generateScript(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generateScript(
+                body.getOrDefault("transcription", ""),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-video")
     public ResponseEntity<?> generateVideo(@RequestBody Map<String, String> body) {
         try {
