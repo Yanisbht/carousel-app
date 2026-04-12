@@ -62,7 +62,7 @@ const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
-const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo']
+const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -231,7 +231,8 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
-      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
+      else if (format === 3) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
+      else result = await callAPI('/api/generate-script', { transcription, style: 'sombre' })
 
       setData(result)
       const imgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
@@ -294,9 +295,9 @@ export default function App() {
             </select>
           </div>
         )}
-        {format === 3 && (
+        {(format === 3 || format === 4) && (
           <div className="ctrl" style={{flex: '1 1 100%'}}>
-            <label>Colle ta transcription</label>
+            <label>{format === 3 ? 'Colle ta transcription' : 'Colle ta transcription (pour le script animé)'}</label>
             <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5} placeholder="Colle ici la transcription de ta vidéo YouTube..." style={{width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical'}} />
           </div>
         )}
@@ -308,7 +309,33 @@ export default function App() {
       {error && <div className="error">{error}</div>}
       {loading && <div className="status">Création du carrousel...</div>}
 
-      {data && (
+      {data && data.scenes && (
+        <div style={{marginTop: '1rem'}}>
+          {data.scenes.map((scene, i) => (
+            <div key={i} style={{background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 12}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8}}>
+                <span style={{fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)'}}>SCÈNE {i + 1} — {scene.duree}</span>
+                <span style={{fontSize: 10, color: 'var(--color-text-tertiary)'}}>{scene.type?.toUpperCase()}</span>
+              </div>
+              <p style={{fontSize: 14, fontWeight: 500, color: 'var(--color-text-primary)', marginBottom: 8, lineHeight: 1.5}}>{scene.texte}</p>
+              <p style={{fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: scene.prompt_visuel ? 8 : 0}}>{scene.narration}</p>
+              {scene.prompt_visuel && (
+                <div style={{background: 'var(--color-background-tertiary)', borderRadius: 8, padding: '8px 12px', marginTop: 8}}>
+                  <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4}}>PROMPT KLING AI</p>
+                  <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic'}}>{scene.prompt_visuel}</p>
+                </div>
+              )}
+            </div>
+          ))}
+          <div className="hashtags">
+            {(data.hashtags || []).map(tag => (
+              <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data && data.slides && (
         <>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 12px' }}>
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: themeStyle.accent }}></div>
