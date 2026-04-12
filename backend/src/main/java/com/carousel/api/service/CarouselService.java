@@ -32,6 +32,10 @@ public class CarouselService {
         return callGemini(buildPromptModerne(theme, style));
     }
 
+    public String generateScript(String transcription, String style) throws Exception {
+        return callGemini(buildPromptScript(transcription, style));
+    }
+
     public String generateVideo(String transcription, String style) throws Exception {
         return callGemini(buildPromptVideo(transcription, style));
     }
@@ -144,6 +148,30 @@ public class CarouselService {
             Retourne UNIQUEMENT ce JSON sans backticks :
             {"hashtags":["citation","philosophie","sagesse","mindset","tag5","tag6"],"slides":[{"type":"moderne_original","auteur":"Prénom Nom","citation":"MAX 10 MOTS"},{"type":"moderne_traduction","moderne":"argot gen Z MAX 10 MOTS","contexte":"MAX 6 MOTS"},{"type":"moderne_cta","texte":"MAX 7 MOTS","question":"MAX 7 MOTS ?"}]}
             """.formatted(theme);
+    }
+
+    private String buildPromptScript(String transcription, String style) {
+        String excerpt = transcription.length() > 1500 ? transcription.substring(0, 1500) : transcription;
+        return """
+            Tu es expert en création de vidéos animées TikTok virales.
+            À partir de cette transcription, crée un script de vidéo animée de 30-45 secondes.
+            Style : cartoon 2D simple, fun et accessible, comme Kurzgesagt mais version TikTok.
+            Ton : naturel, comme un ami qui explique, pas académique.
+            
+            STRUCTURE : 4-6 scènes de 5-8 secondes chacune.
+            Chaque scène a :
+            - Un texte affiché à l'écran (MAX 8 MOTS, percutant)
+            - Une narration voix off courte (MAX 15 MOTS)
+            - Un prompt visuel pour Kling AI (description de l'animation en anglais, MAX 20 MOTS)
+            - La durée en secondes
+            - Le type : intro / explication / exemple / conclusion
+            
+            RÈGLE ABSOLUE : simple, court, visuel. Chaque scène doit être compréhensible en quelques secondes.
+            
+            Transcription : %s
+            Retourne UNIQUEMENT ce JSON sans backticks :
+            {"hashtags":["philosophie","animation","citation","mindset","tag5","tag6"],"scenes":[{"type":"intro","duree":"5s","texte":"texte écran MAX 8 MOTS","narration":"voix off MAX 15 MOTS","prompt_visuel":"Kling AI prompt in english MAX 20 words, cartoon 2D style"},{"type":"explication","duree":"8s","texte":"texte écran MAX 8 MOTS","narration":"voix off MAX 15 MOTS","prompt_visuel":"Kling AI prompt in english MAX 20 words"},{"type":"exemple","duree":"8s","texte":"texte écran MAX 8 MOTS","narration":"voix off MAX 15 MOTS","prompt_visuel":"Kling AI prompt in english MAX 20 words"},{"type":"conclusion","duree":"6s","texte":"texte écran MAX 8 MOTS","narration":"voix off MAX 15 MOTS","prompt_visuel":"Kling AI prompt in english MAX 20 words"}]}
+            """.formatted(excerpt);
     }
 
     private String buildPromptVideo(String transcription, String style) {
