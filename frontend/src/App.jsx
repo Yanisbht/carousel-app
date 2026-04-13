@@ -61,8 +61,27 @@ const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
+const SERPER_KEY = 'a9ee318fe702c37999db0251e75160c2800994ec'
+const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
+
+async function fetchSerperImages(query, count) {
+  try {
+    const res = await fetch('https://google.serper.dev/images', {
+      method: 'POST',
+      headers: { 'X-API-KEY': SERPER_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: `${query} pinterest aesthetic`, num: 20 })
+    })
+    const data = await res.json()
+    if (data.images && data.images.length > 0) {
+      const filtered = data.images.filter(img => img.imageUrl && !img.imageUrl.includes('gif'))
+      const shuffled = [...filtered].sort(() => Math.random() - 0.5)
+      return shuffled.slice(0, count).map(img => img.imageUrl)
+    }
+  } catch (e) {}
+  return Array(count).fill(null)
+}
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -93,15 +112,12 @@ async function fetchUnsplashImages(query, count) {
 }
 
 async function fetchImages(query, count) {
-  const useUnsplash = Math.random() > 0.5
-  const imgs = useUnsplash
-    ? await fetchUnsplashImages(query, count)
-    : await fetchPexelsImages(query, count)
+  const imgs = await fetchSerperImages(query, count)
   const hasNulls = imgs.some(i => i === null)
   if (hasNulls) {
-    const fallback = useUnsplash
-      ? await fetchPexelsImages(query, count)
-      : await fetchUnsplashImages(query, count)
+    const fallback = Math.random() > 0.5
+      ? await fetchUnsplashImages(query, count)
+      : await fetchPexelsImages(query, count)
     return imgs.map((img, i) => img || fallback[i] || null)
   }
   return imgs
