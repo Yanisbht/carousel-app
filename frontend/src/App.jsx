@@ -40,25 +40,6 @@ const AUTEURS = [
   'Simone de Beauvoir', 'Maya Angelou', 'Nietzsche', 'Camus', 'Sartre',
 ]
 
-const THEME_STYLE = {
-  'philosophie stoïcienne':                              { color: 'rgba(30,60,120,0.55)',  accent: '#a8c8ff', keyword: 'ancient greece ruins dramatic' },
-  'sagesse africaine':                                   { color: 'rgba(120,60,10,0.55)',  accent: '#ffb347', keyword: 'africa savanna golden hour' },
-  'philosophie orientale':                               { color: 'rgba(10,80,60,0.55)',   accent: '#7fffd4', keyword: 'japan misty mountain temple' },
-  'leaders et révolutionnaires':                         { color: 'rgba(100,10,10,0.55)',  accent: '#ff6b6b', keyword: 'dramatic crowd protest light' },
-  'philosophie arabe et islamique':                      { color: 'rgba(60,30,100,0.55)',  accent: '#c9a0ff', keyword: 'arabic mosque dramatic light' },
-  'développement personnel moderne':                     { color: 'rgba(10,60,80,0.55)',   accent: '#80d8ff', keyword: 'dramatic sunrise mountain' },
-  'sagesse amérindienne':                                { color: 'rgba(60,80,10,0.55)',   accent: '#b8e986', keyword: 'native american forest dramatic' },
-  'philosophie japonaise (Musashi, Mishima)':            { color: 'rgba(60,10,10,0.55)',   accent: '#ff8a80', keyword: 'japan forest fog samurai' },
-  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(20,20,20,0.60)', accent: '#e0e0e0', keyword: 'dramatic light strength' },
-  'femmes philosophes (Beauvoir, Angelou)':              { color: 'rgba(100,20,60,0.55)', accent: '#f48fb1', keyword: 'woman dramatic portrait light' },
-  'sagesse berbère et maghrébine':                       { color: 'rgba(100,70,10,0.55)', accent: '#ffd54f', keyword: 'sahara desert dramatic dusk' },
-  'citations de guerriers (Sun Tzu, Spartiate)':         { color: 'rgba(40,40,10,0.55)',  accent: '#e6ee9c', keyword: 'warrior battle dramatic fog' },
-  'spiritualité soufie (Rumi, Ibn Arabi)':               { color: 'rgba(60,10,80,0.55)',  accent: '#ce93d8', keyword: 'mystical light spiritual fog' },
-  'philosophie grecque antique (Socrate, Platon)':       { color: 'rgba(10,50,80,0.55)',  accent: '#90caf9', keyword: 'ancient ruins dramatic sky' },
-}
-
-const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword: 'dramatic cinematic landscape' }
-
 const JOUEURS = [
   'LeBron James', 'Kobe Bryant', 'Michael Jordan', 'Stephen Curry',
   'Kevin Durant', 'Giannis Antetokounmpo', 'Nikola Jokic', 'Luka Doncic',
@@ -77,14 +58,30 @@ const ACTIONS = [
   'spin move au cercle',
 ]
 
-const BASKET_FORMATS = ['Citations joueur', 'Stats choc', 'Mentalité de champion', 'Action Anime']
+const THEME_STYLE = {
+  'philosophie stoïcienne':                                 { color: 'rgba(30,60,120,0.55)',  accent: '#a8c8ff', keyword: 'stoicism aesthetic dark moody ancient rome' },
+  'sagesse africaine':                                      { color: 'rgba(120,60,10,0.55)',  accent: '#ffb347', keyword: 'africa aesthetic golden sunset savanna' },
+  'philosophie orientale':                                  { color: 'rgba(10,80,60,0.55)',   accent: '#7fffd4', keyword: 'japan aesthetic zen dark moody temple' },
+  'leaders et révolutionnaires':                            { color: 'rgba(100,10,10,0.55)',  accent: '#ff6b6b', keyword: 'revolution aesthetic dark dramatic portrait' },
+  'philosophie arabe et islamique':                         { color: 'rgba(60,30,100,0.55)',  accent: '#c9a0ff', keyword: 'islamic architecture aesthetic moody light' },
+  'développement personnel moderne':                        { color: 'rgba(10,60,80,0.55)',   accent: '#80d8ff', keyword: 'mindset aesthetic dark motivation sunrise' },
+  'sagesse amérindienne':                                   { color: 'rgba(60,80,10,0.55)',   accent: '#b8e986', keyword: 'native american aesthetic nature spiritual' },
+  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(60,10,10,0.55)',   accent: '#ff8a80', keyword: 'samurai aesthetic dark japan moody' },
+  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(20,20,20,0.60)',   accent: '#e0e0e0', keyword: 'strength resilience aesthetic dark portrait' },
+  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(100,20,60,0.55)',  accent: '#f48fb1', keyword: 'woman aesthetic dark moody portrait' },
+  'sagesse berbère et maghrébine':                          { color: 'rgba(100,70,10,0.55)',  accent: '#ffd54f', keyword: 'sahara desert aesthetic moody golden' },
+  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(40,40,10,0.55)',   accent: '#e6ee9c', keyword: 'warrior aesthetic dark dramatic battle' },
+  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(60,10,80,0.55)',   accent: '#ce93d8', keyword: 'sufi spiritual aesthetic mystical purple' },
+  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(10,50,80,0.55)',   accent: '#90caf9', keyword: 'ancient greece aesthetic dark ruins moody' },
+}
+
+const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#ffffff', keyword: 'dramatic cinematic landscape' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
-const SERPER_KEY = 'a9ee318fe702c37999db0251e75160c2800994ec'
-const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
+const BASKET_FORMATS = ['Citations joueur', 'Stats choc', 'Mentalité de champion', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -143,36 +140,37 @@ function cap(text, max) {
 
 function getSlideContent(slide) {
   switch (slide.type) {
-    case 'hook': return { badge: slide.origine?.toUpperCase(), main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
+    case 'hook': return { main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
     case 'intrigue': return { main: cap(slide.question, 8) }
-    case 'context': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
-    case 'lesson': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
-    case 'cta': return { badge: 'TOI', main: cap(slide.question, 10) }
-    case 'devine_question': return { badge: 'DEVINE', main: cap(slide.question, 8) }
-    case 'devine_citation': return { badge: 'QUI A DIT...', main: `"${cap(slide.citation, 12)}"` }
-    case 'devine_revelation': return { badge: "C'ÉTAIT...", main: slide.auteur, sub: cap(slide.bio, 14) }
+    case 'context': return { main: cap(slide.corps, 10) }
+    case 'lesson': return { main: cap(slide.corps, 10) }
+    case 'cta': return { main: cap(slide.question, 10) }
+    case 'devine_question': return { main: cap(slide.question, 8) }
+    case 'devine_citation': return { main: `"${cap(slide.citation, 12)}"` }
+    case 'devine_revelation': return { main: slide.auteur, sub: cap(slide.bio, 14) }
     case 'philo_question': return { main: cap(slide.question, 8) }
-    case 'philo_citation': return { badge: slide.penseur?.toUpperCase(), main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 8) }
-    case 'philo_conclusion': return { badge: 'LA RÉPONSE', main: cap(slide.conclusion, 8), sub: cap(slide.question_cta, 8) }
-    case 'moderne_original': return { badge: slide.auteur?.toUpperCase(), top: 'VERSION ORIGINALE', main: `"${cap(slide.citation, 10)}"` }
-    case 'moderne_traduction': return { badge: 'EN 2024...', main: `"${cap(slide.moderne, 12)}"`, sub: cap(slide.contexte, 7) }
-    case 'moderne_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: cap(slide.question, 7) }
-    case 'philo_reponse': return { badge: slide.penseur?.toUpperCase(), top: 'SA RÉPONSE', main: cap(slide.reponse, 10), sub: null }
-    case 'philo_qui': return { badge: slide.epoque?.toUpperCase(), main: slide.penseur, sub: cap(slide.fait, 10) }
-    case 'top3_intro': return { badge: 'TOP 3', main: slide.auteur, sub: cap(slide.description, 10) }
-    case 'top3_citation': return { badge: `#${slide.numero}`, main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
-    case 'top3_cta': return { badge: 'TOI', main: cap(slide.texte, 7), sub: slide.question }
-    case 'video_hook': return { badge: slide.concept?.toUpperCase(), main: cap(slide.accroche, 10) }
-    case 'video_explication': return { badge: slide.titre?.toUpperCase(), main: cap(slide.corps, 10) }
-    case 'video_exemple': return { badge: 'PAR EXEMPLE', main: cap(slide.exemple, 10) }
-    case 'video_cta': return { badge: 'TOI', main: cap(slide.texte, 8), sub: cap(slide.question, 8) }
+    case 'philo_reponse': return { main: cap(slide.reponse, 10), sub: slide.citation ? `"${cap(slide.citation, 8)}"` : null }
+    case 'philo_qui': return { main: slide.penseur, sub: cap(slide.fait, 10) }
+    case 'philo_conclusion': return { main: cap(slide.conclusion, 8), sub: cap(slide.question_cta, 8) }
+    case 'top3_intro': return { main: slide.auteur, sub: cap(slide.description, 10) }
+    case 'top3_citation': return { main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
+    case 'top3_cta': return { main: cap(slide.texte, 7), sub: slide.question }
+    case 'video_hook': return { main: cap(slide.accroche, 10) }
+    case 'video_explication': return { main: cap(slide.corps, 10) }
+    case 'video_exemple': return { main: cap(slide.exemple, 10) }
+    case 'video_cta': return { main: cap(slide.texte, 8), sub: cap(slide.question, 8) }
+    case 'basket_hook': return { main: cap(slide.accroche, 10), sub: slide.joueur }
+    case 'basket_citation': return { main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.joueur}` }
+    case 'basket_stat': return { main: cap(slide.stat, 10), sub: cap(slide.contexte, 8) }
+    case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
+    case 'basket_cta': return { main: cap(slide.question, 10) }
+    case 'basket_action': return { main: cap(slide.texte, 8), sub: cap(slide.prompt_kling, 15) }
     default: return { main: '' }
   }
 }
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
-  const { badge, top, main, sub } = getSlideContent(slide)
-  const accent = themeStyle?.accent || '#f0e040'
+  const { main, sub } = getSlideContent(slide)
   const colorOverlay = themeStyle?.color || 'rgba(20,20,20,0.55)'
 
   return (
@@ -189,16 +187,10 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         }} />
       )}
       <div style={{ position: 'absolute', inset: 0, background: colorOverlay, zIndex: 1 }} />
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'rgba(0,0,0,0.2)',
-        zIndex: 2,
-      }} />
-
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', zIndex: 2 }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.4)', zIndex: 4 }}>
         {index + 1}/{total}
       </span>
-
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
@@ -239,12 +231,11 @@ async function callAPI(endpoint, body) {
 }
 
 export default function App() {
+  const [compte, setCompte] = useState('citations')
   const [format, setFormat] = useState(0)
   const [theme, setTheme] = useState(THEMES[0])
-  const [philoQ, setPhiloQ] = useState(PHILO_QUESTIONS[0])
   const [auteur, setAuteur] = useState(AUTEURS[0])
   const [transcription, setTranscription] = useState('')
-  const [compte, setCompte] = useState('citations')
   const [basketFormat, setBasketFormat] = useState(0)
   const [joueur, setJoueur] = useState(JOUEURS[0])
   const [action, setAction] = useState(ACTIONS[0])
@@ -265,9 +256,23 @@ export default function App() {
       else if (format === 2) result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
       else if (format === 3) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else result = await callAPI('/api/generate-script', { transcription, style: 'sombre' })
-
       setData(result)
       const imgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
+      setBgImages(imgs)
+    } catch (e) { setError(e.message) }
+    setLoading(false)
+  }
+
+  const generateBasket = async () => {
+    setLoading(true); setError(null); setData(null); setBgImages([])
+    try {
+      let result
+      if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
+      else if (basketFormat === 1) result = await callAPI('/api/basket/stats', { joueur, style: 'sombre' })
+      else if (basketFormat === 2) result = await callAPI('/api/basket/mentalite', { joueur, style: 'sombre' })
+      else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
+      setData(result)
+      const imgs = await fetchImages('basketball aesthetic anime dark', (result.slides || []).length)
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
@@ -294,30 +299,63 @@ export default function App() {
   useEffect(() => { generate() }, [])
   const slides = data?.slides || []
 
-  const generateBasket = async () => {
-    setLoading(true); setError(null); setData(null); setBgImages([])
-    try {
-      let result
-      if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
-      else if (basketFormat === 1) result = await callAPI('/api/basket/stats', { joueur, style: 'sombre' })
-      else if (basketFormat === 2) result = await callAPI('/api/basket/mentalite', { joueur, style: 'sombre' })
-      else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
-      setData(result)
-      const imgs = await fetchImages('basketball aesthetic anime dark', (result.slides || []).length)
-      setBgImages(imgs)
-    } catch (e) { setError(e.message) }
-    setLoading(false)
-  }
-
   return (
     <div className="app">
       <header>
         <h1>Carousel Generator</h1>
         <div style={{display: 'flex', gap: 8, marginTop: 8}}>
-          <button className={`ftab${compte === 'citations' ? ' active' : ''}`} onClick={() => { setCompte('citations'); setData(null); setBgImages([]) }}>Citations du monde</button>
-          <button className={`ftab${compte === 'basket' ? ' active' : ''}`} onClick={() => { setCompte('basket'); setData(null); setBgImages([]) }}>Basket</button>
+          <button className={`ftab${compte === 'citations' ? ' active' : ''}`}
+            onClick={() => { setCompte('citations'); setData(null); setBgImages([]) }}>
+            Citations du monde
+          </button>
+          <button className={`ftab${compte === 'basket' ? ' active' : ''}`}
+            onClick={() => { setCompte('basket'); setData(null); setBgImages([]) }}>
+            Basket
+          </button>
         </div>
       </header>
+
+      {compte === 'citations' && (
+        <>
+          <div className="format-tabs">
+            {FORMATS.map((f, i) => (
+              <button key={i} className={`ftab${format === i ? ' active' : ''}`}
+                onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>
+                {f}
+              </button>
+            ))}
+          </div>
+          <div className="controls">
+            {(format === 0 || format === 1) && (
+              <div className="ctrl">
+                <label>Thème</label>
+                <select value={theme} onChange={e => setTheme(e.target.value)}>
+                  {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+            )}
+            {format === 2 && (
+              <div className="ctrl">
+                <label>Auteur</label>
+                <select value={auteur} onChange={e => setAuteur(e.target.value)}>
+                  {AUTEURS.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+              </div>
+            )}
+            {(format === 3 || format === 4) && (
+              <div className="ctrl" style={{flex: '1 1 100%'}}>
+                <label>{format === 3 ? 'Colle ta transcription' : 'Colle ta transcription (script animé)'}</label>
+                <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5}
+                  placeholder="Colle ici la transcription de ta vidéo YouTube..."
+                  style={{width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical'}} />
+              </div>
+            )}
+            <button className="gen-btn" onClick={generate} disabled={loading}>
+              {loading ? 'Génération...' : 'Générer'}
+            </button>
+          </div>
+        </>
+      )}
 
       {compte === 'basket' && (
         <>
@@ -351,45 +389,6 @@ export default function App() {
         </>
       )}
 
-      {compte === 'citations' && <div className="format-tabs">
-        {FORMATS.map((f, i) => (
-          <button key={i} className={`ftab${format === i ? ' active' : ''}`}
-            onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>
-            {f}
-          </button>
-        ))}
-      </div>
-
-      <div className="controls">
-        {(format === 0 || format === 1 || format === 3) && (
-          <div className="ctrl">
-            <label>Thème</label>
-            <select value={theme} onChange={e => setTheme(e.target.value)}>
-              {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-        )}
-        {format === 2 && (
-          <div className="ctrl">
-            <label>Auteur</label>
-            <select value={auteur} onChange={e => setAuteur(e.target.value)}>
-              {AUTEURS.map(a => <option key={a} value={a}>{a}</option>)}
-            </select>
-          </div>
-        )}
-        {(format === 3 || format === 4) && (
-          <div className="ctrl" style={{flex: '1 1 100%'}}>
-            <label>{format === 3 ? 'Colle ta transcription' : 'Colle ta transcription (pour le script animé)'}</label>
-            <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5} placeholder="Colle ici la transcription de ta vidéo YouTube..." style={{width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical'}} />
-          </div>
-        )}
-        <button className="gen-btn" onClick={generate} disabled={loading}>
-          {loading ? 'Génération...' : 'Générer'}
-        </button>
-      </div>
-
-      {compte === 'citations' && </div>}
-
       {error && <div className="error">{error}</div>}
       {loading && <div className="status">Création du carrousel...</div>}
 
@@ -404,22 +403,16 @@ export default function App() {
           )}
           {data.scenes.map((scene, i) => (
             <div key={i} style={{background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 12}}>
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10}}>
-                <span style={{fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)'}}>MOMENT {scene.moment} — {scene.duree}</span>
-              </div>
-              <p style={{fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 8}}>"{scene.citation}"</p>
+              <span style={{fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)'}}>MOMENT {scene.moment} — {scene.duree}</span>
+              <p style={{fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)', margin: '8px 0'}}>"{scene.citation}"</p>
               <p style={{fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: 8}}>{scene.scene}</p>
-              <div style={{display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap'}}>
-                <span style={{fontSize: 11, background: 'var(--color-background-tertiary)', padding: '3px 8px', borderRadius: 6, color: 'var(--color-text-secondary)'}}>🎬 {scene.action}</span>
-                <span style={{fontSize: 11, background: 'var(--color-background-tertiary)', padding: '3px 8px', borderRadius: 6, color: 'var(--color-text-secondary)'}}>🎨 {scene.ambiance}</span>
-              </div>
               <div style={{background: 'var(--color-background-tertiary)', borderRadius: 8, padding: '10px 12px'}}>
-                <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4, letterSpacing: '0.1em'}}>PROMPT KLING AI</p>
-                <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic', lineHeight: 1.5}}>{scene.prompt_kling}</p>
+                <p style={{fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4}}>PROMPT KLING AI</p>
+                <p style={{fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic'}}>{scene.prompt_kling}</p>
               </div>
             </div>
           ))}
-          <div className="hashtags" style={{marginTop: 12}}>
+          <div className="hashtags">
             {(data.hashtags || []).map(tag => (
               <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
             ))}
@@ -429,10 +422,6 @@ export default function App() {
 
       {data && data.slides && (
         <>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 12px' }}>
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: themeStyle.accent }}></div>
-            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{theme}</span>
-          </div>
           <div className="slides-row">
             {slides.map((slide, i) => (
               <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
