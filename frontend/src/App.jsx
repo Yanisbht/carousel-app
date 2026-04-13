@@ -326,6 +326,7 @@ export default function App() {
       const res = await fetch(`${PUPPET_URL}/screenshot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(120000),
         body: JSON.stringify({
           slides: slideContents,
           bgImages: bgImages,
