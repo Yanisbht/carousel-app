@@ -139,6 +139,20 @@ public class CarouselController {
         }
     }
 
+    @GetMapping("/proxy-image")
+    public ResponseEntity<?> proxyImage(@RequestParam String url) {
+        try {
+            byte[] imageData = carouselService.proxyImage(url);
+            String contentType = url.contains(".png") ? "image/png" : "image/jpeg";
+            return ResponseEntity.ok()
+                .header("Content-Type", contentType)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(imageData);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @GetMapping("/images")
     public ResponseEntity<?> getImages(@RequestParam String query, @RequestParam(defaultValue = "5") int count) {
         try {
