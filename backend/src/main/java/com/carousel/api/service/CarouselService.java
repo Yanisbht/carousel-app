@@ -94,7 +94,7 @@ public class CarouselService {
     }
 
     public String basketCitations(String joueur, String style) throws Exception {
-        String prompt = "Tu crees des carousels TikTok viraux pour un compte basket aesthetic. Format : citations inspirantes du joueur. REGLE ABSOLUE : MAX 8 MOTS par champ. Joueur : " + joueur + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"basketball\",\"nba\",\"citation\",\"motivation\",\"aesthetic\",\"mindset\"],\"slides\":[{\"type\":\"basket_hook\",\"accroche\":\"accroche choc MAX 8 MOTS\",\"joueur\":\"Prenom Nom\"},{\"type\":\"basket_citation\",\"citation\":\"citation connue MAX 10 MOTS\",\"joueur\":\"Prenom Nom\"},{\"type\":\"basket_citation\",\"citation\":\"deuxieme citation MAX 10 MOTS\",\"joueur\":\"Prenom Nom\"},{\"type\":\"basket_lecon\",\"lecon\":\"lecon de vie MAX 8 MOTS\",\"application\":\"comment appliquer MAX 8 MOTS\"},{\"type\":\"basket_cta\",\"question\":\"question MAX 8 MOTS ?\"}]}";
+        String prompt = "Tu crees des carousels TikTok viraux pour un compte basket aesthetic. Format : 2 slides seulement. Slide 1 = hook accrocheur sur le joueur. Slide 2 = sa citation la plus connue et percutante. REGLE ABSOLUE : MAX 8 MOTS par champ. Joueur : " + joueur + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"basketball\",\"nba\",\"citation\",\"motivation\",\"aesthetic\",\"mindset\"],\"slides\":[{\"type\":\"basket_hook\",\"accroche\":\"accroche choc MAX 8 MOTS\",\"joueur\":\"Prenom Nom\"},{\"type\":\"basket_citation\",\"citation\":\"citation connue et percutante MAX 10 MOTS\",\"joueur\":\"Prenom Nom\"}]}";
         return callGemini(prompt);
     }
 
