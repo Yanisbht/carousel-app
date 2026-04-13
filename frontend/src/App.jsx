@@ -316,14 +316,15 @@ export default function App() {
   const downloadAll = async () => {
     setExporting(true)
     try {
-      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
+      const domtoimage = await import('https://esm.sh/dom-to-image-more@3.4.0')
+      const dti = domtoimage.default || domtoimage
       for (let i = 0; i < (data?.slides || []).length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await html2canvas(el, { scale: 3, useCORS: true, allowTaint: true })
+        const dataUrl = await dti.toPng(el, { scale: 3 })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
-        link.href = canvas.toDataURL('image/png')
+        link.href = dataUrl
         link.click()
         await new Promise(r => setTimeout(r, 400))
       }
