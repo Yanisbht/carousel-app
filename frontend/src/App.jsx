@@ -59,9 +59,30 @@ const THEME_STYLE = {
 
 const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#f0e040', keyword: 'dramatic cinematic landscape' }
 
+const JOUEURS = [
+  'LeBron James', 'Kobe Bryant', 'Michael Jordan', 'Stephen Curry',
+  'Kevin Durant', 'Giannis Antetokounmpo', 'Nikola Jokic', 'Luka Doncic',
+  'Victor Wembanyama', 'Jayson Tatum', 'Joel Embiid', 'Rudy Gobert',
+  'Tony Parker', 'Evan Fournier', 'Frank Ntilikina',
+]
+
+const ACTIONS = [
+  'dunk en contre-attaque',
+  'step-back three pointer',
+  'fadeaway signature',
+  'crossover dévastateur',
+  'block monumental',
+  'lay-up acrobatique',
+  'alley-oop spectaculaire',
+  'spin move au cercle',
+]
+
+const BASKET_FORMATS = ['Citations joueur', 'Stats choc', 'Mentalité de champion', 'Action Anime']
+
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const SERPER_KEY = 'a9ee318fe702c37999db0251e75160c2800994ec'
+const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
 
@@ -223,6 +244,10 @@ export default function App() {
   const [philoQ, setPhiloQ] = useState(PHILO_QUESTIONS[0])
   const [auteur, setAuteur] = useState(AUTEURS[0])
   const [transcription, setTranscription] = useState('')
+  const [compte, setCompte] = useState('citations')
+  const [basketFormat, setBasketFormat] = useState(0)
+  const [joueur, setJoueur] = useState(JOUEURS[0])
+  const [action, setAction] = useState(ACTIONS[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -269,14 +294,64 @@ export default function App() {
   useEffect(() => { generate() }, [])
   const slides = data?.slides || []
 
+  const generateBasket = async () => {
+    setLoading(true); setError(null); setData(null); setBgImages([])
+    try {
+      let result
+      if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
+      else if (basketFormat === 1) result = await callAPI('/api/basket/stats', { joueur, style: 'sombre' })
+      else if (basketFormat === 2) result = await callAPI('/api/basket/mentalite', { joueur, style: 'sombre' })
+      else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
+      setData(result)
+      const imgs = await fetchImages('basketball aesthetic anime dark', (result.slides || []).length)
+      setBgImages(imgs)
+    } catch (e) { setError(e.message) }
+    setLoading(false)
+  }
+
   return (
     <div className="app">
       <header>
         <h1>Carousel Generator</h1>
-        <p className="subtitle">@citationmonde5 — optimisé TikTok</p>
+        <div style={{display: 'flex', gap: 8, marginTop: 8}}>
+          <button className={`ftab${compte === 'citations' ? ' active' : ''}`} onClick={() => { setCompte('citations'); setData(null); setBgImages([]) }}>Citations du monde</button>
+          <button className={`ftab${compte === 'basket' ? ' active' : ''}`} onClick={() => { setCompte('basket'); setData(null); setBgImages([]) }}>Basket</button>
+        </div>
       </header>
 
-      <div className="format-tabs">
+      {compte === 'basket' && (
+        <>
+          <div className="format-tabs" style={{marginTop: '1rem'}}>
+            {BASKET_FORMATS.map((f, i) => (
+              <button key={i} className={`ftab${basketFormat === i ? ' active' : ''}`}
+                onClick={() => { setBasketFormat(i); setData(null); setBgImages([]) }}>
+                {f}
+              </button>
+            ))}
+          </div>
+          <div className="controls">
+            <div className="ctrl">
+              <label>Joueur</label>
+              <select value={joueur} onChange={e => setJoueur(e.target.value)}>
+                {JOUEURS.map(j => <option key={j} value={j}>{j}</option>)}
+              </select>
+            </div>
+            {basketFormat === 3 && (
+              <div className="ctrl">
+                <label>Action</label>
+                <select value={action} onChange={e => setAction(e.target.value)}>
+                  {ACTIONS.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+              </div>
+            )}
+            <button className="gen-btn" onClick={generateBasket} disabled={loading}>
+              {loading ? 'Génération...' : 'Générer'}
+            </button>
+          </div>
+        </>
+      )}
+
+      {compte === 'citations' && <div className="format-tabs">
         {FORMATS.map((f, i) => (
           <button key={i} className={`ftab${format === i ? ' active' : ''}`}
             onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>
@@ -312,6 +387,8 @@ export default function App() {
           {loading ? 'Génération...' : 'Générer'}
         </button>
       </div>
+
+      {compte === 'citations' && </div>}
 
       {error && <div className="error">{error}</div>}
       {loading && <div className="status">Création du carrousel...</div>}
