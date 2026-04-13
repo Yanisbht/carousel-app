@@ -66,23 +66,6 @@ const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
 
-async function fetchSerperImages(query, count) {
-  try {
-    const res = await fetch('https://google.serper.dev/images', {
-      method: 'POST',
-      headers: { 'X-API-KEY': SERPER_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ q: `${query} pinterest aesthetic`, num: 20 })
-    })
-    const data = await res.json()
-    if (data.images && data.images.length > 0) {
-      const filtered = data.images.filter(img => img.imageUrl && !img.imageUrl.includes('gif'))
-      const shuffled = [...filtered].sort(() => Math.random() - 0.5)
-      return shuffled.slice(0, count).map(img => img.imageUrl)
-    }
-  } catch (e) {}
-  return Array(count).fill(null)
-}
-
 async function fetchPexelsImages(query, count) {
   try {
     const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, {
@@ -107,6 +90,15 @@ async function fetchUnsplashImages(query, count) {
       const shuffled = [...data.results].sort(() => Math.random() - 0.5)
       return shuffled.slice(0, count).map(p => p.urls.regular)
     }
+  } catch (e) {}
+  return Array(count).fill(null)
+}
+
+async function fetchSerperImages(query, count) {
+  try {
+    const res = await fetch(`${API_BASE}/api/images?query=${encodeURIComponent(query + ' pinterest aesthetic')}&count=${count}`)
+    const data = await res.json()
+    if (data.images && data.images.length > 0) return data.images
   } catch (e) {}
   return Array(count).fill(null)
 }
