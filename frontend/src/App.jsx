@@ -84,7 +84,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
-const BASKET_FORMATS = ['Citations joueur', 'Stats choc', 'Mentalité de champion', 'Action Anime']
+const BASKET_FORMATS = ['Citations joueur', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -273,8 +273,6 @@ export default function App() {
     try {
       let result
       if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
-      else if (basketFormat === 1) result = await callAPI('/api/basket/stats', { joueur, style: 'sombre' })
-      else if (basketFormat === 2) result = await callAPI('/api/basket/mentalite', { joueur, style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
       const imgs = await fetchImages('vintage basketball 90s aesthetic film grain', (result.slides || []).length)
@@ -301,7 +299,7 @@ export default function App() {
     setExporting(false)
   }
 
-  useEffect(() => { generate() }, [])
+  // useEffect(() => { generate() }, [])
   const slides = data?.slides || []
 
   return (
