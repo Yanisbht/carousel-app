@@ -94,6 +94,51 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/basket/citations")
+    public ResponseEntity<?> basketCitations(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.basketCitations(
+                body.getOrDefault("joueur", "LeBron James"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/basket/stats")
+    public ResponseEntity<?> basketStats(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.basketStats(
+                body.getOrDefault("joueur", "LeBron James"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/basket/mentalite")
+    public ResponseEntity<?> basketMentalite(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.basketMentalite(
+                body.getOrDefault("joueur", "LeBron James"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/basket/action")
+    public ResponseEntity<?> basketAction(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.basketAction(
+                body.getOrDefault("joueur", "LeBron James"),
+                body.getOrDefault("action", "dunk en contre-attaque"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @GetMapping("/images")
     public ResponseEntity<?> getImages(@RequestParam String query, @RequestParam(defaultValue = "5") int count) {
         try {
