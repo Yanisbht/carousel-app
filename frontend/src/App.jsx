@@ -313,36 +313,34 @@ export default function App() {
     setLoading(false)
   }
 
+  const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
+
   const downloadAll = async () => {
     setExporting(true)
     try {
-      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
-      for (let i = 0; i < (data?.slides || []).length; i++) {
-        const el = document.getElementById(`slide-${i}`)
-        if (!el) continue
-        const bgDiv = el.querySelector('div[style*="backgroundImage"]')
-        const originalBg = bgDiv ? bgDiv.style.backgroundImage : null
-        const canvas = await html2canvas(el, {
-          scale: 3,
-          useCORS: true,
-          allowTaint: false,
-          logging: false,
-          imageTimeout: 15000,
-          onclone: (doc, cloned) => {
-            const imgs = cloned.querySelectorAll('div[style*="backgroundImage"]')
-            imgs.forEach(div => {
-              const src = div.style.backgroundImage.replace(/url\(["']?|["']?\)/g, '')
-              if (src.startsWith('data:')) return
-              div.style.backgroundImage = `url(${src})`
-            })
-          }
+      const slideContents = (data?.slides || []).map((slide, i) => {
+        const { main, sub } = getSlideContent(slide)
+        return { main, sub, type: slide.type }
+      })
+      const isBasket = slideContents[0]?.type?.startsWith('basket_')
+      const res = await fetch(`${PUPPET_URL}/screenshot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slides: slideContents,
+          bgImages: bgImages,
+          themeColor: themeStyle?.color,
+          isBasket
         })
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error)
+      json.images.forEach((b64, i) => {
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
-        link.href = canvas.toDataURL('image/png')
+        link.href = `data:image/png;base64,${b64}`
         link.click()
-        await new Promise(r => setTimeout(r, 500))
-      }
+      })
     } catch (e) { alert('Erreur export: ' + e.message) }
     setExporting(false)
   }
