@@ -41,10 +41,12 @@ const AUTEURS = [
 ]
 
 const JOUEURS = [
-  'LeBron James', 'Kobe Bryant', 'Michael Jordan', 'Stephen Curry',
-  'Kevin Durant', 'Giannis Antetokounmpo', 'Nikola Jokic', 'Luka Doncic',
-  'Victor Wembanyama', 'Jayson Tatum', 'Joel Embiid', 'Rudy Gobert',
-  'Tony Parker', 'Evan Fournier', 'Frank Ntilikina',
+  'Michael Jordan', 'Kobe Bryant', 'Allen Iverson', 'Kyrie Irving',
+  'LeBron James', 'Shaquille O'Neal', 'Tim Duncan', 'Kevin Garnett',
+  'Tracy McGrady', 'Vince Carter', 'Dwyane Wade', 'Dirk Nowitzki',
+  'Steve Nash', 'Paul Pierce', 'Ray Allen', 'Carmelo Anthony',
+  'Chris Paul', 'Derrick Rose', 'Russell Westbrook', 'Stephen Curry',
+  'Kevin Durant', 'Tony Parker', 'Pau Gasol', 'Manu Ginobili',
 ]
 
 const ACTIONS = [
@@ -171,7 +173,8 @@ function getSlideContent(slide) {
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const colorOverlay = themeStyle?.color || 'rgba(20,20,20,0.55)'
+  const isBasket = ['basket_hook','basket_citation','basket_stat','basket_lecon','basket_cta','basket_action'].includes(slide.type)
+  const colorOverlay = isBasket ? 'rgba(60,40,10,0.45)' : (themeStyle?.color || 'rgba(20,20,20,0.55)')
 
   return (
     <div id={id} style={{
@@ -187,7 +190,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         }} />
       )}
       <div style={{ position: 'absolute', inset: 0, background: colorOverlay, zIndex: 1 }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', zIndex: 2 }} />
+      <div style={{ position: 'absolute', inset: 0, background: isBasket ? 'rgba(255,220,150,0.08)' : 'rgba(0,0,0,0.2)', zIndex: 2 }} />
+      {isBasket && <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")', backgroundSize: 'cover', zIndex: 3, opacity: 0.4, mixBlendMode: 'overlay' }} />}
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.4)', zIndex: 4 }}>
         {index + 1}/{total}
       </span>
@@ -201,7 +205,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         {main && (
           <p style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 17, fontWeight: 800, color: '#FFFFFF',
+            fontSize: 17, fontWeight: 800, color: isBasket ? '#f5e6c8' : '#FFFFFF',
             lineHeight: 1.3, textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
@@ -272,7 +276,7 @@ export default function App() {
       else if (basketFormat === 2) result = await callAPI('/api/basket/mentalite', { joueur, style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
-      const imgs = await fetchImages('basketball aesthetic anime dark', (result.slides || []).length)
+      const imgs = await fetchImages('vintage basketball 90s aesthetic film grain', (result.slides || []).length)
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
