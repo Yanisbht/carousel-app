@@ -123,16 +123,27 @@ async function fetchSerperImages(query, count) {
   return Array(count).fill(null)
 }
 
+async function toBase64(url) {
+  try {
+    const res = await fetch(`${API_BASE}/api/proxy-image?url=${encodeURIComponent(url)}`)
+    const blob = await res.blob()
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+  } catch (e) { return url }
+}
+
 async function fetchImages(query, count) {
   const imgs = await fetchSerperImages(query, count)
-  const hasNulls = imgs.some(i => i === null)
-  if (hasNulls) {
-    const fallback = Math.random() > 0.5
-      ? await fetchUnsplashImages(query, count)
-      : await fetchPexelsImages(query, count)
-    return imgs.map((img, i) => img || fallback[i] || null)
-  }
-  return imgs
+  const fallback = Math.random() > 0.5
+    ? await fetchUnsplashImages(query, count)
+    : await fetchPexelsImages(query, count)
+  const merged = imgs.map((img, i) => img || fallback[i] || null)
+  const validImgs = merged.filter(Boolean)
+  if (validImgs.length === 0) return Array(count).fill(null)
+  return merged.map(img => img || validImgs[Math.floor(Math.random() * validImgs.length)])
 }
 
 function cap(text, max) {
@@ -262,7 +273,8 @@ export default function App() {
       else if (format === 3) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else result = await callAPI('/api/generate-script', { transcription, style: 'sombre' })
       setData(result)
-      const imgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
+      const rawImgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
+      const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
@@ -275,7 +287,8 @@ export default function App() {
       if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
-      const imgs = await fetchImages('vintage basketball 90s aesthetic film grain', (result.slides || []).length)
+      const rawImgs = await fetchImages('vintage basketball 90s aesthetic film grain', (result.slides || []).length)
+      const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
