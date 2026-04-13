@@ -40,14 +40,33 @@ const AUTEURS = [
   'Simone de Beauvoir', 'Maya Angelou', 'Nietzsche', 'Camus', 'Sartre',
 ]
 
-const JOUEURS = [
-  'Michael Jordan', 'Kobe Bryant', 'Allen Iverson', 'Kyrie Irving',
-  'LeBron James', 'Tim Duncan', 'Kevin Garnett',
-  'Tracy McGrady', 'Vince Carter', 'Dwyane Wade', 'Dirk Nowitzki',
-  'Steve Nash', 'Paul Pierce', 'Ray Allen', 'Carmelo Anthony',
-  'Chris Paul', 'Derrick Rose', 'Russell Westbrook', 'Stephen Curry',
-  'Kevin Durant', 'Tony Parker', 'Pau Gasol', 'Manu Ginobili',
-]
+const JOUEURS_KEYWORDS = {
+  'Michael Jordan': 'Michael Jordan Bulls 90s aesthetic vintage',
+  'Kobe Bryant': 'Kobe Bryant Lakers Mamba aesthetic vintage',
+  'Allen Iverson': 'Allen Iverson 76ers crossover aesthetic vintage',
+  'Kyrie Irving': 'Kyrie Irving handles aesthetic dark moody',
+  'LeBron James': 'LeBron James cinematic aesthetic moody',
+  'Tim Duncan': 'Tim Duncan Spurs championship aesthetic',
+  'Kevin Garnett': 'Kevin Garnett intensity aesthetic vintage',
+  'Tracy McGrady': 'Tracy McGrady Orlando aesthetic vintage',
+  'Vince Carter': 'Vince Carter dunk aesthetic vintage',
+  'Dwyane Wade': 'Dwyane Wade Heat aesthetic vintage',
+  'Dirk Nowitzki': 'Dirk Nowitzki fadeaway aesthetic vintage',
+  'Steve Nash': 'Steve Nash Suns aesthetic vintage',
+  'Paul Pierce': 'Paul Pierce Celtics aesthetic vintage',
+  'Ray Allen': 'Ray Allen shooter aesthetic vintage',
+  'Carmelo Anthony': 'Carmelo Anthony scorer aesthetic vintage',
+  'Chris Paul': 'Chris Paul point guard aesthetic vintage',
+  'Derrick Rose': 'Derrick Rose Bulls athletic aesthetic vintage',
+  'Russell Westbrook': 'Russell Westbrook aggressive aesthetic moody',
+  'Stephen Curry': 'Stephen Curry Warriors aesthetic cinematic',
+  'Kevin Durant': 'Kevin Durant scorer aesthetic dark moody',
+  'Tony Parker': 'Tony Parker Spurs aesthetic vintage',
+  'Pau Gasol': 'Pau Gasol big man aesthetic vintage',
+  'Manu Ginobili': 'Manu Ginobili eurostep aesthetic vintage',
+}
+
+const JOUEURS = Object.keys(JOUEURS_KEYWORDS)
 
 const ACTIONS = [
   'dunk en contre-attaque',
@@ -287,7 +306,7 @@ export default function App() {
       if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
-      const rawImgs = await fetchImages('vintage basketball 90s aesthetic film grain', (result.slides || []).length)
+      const rawImgs = await fetchImages(JOUEURS_KEYWORDS[joueur] || joueur + ' basketball vintage aesthetic', (result.slides || []).length)
       const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
