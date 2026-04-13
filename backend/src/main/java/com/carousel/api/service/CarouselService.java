@@ -32,6 +32,18 @@ public class CarouselService {
         return callGemini(buildPromptModerne(theme, style));
     }
 
+    public byte[] proxyImage(String url) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("User-Agent", "Mozilla/5.0")
+            .GET()
+            .build();
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) throw new RuntimeException("Image fetch error: " + response.statusCode());
+        return response.body();
+    }
+
     public String fetchImages(String query, int count) throws Exception {
         String safeQuery = query.replace("\"", "\\\"");
         String requestBody = "{\"q\": \"" + safeQuery + "\", \"num\": 20}";
