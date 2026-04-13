@@ -93,4 +93,14 @@ public class CarouselController {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/images")
+    public ResponseEntity<?> getImages(@RequestParam String query, @RequestParam(defaultValue = "5") int count) {
+        try {
+            String result = carouselService.fetchImages(query, count);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
 }
