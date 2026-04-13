@@ -42,7 +42,7 @@ const AUTEURS = [
 
 const JOUEURS = [
   'Michael Jordan', 'Kobe Bryant', 'Allen Iverson', 'Kyrie Irving',
-  'LeBron James', "Shaquille O'Neal", 'Tim Duncan', 'Kevin Garnett',
+  'LeBron James', 'Tim Duncan', 'Kevin Garnett',
   'Tracy McGrady', 'Vince Carter', 'Dwyane Wade', 'Dirk Nowitzki',
   'Steve Nash', 'Paul Pierce', 'Ray Allen', 'Carmelo Anthony',
   'Chris Paul', 'Derrick Rose', 'Russell Westbrook', 'Stephen Curry',
@@ -166,7 +166,7 @@ function getSlideContent(slide) {
     case 'basket_stat': return { main: cap(slide.stat, 10), sub: cap(slide.contexte, 8) }
     case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
     case 'basket_cta': return { main: cap(slide.question, 10) }
-    case 'basket_action': return { main: cap(slide.texte, 8), sub: cap(slide.prompt_kling, 15) }
+    case 'basket_action': return { main: cap(slide.texte, 8) }
     default: return { main: '' }
   }
 }
@@ -432,6 +432,20 @@ export default function App() {
                 total={slides.length} bgImage={bgImages[i]} themeStyle={themeStyle} />
             ))}
           </div>
+          {slides[0]?.type === 'basket_action' && (
+            <div style={{marginTop: '1rem'}}>
+              <p style={{fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 12, letterSpacing: '0.1em'}}>PROMPTS KLING AI — copie-colle dans Kling pour chaque image</p>
+              {slides.map((slide, i) => (
+                <div key={i} style={{background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 10, padding: '12px 14px', marginBottom: 8}}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 6}}>
+                    <span style={{fontSize: 10, fontWeight: 500, color: 'var(--color-text-secondary)'}}>IMAGE {slide.moment} — {slide.texte}</span>
+                    <button onClick={() => navigator.clipboard.writeText(slide.prompt_kling)} style={{fontSize: 10, padding: '2px 8px', border: '0.5px solid var(--color-border-secondary)', borderRadius: 6, background: 'transparent', color: 'var(--color-text-secondary)', cursor: 'pointer'}}>Copier</button>
+                  </div>
+                  <p style={{fontSize: 12, color: 'var(--color-text-primary)', lineHeight: 1.5, fontStyle: 'italic'}}>{slide.prompt_kling}</p>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="hashtags">
             {(data.hashtags || []).map(tag => (
               <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
