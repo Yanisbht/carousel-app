@@ -42,7 +42,7 @@ const AUTEURS = [
 
 const JOUEURS = [
   'Michael Jordan', 'Kobe Bryant', 'Allen Iverson', 'Kyrie Irving',
-  'LeBron James', 'Shaquille O'Neal', 'Tim Duncan', 'Kevin Garnett',
+  'LeBron James', "Shaquille O'Neal", 'Tim Duncan', 'Kevin Garnett',
   'Tracy McGrady', 'Vince Carter', 'Dwyane Wade', 'Dirk Nowitzki',
   'Steve Nash', 'Paul Pierce', 'Ray Allen', 'Carmelo Anthony',
   'Chris Paul', 'Derrick Rose', 'Russell Westbrook', 'Stephen Curry',
