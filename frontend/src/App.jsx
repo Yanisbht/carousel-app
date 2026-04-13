@@ -78,6 +78,7 @@ const THEME_STYLE = {
 }
 
 const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#ffffff', keyword: 'dramatic cinematic landscape' }
+const BASKET_STYLE = { color: 'rgba(60,40,10,0.45)', accent: '#f5e6c8' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
@@ -166,15 +167,16 @@ function getSlideContent(slide) {
     case 'basket_stat': return { main: cap(slide.stat, 10), sub: cap(slide.contexte, 8) }
     case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
     case 'basket_cta': return { main: cap(slide.question, 10) }
-    case 'basket_action': return { main: cap(slide.texte, 8) }
+    case 'basket_action': return { main: cap(slide.texte, 6) }
     default: return { main: '' }
   }
 }
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const isBasket = ['basket_hook','basket_citation','basket_stat','basket_lecon','basket_cta','basket_action'].includes(slide.type)
-  const colorOverlay = isBasket ? 'rgba(60,40,10,0.45)' : (themeStyle?.color || 'rgba(20,20,20,0.55)')
+  const isBasket = slide.type?.startsWith('basket_')
+  const colorOverlay = isBasket ? BASKET_STYLE.color : (themeStyle?.color || 'rgba(20,20,20,0.55)')
+  const textColor = isBasket ? '#f5e6c8' : '#FFFFFF'
 
   return (
     <div id={id} style={{
@@ -190,8 +192,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         }} />
       )}
       <div style={{ position: 'absolute', inset: 0, background: colorOverlay, zIndex: 1 }} />
-      <div style={{ position: 'absolute', inset: 0, background: isBasket ? 'rgba(255,220,150,0.08)' : 'rgba(0,0,0,0.2)', zIndex: 2 }} />
-      {isBasket && <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")', backgroundSize: 'cover', zIndex: 3, opacity: 0.4, mixBlendMode: 'overlay' }} />}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', zIndex: 2 }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.4)', zIndex: 4 }}>
         {index + 1}/{total}
       </span>
@@ -205,7 +206,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         {main && (
           <p style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 17, fontWeight: 800, color: isBasket ? '#f5e6c8' : '#FFFFFF',
+            fontSize: 17, fontWeight: 800, color: textColor,
             lineHeight: 1.3, textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
@@ -434,7 +435,7 @@ export default function App() {
           </div>
           {slides[0]?.type === 'basket_action' && (
             <div style={{marginTop: '1rem'}}>
-              <p style={{fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 12, letterSpacing: '0.1em'}}>PROMPTS KLING AI — copie-colle dans Kling pour chaque image</p>
+              <p style={{fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 12, letterSpacing: '0.1em'}}>PROMPTS KLING AI</p>
               {slides.map((slide, i) => (
                 <div key={i} style={{background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 10, padding: '12px 14px', marginBottom: 8}}>
                   <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 6}}>
