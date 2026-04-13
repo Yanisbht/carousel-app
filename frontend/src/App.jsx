@@ -316,17 +316,32 @@ export default function App() {
   const downloadAll = async () => {
     setExporting(true)
     try {
-      const domtoimage = await import('https://esm.sh/dom-to-image-more@3.4.0')
-      const dti = domtoimage.default || domtoimage
+      const { default: html2canvas } = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.esm.js')
       for (let i = 0; i < (data?.slides || []).length; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const dataUrl = await dti.toPng(el, { scale: 3 })
+        const bgDiv = el.querySelector('div[style*="backgroundImage"]')
+        const originalBg = bgDiv ? bgDiv.style.backgroundImage : null
+        const canvas = await html2canvas(el, {
+          scale: 3,
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          imageTimeout: 15000,
+          onclone: (doc, cloned) => {
+            const imgs = cloned.querySelectorAll('div[style*="backgroundImage"]')
+            imgs.forEach(div => {
+              const src = div.style.backgroundImage.replace(/url\(["']?|["']?\)/g, '')
+              if (src.startsWith('data:')) return
+              div.style.backgroundImage = `url(${src})`
+            })
+          }
+        })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
-        link.href = dataUrl
+        link.href = canvas.toDataURL('image/png')
         link.click()
-        await new Promise(r => setTimeout(r, 400))
+        await new Promise(r => setTimeout(r, 500))
       }
     } catch (e) { alert('Erreur export: ' + e.message) }
     setExporting(false)
