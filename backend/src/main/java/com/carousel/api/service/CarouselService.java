@@ -32,6 +32,44 @@ public class CarouselService {
         return callGemini(buildPromptModerne(theme, style));
     }
 
+    public String fetchImages(String query, int count) throws Exception {
+        String requestBody = """
+            {"q": "%s", "num": 20}
+            """.formatted(query.replace(""", "\\""));
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://google.serper.dev/images"))
+            .header("Content-Type", "application/json")
+            .header("X-API-KEY", "a9ee318fe702c37999db0251e75160c2800994ec")
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) throw new RuntimeException("Serper error: " + response.statusCode());
+
+        String body = response.body();
+        java.util.List<String> urls = new java.util.ArrayList<>();
+        int idx = 0;
+        while (urls.size() < count) {
+            int start = body.indexOf("\"imageUrl\":\"", idx);
+            if (start == -1) break;
+            start += 12;
+            int end = body.indexOf("\"", start);
+            if (end == -1) break;
+            String url = body.substring(start, end);
+            if (!url.contains(".gif")) urls.add(url);
+            idx = end;
+        }
+        StringBuilder json = new StringBuilder("{\"images\":[");
+        for (int i = 0; i < urls.size(); i++) {
+            if (i > 0) json.append(",");
+            json.append("\"").append(urls.get(i)).append("\"");
+        }
+        json.append("]}");
+        return json.toString();
+    }
+
     public String generateScript(String transcription, String style) throws Exception {
         return callGemini(buildPromptScript(transcription, style));
     }
