@@ -103,7 +103,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
-const BASKET_FORMATS = ['Citations joueur', 'Action Anime']
+const BASKET_FORMATS = ['Faits choc', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
