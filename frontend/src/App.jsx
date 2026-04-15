@@ -97,7 +97,7 @@ const THEME_STYLE = {
 }
 
 const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.55)', accent: '#ffffff', keyword: 'dramatic cinematic landscape' }
-const BASKET_STYLE = { color: 'rgba(60,40,10,0.45)', accent: '#f5e6c8' }
+const BASKET_STYLE = { color: 'rgba(0,0,0,0.65)', accent: '#ffffff' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
@@ -194,15 +194,15 @@ function getSlideContent(slide) {
     case 'video_explication': return { main: cap(slide.corps, 10) }
     case 'video_exemple': return { main: cap(slide.exemple, 10) }
     case 'video_cta': return { main: cap(slide.texte, 8), sub: cap(slide.question, 8) }
-    case 'basket_hook': return { main: cap(slide.accroche, 10), sub: slide.joueur }
-    case 'basket_citation': return { main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.joueur}` }
-    case 'basket_stat': return { main: cap(slide.stat, 10), sub: cap(slide.contexte, 8) }
+    case 'basket_hook': return { main: cap(slide.accroche, 5) }
+    case 'basket_citation': return { main: cap(slide.citation, 6), sub: `— ${slide.joueur}` }
+    case 'basket_stat': return { main: cap(slide.stat, 6) }
     case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
     case 'basket_cta': return { main: cap(slide.question, 10) }
     case 'basket_action': return { main: cap(slide.texte, 6) }
-    case 'motiv_hook': return { main: cap(slide.texte, 10) }
-    case 'motiv_citation': return { main: '\"' + cap(slide.citation, 12) + '\"', sub: slide.auteur }
-    case 'motiv_cta': return { main: cap(slide.question, 10) }
+    case 'motiv_hook': return { main: cap(slide.texte, 5) }
+    case 'motiv_citation': return { main: cap(slide.citation, 6), sub: slide.auteur }
+    case 'motiv_cta': return { main: cap(slide.question, 6) }
     default: return { main: '' }
   }
 }
@@ -211,7 +211,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
   const isBasket = slide.type?.startsWith('basket_')
   const colorOverlay = isBasket ? BASKET_STYLE.color : (themeStyle?.color || 'rgba(20,20,20,0.55)')
-  const textColor = isBasket ? '#f5e6c8' : '#FFFFFF'
+  const textColor = '#FFFFFF'
 
   return (
     <div id={id} style={{
