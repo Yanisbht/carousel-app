@@ -209,9 +209,47 @@ function getSlideContent(slide) {
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const isBasket = slide.type?.startsWith('basket_')
-  const colorOverlay = isBasket ? BASKET_STYLE.color : (themeStyle?.color || 'rgba(20,20,20,0.55)')
-  const textColor = '#FFFFFF'
+  const isBasket = slide.type?.startsWith('basket_') || slide.type?.startsWith('motiv_')
+  const colorOverlay = isBasket ? 'rgba(0,0,0,0.15)' : (themeStyle?.color || 'rgba(20,20,20,0.55)')
+
+  if (isBasket) {
+    return (
+      <div id={id} style={{
+        flexShrink: 0, width: 180, height: 320, borderRadius: 10,
+        position: 'relative', overflow: 'hidden', background: '#000',
+        border: '0.5px solid rgba(255,255,255,0.08)',
+      }}>
+        {bgImage && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: 'cover', backgroundPosition: 'center top', zIndex: 0,
+          }} />
+        )}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.18)', zIndex: 1 }} />
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
+          padding: '36px 12px 14px',
+          textAlign: 'center',
+        }}>
+          {main && <p style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: 12, fontWeight: 600, color: '#fff',
+            lineHeight: 1.4, letterSpacing: '0.01em',
+            textShadow: '0 1px 8px rgba(0,0,0,1)',
+          }}>{main}</p>}
+          {sub && <p style={{
+            fontSize: 9, color: 'rgba(255,255,255,0.55)',
+            marginTop: 3, fontStyle: 'italic',
+          }}>{sub}</p>}
+        </div>
+        <span style={{ position: 'absolute', top: 8, left: 10, fontSize: 8, color: 'rgba(255,255,255,0.3)', zIndex: 3 }}>
+          {index + 1}/{total}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div id={id} style={{
@@ -241,7 +279,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         {main && (
           <p style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 17, fontWeight: 800, color: textColor,
+            fontSize: 17, fontWeight: 800, color: '#FFFFFF',
             lineHeight: 1.3, textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             wordBreak: 'break-word', overflow: 'hidden',
             display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical',
