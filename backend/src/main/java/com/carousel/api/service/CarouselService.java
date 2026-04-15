@@ -108,6 +108,11 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String basketMotivation(String style) throws Exception {
+        String prompt = "Tu crees des carrousels TikTok basket motivation style edit. 3 slides qui donnent des frissons comme les meilleurs edits basket sur TikTok. Slide 1 = phrase motivante ultra courte et percutante sur le travail et la grandeur, style vestiaire avant le match, MAX 8 MOTS. Slide 2 = citation reelle d'un grand joueur NBA sur la mentalite et le sacrifice, MAX 10 MOTS + le nom du joueur. Slide 3 = question clivante qui pousse les gens a commenter, MAX 8 MOTS. REGLE ABSOLUE : MAX 10 MOTS par champ. Ton : intense, inspire, cinematique. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"basketball\",\"motivation\",\"nba\",\"mindset\",\"aesthetic\",\"grind\"],\"slides\":[{\"type\":\"motiv_hook\",\"texte\":\"phrase motivante MAX 8 MOTS\"},{\"type\":\"motiv_citation\",\"citation\":\"citation joueur MAX 10 MOTS\",\"auteur\":\"Prenom Nom\"},{\"type\":\"motiv_cta\",\"question\":\"question clivante MAX 8 MOTS ?\"}]}";
+        return callGemini(prompt);
+    }
+
     public String basketFilm(String film, String style) throws Exception {
         String prompt = "Tu crees des carousels TikTok emotionnels pour un compte basket aesthetic. Film : " + film + ". Format : 3 slides qui donnent des frissons. Slide 1 = replique iconique du film qui donne des frissons, MAX 10 MOTS. Slide 2 = contexte de la scene en 1 phrase percutante, MAX 10 MOTS. Slide 3 = lecon de vie universelle tiree de cette scene, MAX 10 MOTS. Style : emotionnel, inspire, cinematique. REGLE ABSOLUE : MAX 10 MOTS par champ. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"basketball\",\"film\",\"motivation\",\"inspiration\",\"aesthetic\",\"mindset\"],\"slides\":[{\"type\":\"film_hook\",\"replique\":\"replique iconique MAX 10 MOTS\",\"film\":\"" + film + "\"},{\"type\":\"film_contexte\",\"contexte\":\"contexte de la scene MAX 10 MOTS\"},{\"type\":\"film_lecon\",\"lecon\":\"lecon de vie MAX 10 MOTS\"}]}";
         return callGemini(prompt);
