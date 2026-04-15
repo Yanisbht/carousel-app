@@ -277,7 +277,7 @@ export default function App() {
   const [auteur, setAuteur] = useState(AUTEURS[0])
   const [transcription, setTranscription] = useState('')
   const [basketFormat, setBasketFormat] = useState(0)
-  const [joueur, setJoueur] = useState(JOUEURS[0])
+  const [joueur, setJoueur] = useState('')
   const [action, setAction] = useState(ACTIONS[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -308,7 +308,7 @@ export default function App() {
     setLoading(true); setError(null); setData(null); setBgImages([])
     try {
       let result
-      if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
+      if (basketFormat === 0) { if (!joueur) { setError('Choisis un joueur'); setLoading(false); return; } result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' }) }
       else if (basketFormat === 1) result = await callAPI('/api/basket/motivation', { style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
@@ -428,7 +428,8 @@ export default function App() {
               <div className="ctrl">
                 <label>Joueur</label>
                 <select value={joueur} onChange={e => setJoueur(e.target.value)}>
-                  {JOUEURS.map(j => <option key={j} value={j}>{j}</option>)}
+                  <option value=''>-- Choisir un joueur --</option>
+                {JOUEURS.map(j => <option key={j} value={j}>{j}</option>)}
                 </select>
               </div>
             )}
