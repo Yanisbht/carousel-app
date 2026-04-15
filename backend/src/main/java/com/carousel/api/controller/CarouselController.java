@@ -127,6 +127,17 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/basket/film")
+    public ResponseEntity<?> basketFilm(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.basketFilm(
+                body.getOrDefault("film", "Coach Carter"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/basket/action")
     public ResponseEntity<?> basketAction(@RequestBody Map<String, String> body) {
         try {
