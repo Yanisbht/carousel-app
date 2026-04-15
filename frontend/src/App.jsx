@@ -119,6 +119,22 @@ const FILMS_SPORT = [
   'More Than a Game',
 ]
 
+const FILMS_KEYWORDS = {
+  'Coach Carter': 'Coach Carter 2005 film still Samuel L Jackson locker room',
+  'Woodlawn': 'Woodlawn 2015 film still football team prayer',
+  'Space Jam': 'Space Jam 1996 film still Michael Jordan Bugs Bunny',
+  'He Got Game': 'He Got Game 1998 film still Ray Allen Denzel Washington',
+  'Hoop Dreams': 'Hoop Dreams 1994 documentary film still',
+  'Above the Rim': 'Above the Rim 1994 film still Tupac basketball',
+  'Like Mike': 'Like Mike 2002 film still Lil Bow Wow basketball',
+  'The Way Back': 'The Way Back 2020 film still Ben Affleck basketball coach',
+  'Hustle (Netflix)': 'Hustle 2022 Netflix film still Adam Sandler basketball scout',
+  'High Flying Bird': 'High Flying Bird 2019 film still basketball agent',
+  'Uncle Drew': 'Uncle Drew 2018 film still Kyrie Irving playground',
+  'The Last Dance (documentaire)': 'The Last Dance documentary 1998 Chicago Bulls Michael Jordan',
+  'More Than a Game': 'More Than a Game 2008 documentary LeBron James high school',
+}
+
 const BASKET_FORMATS = ['Faits choc', 'Films de sport', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
