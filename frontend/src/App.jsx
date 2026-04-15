@@ -103,39 +103,9 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
-const FILMS_SPORT = [
-  'Coach Carter',
-  'Woodlawn',
-  'Space Jam',
-  'He Got Game',
-  'Hoop Dreams',
-  'Above the Rim',
-  'Like Mike',
-  'The Way Back',
-  'Hustle (Netflix)',
-  'High Flying Bird',
-  'Uncle Drew',
-  'The Last Dance (documentaire)',
-  'More Than a Game',
-]
 
-const FILMS_KEYWORDS = {
-  'Coach Carter': 'Coach Carter 2005 film still Samuel L Jackson locker room',
-  'Woodlawn': 'Woodlawn 2015 film still football team prayer',
-  'Space Jam': 'Space Jam 1996 film still Michael Jordan Bugs Bunny',
-  'He Got Game': 'He Got Game 1998 film still Ray Allen Denzel Washington',
-  'Hoop Dreams': 'Hoop Dreams 1994 documentary film still',
-  'Above the Rim': 'Above the Rim 1994 film still Tupac basketball',
-  'Like Mike': 'Like Mike 2002 film still Lil Bow Wow basketball',
-  'The Way Back': 'The Way Back 2020 film still Ben Affleck basketball coach',
-  'Hustle (Netflix)': 'Hustle 2022 Netflix film still Adam Sandler basketball scout',
-  'High Flying Bird': 'High Flying Bird 2019 film still basketball agent',
-  'Uncle Drew': 'Uncle Drew 2018 film still Kyrie Irving playground',
-  'The Last Dance (documentaire)': 'The Last Dance documentary 1998 Chicago Bulls Michael Jordan',
-  'More Than a Game': 'More Than a Game 2008 documentary LeBron James high school',
-}
 
-const BASKET_FORMATS = ['Faits choc', 'Films de sport', 'Action Anime']
+const BASKET_FORMATS = ['Faits choc', 'Motivation', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -230,9 +200,9 @@ function getSlideContent(slide) {
     case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
     case 'basket_cta': return { main: cap(slide.question, 10) }
     case 'basket_action': return { main: cap(slide.texte, 6) }
-    case 'film_hook': return { main: cap(slide.replique, 10), sub: slide.film }
-    case 'film_contexte': return { main: cap(slide.contexte, 10) }
-    case 'film_lecon': return { main: cap(slide.lecon, 10) }
+    case 'motiv_hook': return { main: cap(slide.texte, 10) }
+    case 'motiv_citation': return { main: '\"' + cap(slide.citation, 12) + '\"', sub: slide.auteur }
+    case 'motiv_cta': return { main: cap(slide.question, 10) }
     default: return { main: '' }
   }
 }
@@ -309,7 +279,6 @@ export default function App() {
   const [basketFormat, setBasketFormat] = useState(0)
   const [joueur, setJoueur] = useState(JOUEURS[0])
   const [action, setAction] = useState(ACTIONS[0])
-  const [film, setFilm] = useState(FILMS_SPORT[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -340,7 +309,7 @@ export default function App() {
     try {
       let result
       if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
-      else if (basketFormat === 1) result = await callAPI('/api/basket/film', { film, style: 'sombre' })
+      else if (basketFormat === 1) result = await callAPI('/api/basket/motivation', { style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
       const rawImgs = await fetchImages(JOUEURS_KEYWORDS[joueur] || joueur + ' basketball vintage aesthetic', (result.slides || []).length)
