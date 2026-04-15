@@ -103,7 +103,23 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
-const BASKET_FORMATS = ['Faits choc', 'Action Anime']
+const FILMS_SPORT = [
+  'Coach Carter',
+  'Woodlawn',
+  'Space Jam',
+  'He Got Game',
+  'Hoop Dreams',
+  'Above the Rim',
+  'Like Mike',
+  'The Way Back',
+  'Hustle (Netflix)',
+  'High Flying Bird',
+  'Uncle Drew',
+  'The Last Dance (documentaire)',
+  'More Than a Game',
+]
+
+const BASKET_FORMATS = ['Faits choc', 'Films de sport', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -198,6 +214,9 @@ function getSlideContent(slide) {
     case 'basket_lecon': return { main: cap(slide.lecon, 10), sub: cap(slide.application, 8) }
     case 'basket_cta': return { main: cap(slide.question, 10) }
     case 'basket_action': return { main: cap(slide.texte, 6) }
+    case 'film_hook': return { main: cap(slide.replique, 10), sub: slide.film }
+    case 'film_contexte': return { main: cap(slide.contexte, 10) }
+    case 'film_lecon': return { main: cap(slide.lecon, 10) }
     default: return { main: '' }
   }
 }
@@ -274,6 +293,7 @@ export default function App() {
   const [basketFormat, setBasketFormat] = useState(0)
   const [joueur, setJoueur] = useState(JOUEURS[0])
   const [action, setAction] = useState(ACTIONS[0])
+  const [film, setFilm] = useState(FILMS_SPORT[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -304,6 +324,7 @@ export default function App() {
     try {
       let result
       if (basketFormat === 0) result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' })
+      else if (basketFormat === 1) result = await callAPI('/api/basket/film', { film, style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
       const rawImgs = await fetchImages(JOUEURS_KEYWORDS[joueur] || joueur + ' basketball vintage aesthetic', (result.slides || []).length)
@@ -418,12 +439,14 @@ export default function App() {
             ))}
           </div>
           <div className="controls">
-            <div className="ctrl">
-              <label>Joueur</label>
-              <select value={joueur} onChange={e => setJoueur(e.target.value)}>
-                {JOUEURS.map(j => <option key={j} value={j}>{j}</option>)}
-              </select>
-            </div>
+            {basketFormat !== 1 && (
+              <div className="ctrl">
+                <label>Joueur</label>
+                <select value={joueur} onChange={e => setJoueur(e.target.value)}>
+                  {JOUEURS.map(j => <option key={j} value={j}>{j}</option>)}
+                </select>
+              </div>
+            )}
             {basketFormat === 3 && (
               <div className="ctrl">
                 <label>Action</label>
