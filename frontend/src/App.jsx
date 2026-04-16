@@ -236,10 +236,12 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         }}>
           {main && <p style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 13, fontWeight: 700,
-            color: slide.type === 'vie_slide' ? '#f5a623' : '#ffffff',
-            lineHeight: 1.4, letterSpacing: '0.01em',
-            textShadow: '0 2px 10px rgba(0,0,0,1)',
+            fontSize: slide.type === 'vie_slide' ? 14 : 12,
+            fontWeight: 700,
+            color: slide.type === 'vie_slide' ? '#f5c842' : '#ffffff',
+            lineHeight: 1.35, letterSpacing: '0.01em',
+            textShadow: '0 2px 12px rgba(0,0,0,1)',
+            textAlign: 'center',
           }}>{main}</p>}
           {sub && <p style={{
             fontSize: 9, color: 'rgba(255,255,255,0.55)',
