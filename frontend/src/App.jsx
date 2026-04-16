@@ -105,7 +105,7 @@ const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
 
 
-const BASKET_FORMATS = ['Faits choc', 'Motivation', 'Action Anime']
+const BASKET_FORMATS = ['Faits choc', 'Vie de basketteur', 'Action Anime']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -201,6 +201,7 @@ function getSlideContent(slide) {
     case 'basket_cta': return { main: cap(slide.question, 10) }
     case 'basket_action': return { main: cap(slide.texte, 6) }
     case 'motiv_hook': return { main: cap(slide.texte, 5) }
+    case 'vie_slide': return { main: cap(slide.texte, 12) }
     case 'motiv_citation': return { main: cap(slide.citation, 6), sub: slide.auteur }
     case 'motiv_cta': return { main: cap(slide.question, 6) }
     default: return { main: '' }
@@ -235,9 +236,10 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         }}>
           {main && <p style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 12, fontWeight: 600, color: '#fff',
+            fontSize: 13, fontWeight: 700,
+            color: slide.type === 'vie_slide' ? '#f5a623' : '#ffffff',
             lineHeight: 1.4, letterSpacing: '0.01em',
-            textShadow: '0 1px 8px rgba(0,0,0,1)',
+            textShadow: '0 2px 10px rgba(0,0,0,1)',
           }}>{main}</p>}
           {sub && <p style={{
             fontSize: 9, color: 'rgba(255,255,255,0.55)',
@@ -347,7 +349,7 @@ export default function App() {
     try {
       let result
       if (basketFormat === 0) { if (!joueur) { setError('Choisis un joueur'); setLoading(false); return; } result = await callAPI('/api/basket/citations', { joueur, style: 'sombre' }) }
-      else if (basketFormat === 1) result = await callAPI('/api/basket/motivation', { style: 'sombre' })
+      else if (basketFormat === 1) result = await callAPI('/api/basket/vie', { style: 'sombre' })
       else result = await callAPI('/api/basket/action', { joueur, action, style: 'sombre' })
       setData(result)
       const rawImgs = await fetchImages(JOUEURS_KEYWORDS[joueur] || joueur + ' basketball vintage aesthetic', (result.slides || []).length)
