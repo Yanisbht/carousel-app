@@ -108,6 +108,11 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String basketVie(String style) throws Exception {
+        String prompt = "Tu crees des carrousels TikTok viraux. 3 slides. Chaque slide = une phrase universelle courte qui touche tout le monde — sur les emotions, les relations, la vie, les silences, les trahisons, la croissance, l'amour, la solitude, l'ambition. Pas de basket dans le texte. Style : poetique, simple, vrai. Comme les phrases qui font 100k likes sur TikTok. Exemples : 'on ignore pas quelqu'un pour qui on ressent rien', 'certaines personnes te manquent avant meme qu'elles partent', 'le silence dit tout ce que les mots cachent'. MAX 15 MOTS par slide. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"vie\",\"citation\",\"emotion\",\"basketball\",\"aesthetic\",\"vrai\"],\"slides\":[{\"type\":\"vie_slide\",\"texte\":\"phrase universelle MAX 15 MOTS\"},{\"type\":\"vie_slide\",\"texte\":\"phrase universelle MAX 15 MOTS\"},{\"type\":\"vie_slide\",\"texte\":\"phrase universelle MAX 15 MOTS\"}]}";
+        return callGemini(prompt);
+    }
+
     public String basketMotivation(String style) throws Exception {
         String prompt = "Tu crees des carrousels TikTok basket emotion style edit cinematique. 3 slides. REGLE ABSOLUE : MAX 5 MOTS par champ. Tres court, tres fort, tres emotionnel. Slide 1 = phrase choc ultra courte style 'Le sacrifice. La gloire.' ou 'Personne ne voit les larmes.' MAX 5 MOTS. Slide 2 = citation reelle d'un joueur NBA tres courte sur la douleur ou la grandeur MAX 6 MOTS + nom joueur. Slide 3 = question qui touche au coeur MAX 5 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"basketball\",\"motivation\",\"nba\",\"mindset\",\"aesthetic\",\"emotion\"],\"slides\":[{\"type\":\"motiv_hook\",\"texte\":\"MAX 5 MOTS\"},{\"type\":\"motiv_citation\",\"citation\":\"MAX 6 MOTS\",\"auteur\":\"Prenom Nom\"},{\"type\":\"motiv_cta\",\"question\":\"MAX 5 MOTS ?\"}]}";
         return callGemini(prompt);
