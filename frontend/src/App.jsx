@@ -105,7 +105,15 @@ const API_BASE = import.meta.env.VITE_API_URL || ''
 const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
 
 
-const BASKET_FORMATS = ['Faits choc', 'Vie de basketteur', 'Action Anime']
+const GENZ_FORMATS = ['Nostalgie', 'Pensées gen Z', 'Cinéma & Rap']
+
+const ERES = [
+  '2010 - 2013 (collège swag)',
+  '2013 - 2016 (lycée tumblr)',
+  '2015 - 2018 (PS4 / Snapchat)',
+  '2017 - 2020 (ado tardif)',
+  '2019 - 2022 (covid generation)',
+]
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -202,6 +210,11 @@ function getSlideContent(slide) {
     case 'basket_action': return { main: cap(slide.texte, 6) }
     case 'motiv_hook': return { main: cap(slide.texte, 5) }
     case 'vie_slide': return { main: cap(slide.texte, 12) }
+    case 'nostalgie_hook': return { main: cap(slide.texte, 12) }
+    case 'nostalgie_refs': return { main: cap(slide.texte, 15) }
+    case 'nostalgie_feeling': return { main: cap(slide.texte, 12) }
+    case 'pensee_slide': return { main: cap(slide.texte, 12) }
+    case 'cinema_slide': return { main: cap(slide.texte, 12) }
     case 'motiv_citation': return { main: cap(slide.citation, 6), sub: slide.auteur }
     case 'motiv_cta': return { main: cap(slide.question, 6) }
     default: return { main: '' }
@@ -210,7 +223,7 @@ function getSlideContent(slide) {
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const isBasket = slide.type?.startsWith('basket_') || slide.type?.startsWith('motiv_')
+  const isBasket = slide.type?.startsWith('basket_') || slide.type?.startsWith('motiv_') || slide.type?.startsWith('nostalgie_') || slide.type?.startsWith('pensee_') || slide.type?.startsWith('cinema_') || slide.type === 'vie_slide'
   const colorOverlay = isBasket ? 'rgba(0,0,0,0.15)' : (themeStyle?.color || 'rgba(20,20,20,0.55)')
 
   if (isBasket) {
@@ -238,7 +251,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
             fontFamily: "'Montserrat', sans-serif",
             fontSize: slide.type === 'vie_slide' ? 14 : 12,
             fontWeight: 700,
-            color: slide.type === 'vie_slide' ? '#f5c842' : '#ffffff',
+            color: slide.type?.startsWith('nostalgie_') ? '#f5c842' : '#ffffff',
             lineHeight: 1.35, letterSpacing: '0.01em',
             textShadow: '0 2px 12px rgba(0,0,0,1)',
             textAlign: 'center',
@@ -321,6 +334,7 @@ export default function App() {
   const [basketFormat, setBasketFormat] = useState(0)
   const [joueur, setJoueur] = useState('')
   const [action, setAction] = useState(ACTIONS[0])
+  const [ere, setEre] = useState(ERES[0])
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -406,9 +420,9 @@ export default function App() {
             onClick={() => { setCompte('citations'); setData(null); setBgImages([]) }}>
             Citations du monde
           </button>
-          <button className={`ftab${compte === 'basket' ? ' active' : ''}`}
-            onClick={() => { setCompte('basket'); setData(null); setBgImages([]) }}>
-            Basket
+          <button className={`ftab${compte === 'genz' ? ' active' : ''}`}
+            onClick={() => { setCompte('genz'); setData(null); setBgImages([]) }}>
+            Gen Z
           </button>
         </div>
       </header>
@@ -455,10 +469,10 @@ export default function App() {
         </>
       )}
 
-      {compte === 'basket' && (
+      {compte === 'genz' && (
         <>
           <div className="format-tabs" style={{marginTop: '1rem'}}>
-            {BASKET_FORMATS.map((f, i) => (
+            {GENZ_FORMATS.map((f, i) => (
               <button key={i} className={`ftab${basketFormat === i ? ' active' : ''}`}
                 onClick={() => { setBasketFormat(i); setData(null); setBgImages([]) }}>
                 {f}
