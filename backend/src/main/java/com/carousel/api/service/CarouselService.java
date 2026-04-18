@@ -108,6 +108,21 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String genzNostalgie(String ere, String style) throws Exception {
+        String prompt = "Tu crees des carrousels TikTok viraux style nostalgie gen Z francaise. Format POV. Ere : " + ere + ". 3 slides. Slide 1 = accroche POV courte et precise qui pose l'ere (ex: 'pov t'avais 14 ans en 2016'). Slide 2 = liste de 5-6 references culturelles ultra precises de cette periode : musiques, series, jeux, applis, moments (ex: Nkfeu, Naruto, PS4, Snapchat streaks, PNL, les soirees FIFA). Slide 3 = emotion nostalgique courte qui resonne (ex: 'cette epoque reviendra jamais', 'vous comprendrez pas si vous y ettiez pas'). REGLE : direct, familier, gen Z francais. MAX 15 MOTS par slide. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"nostalgie\",\"genz\",\"pov\",\"2010s\",\"ado\",\"souvenir\"],\"slides\":[{\"type\":\"nostalgie_hook\",\"texte\":\"accroche POV MAX 10 MOTS\"},{\"type\":\"nostalgie_refs\",\"texte\":\"liste refs separees par virgules MAX 15 MOTS\"},{\"type\":\"nostalgie_feeling\",\"texte\":\"emotion finale MAX 10 MOTS\"}]}";
+        return callGemini(prompt);
+    }
+
+    public String genzPensees(String style) throws Exception {
+        String prompt = "Tu crees des carrousels TikTok viraux. Style pensees de jeune adulte gen Z francais entre cinema, rap et verite de vie. 3 slides. Chaque slide = une pensee courte, directe, vraie. Mi-philosophique mi-quotidien. Style des sous-titres de films ou des paroles de rap. Exemples : 'on grandit en realisant que tout le monde fait semblant', 'y'a des gens qui restent et des gens qui apprennent', 'le silence est la seule reponse honnete parfois'. MAX 12 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"pensee\",\"genz\",\"vrai\",\"rap\",\"cinema\",\"vie\"],\"slides\":[{\"type\":\"pensee_slide\",\"texte\":\"pensee directe MAX 12 MOTS\"},{\"type\":\"pensee_slide\",\"texte\":\"pensee directe MAX 12 MOTS\"},{\"type\":\"pensee_slide\",\"texte\":\"pensee directe MAX 12 MOTS\"}]}";
+        return callGemini(prompt);
+    }
+
+    public String genzCinema(String style) throws Exception {
+        String prompt = "Tu crees des carrousels TikTok viraux. Style repliques de films ou paroles de rap qui parlent a la gen Z francaise. 3 slides. Slide 1 = replique de film ou parole de rap connue qui touche. Slide 2 = ce que ca dit sur la vraie vie en 1 phrase. Slide 3 = question ou pensee qui resonne. Films : Intouchables, La Haine, Les Profs, Grave, Bande de Filles. Rap : PNL, Nekfeu, Orelsan, Hamza, SCH. MAX 12 MOTS par slide. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"cinema\",\"rap\",\"genz\",\"france\",\"replique\",\"vrai\"],\"slides\":[{\"type\":\"cinema_slide\",\"texte\":\"replique ou parole MAX 12 MOTS\"},{\"type\":\"cinema_slide\",\"texte\":\"ce que ca dit MAX 12 MOTS\"},{\"type\":\"cinema_slide\",\"texte\":\"pensee finale MAX 12 MOTS\"}]}";
+        return callGemini(prompt);
+    }
+
     public String basketVie(String style) throws Exception {
         String prompt = "Tu crees des carrousels TikTok viraux qui font des millions de vues. 3 slides. Chaque slide = UNE phrase tres courte, directe, vraie, qui parle a tout le monde. Style parle, familier, comme un ami qui dit une verite. PAS de style litteraire ou poetique. PAS de metaphores compliquees. Exemples EXACTEMENT ce style : 'on ignore pas quelqu'un pour qui on ressent rien', 't'as pas perdu du temps, t'as appris qui restait', 'certaines personnes savent exactement ce qu'elles font', 'le silence repond mieux que les excuses', 'on grandit pas en vieillissant, on grandit en perdant'. MAX 12 MOTS. Simple. Direct. Vrai. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"vie\",\"vrai\",\"emotion\",\"tiktok\",\"aesthetic\",\"basketball\"],\"slides\":[{\"type\":\"vie_slide\",\"texte\":\"phrase directe MAX 12 MOTS\"},{\"type\":\"vie_slide\",\"texte\":\"phrase directe MAX 12 MOTS\"},{\"type\":\"vie_slide\",\"texte\":\"phrase directe MAX 12 MOTS\"}]}";
         return callGemini(prompt);
