@@ -127,6 +127,37 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/genz/nostalgie")
+    public ResponseEntity<?> genzNostalgie(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.genzNostalgie(
+                body.getOrDefault("ere", "2015 - 2018"),
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/genz/pensees")
+    public ResponseEntity<?> genzPensees(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.genzPensees(
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/genz/cinema")
+    public ResponseEntity<?> genzCinema(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.genzCinema(
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/basket/vie")
     public ResponseEntity<?> basketVie(@RequestBody Map<String, String> body) {
         try {
