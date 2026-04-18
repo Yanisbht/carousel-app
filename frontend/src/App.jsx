@@ -223,7 +223,8 @@ function getSlideContent(slide) {
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const isBasket = slide.type?.startsWith('basket_') || slide.type?.startsWith('motiv_') || slide.type?.startsWith('nostalgie_') || slide.type?.startsWith('pensee_') || slide.type?.startsWith('cinema_') || slide.type === 'vie_slide'
+  const isBasket = slide.type?.startsWith('basket_') || slide.type?.startsWith('motiv_')
+  const isGenz = slide.type?.startsWith('nostalgie_') || slide.type?.startsWith('pensee_') || slide.type?.startsWith('cinema_') || slide.type === 'vie_slide'
   const colorOverlay = isBasket ? 'rgba(0,0,0,0.15)' : (themeStyle?.color || 'rgba(20,20,20,0.55)')
 
   if (isBasket) {
