@@ -26,16 +26,14 @@ const AUTEURS = [
 ]
 
 const AESTHETIC_KEYWORDS = [
-  'prairie golden hour aesthetic',
-  'sunset sky aesthetic',
-  'field grass golden light aesthetic',
-  'sky clouds sunset aesthetic',
-  'meadow sunrise aesthetic',
-  'horizon sunset aesthetic',
-  'nature light aesthetic simple',
-  'golden field aesthetic calm',
-  'open sky aesthetic peaceful',
-  'countryside sunset aesthetic',
+  'landscape golden hour no people',
+  'sunset sky clouds no people',
+  'wheat field golden light no people',
+  'nature landscape sunrise no people',
+  'horizon sunset landscape no people',
+  'meadow golden hour no people',
+  'countryside landscape no people',
+  'sky clouds golden no people',
 ]
 
 const THEME_STYLE = {
@@ -98,13 +96,11 @@ async function toBase64(url) {
 }
 
 async function fetchImages(query, count) {
-  // Essaie Unsplash en priorité pour les paysages aesthetics
+  const pexels = await fetchPexelsImages(query, count)
+  const hasAll = pexels.every(Boolean)
+  if (hasAll) return pexels
   const unsplash = await fetchUnsplashImages(query, count)
-  const hasAll = unsplash.every(Boolean)
-  if (hasAll) return unsplash
-  // Fallback Serper
-  const serper = await fetchSerperImages(query, count)
-  const merged = unsplash.map((img, i) => img || serper[i] || null)
+  const merged = pexels.map((img, i) => img || unsplash[i] || null)
   const valid = merged.filter(Boolean)
   if (valid.length === 0) return Array(count).fill(null)
   return merged.map(img => img || valid[Math.floor(Math.random() * valid.length)])
