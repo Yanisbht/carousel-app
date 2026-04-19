@@ -26,35 +26,35 @@ const AUTEURS = [
 ]
 
 const AESTHETIC_KEYWORDS = [
-  'golden hour landscape aesthetic sunny',
-  'mountain sunrise golden light aesthetic',
-  'ocean sunset warm aesthetic',
-  'forest sunlight rays aesthetic',
-  'desert golden dunes sunny aesthetic',
-  'field flowers sunny aesthetic warm',
-  'lake reflection golden hour aesthetic',
-  'nature sunny cinematic warm light',
-  'hills green sunny aesthetic landscape',
-  'sky clouds golden light aesthetic',
+  'prairie golden hour aesthetic',
+  'sunset sky aesthetic',
+  'field grass golden light aesthetic',
+  'sky clouds sunset aesthetic',
+  'meadow sunrise aesthetic',
+  'horizon sunset aesthetic',
+  'nature light aesthetic simple',
+  'golden field aesthetic calm',
+  'open sky aesthetic peaceful',
+  'countryside sunset aesthetic',
 ]
 
 const THEME_STYLE = {
-  'philosophie stoïcienne':                                 { color: 'rgba(20,30,60,0.35)',  accent: '#a8c8ff' },
-  'sagesse africaine':                                      { color: 'rgba(80,40,10,0.35)',  accent: '#ffb347' },
-  'philosophie orientale':                                  { color: 'rgba(10,50,40,0.35)',  accent: '#7fffd4' },
-  'leaders et révolutionnaires':                            { color: 'rgba(60,10,10,0.35)',  accent: '#ff6b6b' },
-  'philosophie arabe et islamique':                         { color: 'rgba(40,20,70,0.35)',  accent: '#c9a0ff' },
-  'développement personnel moderne':                        { color: 'rgba(10,40,60,0.35)',  accent: '#80d8ff' },
-  'sagesse amérindienne':                                   { color: 'rgba(40,50,10,0.35)',  accent: '#b8e986' },
-  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(40,10,10,0.35)',  accent: '#ff8a80' },
-  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(15,15,15,0.40)',  accent: '#e0e0e0' },
-  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(70,15,40,0.35)',  accent: '#f48fb1' },
-  'sagesse berbère et maghrébine':                          { color: 'rgba(80,50,10,0.35)',  accent: '#ffd54f' },
-  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(30,30,10,0.35)',  accent: '#e6ee9c' },
-  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(40,10,60,0.35)',  accent: '#ce93d8' },
-  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(10,35,60,0.35)',  accent: '#90caf9' },
+  'philosophie stoïcienne':                                 { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'sagesse africaine':                                      { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'philosophie orientale':                                  { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'leaders et révolutionnaires':                            { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'philosophie arabe et islamique':                         { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'développement personnel moderne':                        { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'sagesse amérindienne':                                   { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'sagesse berbère et maghrébine':                          { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
+  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
 }
-const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.35)', accent: '#ffffff' }
+const DEFAULT_STYLE = { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
@@ -150,7 +150,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
     <div id={id} style={{ flexShrink: 0, width: 180, height: 320, borderRadius: 10, position: 'relative', overflow: 'hidden', background: '#080810', border: '0.5px solid rgba(255,255,255,0.06)' }}>
       {bgImage && <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />}
       <div style={{ position: 'absolute', inset: 0, background: overlay, zIndex: 1 }} />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.3) 100%)', zIndex: 2 }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)', zIndex: 2 }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.35)', zIndex: 4 }}>{index + 1}/{total}</span>
       <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '44px 16px 28px', textAlign: 'center', gap: 12, boxSizing: 'border-box' }}>
         {main && <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 800, color: '#FFFFFF', lineHeight: 1.3, textShadow: '0 1px 12px rgba(0,0,0,0.95), 0 2px 24px rgba(0,0,0,0.8)', textWrap: 'balance' }}>{main}</p>}
