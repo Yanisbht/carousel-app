@@ -25,23 +25,34 @@ const AUTEURS = [
   'Nietzsche', 'Camus', 'Sartre',
 ]
 
+const AESTHETIC_KEYWORDS = [
+  'dark moody cinematic landscape fog',
+  'mountain fog aesthetic dark',
+  'ocean night dark moody cinematic',
+  'forest dark aesthetic moody',
+  'desert sunset aesthetic cinematic',
+  'dark sky stars aesthetic night',
+  'city night lights aesthetic dark',
+  'nature dark moody cinematic landscape',
+]
+
 const THEME_STYLE = {
-  'philosophie stoïcienne':                                 { color: 'rgba(20,30,60,0.6)',   accent: '#a8c8ff', keyword: 'ancient rome ruins fog aesthetic dark moody' },
-  'sagesse africaine':                                      { color: 'rgba(80,40,10,0.6)',   accent: '#ffb347', keyword: 'africa savanna golden hour sunset aesthetic' },
-  'philosophie orientale':                                  { color: 'rgba(10,50,40,0.6)',   accent: '#7fffd4', keyword: 'japan misty mountain cherry blossom aesthetic' },
-  'leaders et révolutionnaires':                            { color: 'rgba(60,10,10,0.6)',   accent: '#ff6b6b', keyword: 'dramatic sky storm dark cinematic landscape' },
-  'philosophie arabe et islamique':                         { color: 'rgba(40,20,70,0.6)',   accent: '#c9a0ff', keyword: 'morocco desert night stars aesthetic moody' },
-  'développement personnel moderne':                        { color: 'rgba(10,40,60,0.6)',   accent: '#80d8ff', keyword: 'mountain sunrise fog aesthetic cinematic' },
-  'sagesse amérindienne':                                   { color: 'rgba(40,50,10,0.6)',   accent: '#b8e986', keyword: 'forest fog nature spiritual aesthetic dark' },
-  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(40,10,10,0.6)',   accent: '#ff8a80', keyword: 'japan samurai fog dark aesthetic moody' },
-  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(15,15,15,0.65)',  accent: '#e0e0e0', keyword: 'dark dramatic light shadow cinematic aesthetic' },
-  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(70,15,40,0.6)',   accent: '#f48fb1', keyword: 'flower field soft light aesthetic moody portrait' },
-  'sagesse berbère et maghrébine':                          { color: 'rgba(80,50,10,0.6)',   accent: '#ffd54f', keyword: 'sahara desert dunes golden light aesthetic' },
-  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(30,30,10,0.6)',   accent: '#e6ee9c', keyword: 'dark battlefield fog cinematic warrior aesthetic' },
-  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(40,10,60,0.6)',   accent: '#ce93d8', keyword: 'mystical purple light smoke spiritual aesthetic' },
-  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(10,35,60,0.6)',   accent: '#90caf9', keyword: 'ancient greece marble ruins blue sky aesthetic' },
+  'philosophie stoïcienne':                                 { color: 'rgba(20,30,60,0.6)',  accent: '#a8c8ff' },
+  'sagesse africaine':                                      { color: 'rgba(80,40,10,0.6)',  accent: '#ffb347' },
+  'philosophie orientale':                                  { color: 'rgba(10,50,40,0.6)',  accent: '#7fffd4' },
+  'leaders et révolutionnaires':                            { color: 'rgba(60,10,10,0.6)',  accent: '#ff6b6b' },
+  'philosophie arabe et islamique':                         { color: 'rgba(40,20,70,0.6)',  accent: '#c9a0ff' },
+  'développement personnel moderne':                        { color: 'rgba(10,40,60,0.6)',  accent: '#80d8ff' },
+  'sagesse amérindienne':                                   { color: 'rgba(40,50,10,0.6)',  accent: '#b8e986' },
+  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(40,10,10,0.6)',  accent: '#ff8a80' },
+  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(15,15,15,0.65)', accent: '#e0e0e0' },
+  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(70,15,40,0.6)',  accent: '#f48fb1' },
+  'sagesse berbère et maghrébine':                          { color: 'rgba(80,50,10,0.6)',  accent: '#ffd54f' },
+  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(30,30,10,0.6)',  accent: '#e6ee9c' },
+  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(40,10,60,0.6)',  accent: '#ce93d8' },
+  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(10,35,60,0.6)',  accent: '#90caf9' },
 }
-const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.6)', accent: '#ffffff', keyword: 'dark moody cinematic landscape fog aesthetic' }
+const DEFAULT_STYLE = { color: 'rgba(20,20,20,0.6)', accent: '#ffffff' }
 
 const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
@@ -177,7 +188,8 @@ export default function App() {
       else if (format === 3) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else result = await callAPI('/api/generate-script', { transcription, style: 'sombre' })
       setData(result)
-      const rawImgs = await fetchImages(themeStyle.keyword, (result.slides || []).length)
+      const keyword = AESTHETIC_KEYWORDS[Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)]
+      const rawImgs = await fetchImages(keyword, (result.slides || []).length)
       const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
