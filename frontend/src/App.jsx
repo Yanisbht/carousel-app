@@ -26,14 +26,14 @@ const AUTEURS = [
 ]
 
 const AESTHETIC_KEYWORDS = [
-  'landscape golden hour no people',
-  'sunset sky clouds no people',
-  'wheat field golden light no people',
-  'nature landscape sunrise no people',
-  'horizon sunset landscape no people',
-  'meadow golden hour no people',
-  'countryside landscape no people',
-  'sky clouds golden no people',
+  'green meadow blue sky landscape',
+  'blue sky white clouds landscape',
+  'green field sunny landscape',
+  'nature green landscape bright',
+  'blue sky sunny nature landscape',
+  'green hills landscape sunny',
+  'bright blue sky clouds nature',
+  'green grass field sunny landscape',
 ]
 
 const THEME_STYLE = {
