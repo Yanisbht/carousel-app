@@ -26,14 +26,14 @@ const AUTEURS = [
 ]
 
 const AESTHETIC_KEYWORDS = [
-  'green meadow blue sky landscape',
-  'blue sky white clouds landscape',
-  'green field sunny landscape',
-  'nature green landscape bright',
-  'blue sky sunny nature landscape',
-  'green hills landscape sunny',
-  'bright blue sky clouds nature',
-  'green grass field sunny landscape',
+  'green meadow landscape',
+  'green field nature landscape',
+  'green hills landscape',
+  'countryside green landscape',
+  'green grass landscape nature',
+  'meadow landscape nature',
+  'green valley landscape',
+  'nature landscape green peaceful',
 ]
 
 const THEME_STYLE = {
@@ -144,7 +144,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
 
   return (
     <div id={id} style={{ flexShrink: 0, width: 180, height: 320, borderRadius: 10, position: 'relative', overflow: 'hidden', background: '#080810', border: '0.5px solid rgba(255,255,255,0.06)' }}>
-      {bgImage && <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0 }} />}
+      {bgImage && <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0, filter: 'brightness(0.85) saturate(0.9)' }} />}
       <div style={{ position: 'absolute', inset: 0, background: overlay, zIndex: 1 }} />
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)', zIndex: 2 }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.35)', zIndex: 4 }}>{index + 1}/{total}</span>
