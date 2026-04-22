@@ -43,17 +43,6 @@ const AUTEURS = [
   'Nietzsche', 'Camus', 'Sartre',
 ]
 
-const AESTHETIC_KEYWORDS = [
-  'aesthetic nature pinterest',
-  'aesthetic landscape pinterest',
-  'aesthetic sky pinterest',
-  'aesthetic meadow pinterest',
-  'aesthetic sunset pinterest',
-  'aesthetic nature photography pinterest',
-  'aesthetic landscape photography pinterest',
-  'aesthetic countryside pinterest',
-]
-
 const THEME_STYLE = {
   'philosophie stoïcienne':                                 { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
   'sagesse africaine':                                      { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
@@ -78,33 +67,6 @@ const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
 const FORMATS = ['Carrousel', 'Depuis vidéo']
 
-async function fetchPexelsImages(query, count) {
-  try {
-    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, { headers: { Authorization: PEXELS_KEY } })
-    const data = await res.json()
-    if (data.photos?.length > 0) return [...data.photos].sort(() => Math.random() - 0.5).slice(0, count).map(p => p.src.large)
-  } catch (e) {}
-  return Array(count).fill(null)
-}
-
-async function fetchUnsplashImages(query, count) {
-  try {
-    const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=20&orientation=portrait`, { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } })
-    const data = await res.json()
-    if (data.results?.length > 0) return [...data.results].sort(() => Math.random() - 0.5).slice(0, count).map(p => p.urls.regular)
-  } catch (e) {}
-  return Array(count).fill(null)
-}
-
-async function fetchSerperImages(query, count, start = 0) {
-  try {
-    const res = await fetch(`${API_BASE}/api/images?query=${encodeURIComponent(query)}&count=${count}&start=${start}`)
-    const data = await res.json()
-    if (data.images?.length > 0) return data.images
-  } catch (e) {}
-  return Array(count).fill(null)
-}
-
 async function toBase64(url) {
   try {
     const res = await fetch(`${API_BASE}/api/proxy-image?url=${encodeURIComponent(url)}`)
@@ -113,15 +75,29 @@ async function toBase64(url) {
   } catch (e) { return url }
 }
 
-async function fetchImages(query, count, start = 0) {
-  const serper = await fetchSerperImages(query, count, start)
-  const valid = serper.filter(Boolean)
-  if (valid.length >= count) return serper
-  const pexels = await fetchPexelsImages(query, count)
-  const merged = serper.map((img, i) => img || pexels[i] || null)
-  const validMerged = merged.filter(Boolean)
-  if (validMerged.length === 0) return Array(count).fill(null)
-  return merged.map(img => img || validMerged[Math.floor(Math.random() * validMerged.length)])
+async function fetchOneUnsplashRandom(query) {
+  try {
+    const res = await fetch(
+      `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=portrait&count=1`,
+      { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } }
+    )
+    const data = await res.json()
+    if (Array.isArray(data) && data[0]) return data[0].urls.regular
+  } catch (e) {}
+  return null
+}
+
+const QUERIES = [
+  'landscape nature', 'sky clouds', 'mountain', 'forest', 'ocean',
+  'sunset', 'meadow', 'desert', 'river', 'night sky',
+]
+
+async function fetchImages(query, count) {
+  const shuffled = [...QUERIES].sort(() => Math.random() - 0.5)
+  const results = await Promise.all(
+    Array.from({ length: count }, (_, i) => fetchOneUnsplashRandom(shuffled[i % shuffled.length]))
+  )
+  return results
 }
 
 function cap(text, max) {
@@ -132,10 +108,10 @@ function cap(text, max) {
 
 function getSlideContent(slide) {
   switch (slide.type) {
-    case 'hook': return { main: `"${cap(slide.citation, 10)}"`, sub: `— ${slide.auteur}` }
-    case 'intrigue': return { main: cap(slide.question, 8) }
+    case 'hook': return { main: cap(slide.citation, 6), sub: slide.auteur || null }
+    case 'intrigue': return { main: cap(slide.question, 6) }
     case 'context': return { main: cap(slide.corps, 10) }
-    case 'lesson': return { main: cap(slide.corps, 10) }
+    case 'lesson': return { main: cap(slide.corps, 6) }
     case 'cta': return { main: cap(slide.question, 10) }
     case 'devine_question': return { main: cap(slide.question, 8) }
     case 'devine_citation': return { main: `"${cap(slide.citation, 12)}"` }
@@ -235,13 +211,8 @@ export default function App() {
       else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       setData(result)
       const slideCount = (result.slides || []).length
-      const shuffled = [...AESTHETIC_KEYWORDS].sort(() => Math.random() - 0.5)
-      const rawImgs = await Promise.all(
-        Array.from({ length: slideCount }, (_, i) => 
-          fetchImages(shuffled[i % shuffled.length], 1)
-        )
-      )
-      const imgs = await Promise.all(rawImgs.map(arr => arr[0] ? toBase64(arr[0]) : null))
+      const rawImgs = await fetchImages('', slideCount)
+      const imgs = await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
