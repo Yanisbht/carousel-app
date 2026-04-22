@@ -16,6 +16,24 @@ const THEMES = [
   'citations de guerriers (Sun Tzu, Spartiate)',
   'spiritualité soufie (Rumi, Ibn Arabi)',
   'philosophie grecque antique (Socrate, Platon)',
+  'philosophie existentialiste (Camus, Sartre, Beauvoir)',
+  'philosophie nietzschéenne',
+  'bouddhisme et pleine conscience',
+  'philosophie indienne (Veda, Upanishad, Gandhi)',
+  'sagesse chinoise (Confucius, Lao Tseu, Zhuangzi)',
+  'philosophie latine (Cicéron, Virgile, Horace)',
+  'philosophie médiévale (Thomas d'Aquin, Ibn Rushd)',
+  'philosophie des Lumières (Voltaire, Rousseau, Montesquieu)',
+  'philosophie allemande (Kant, Hegel, Schopenhauer)',
+  'citations de scientifiques (Einstein, Feynman, Curie)',
+  'sagesse des peuples du monde (proverbes universels)',
+  'philosophie politique (Machiavel, Hobbes, Locke)',
+  'philosophie de l'amour et des relations',
+  'philosophie de la mort et du temps',
+  'philosophie du bonheur et de la joie',
+  'sagesse des nomades et des voyageurs',
+  'philosophie de la créativité et de l'art',
+  'citations littéraires (Hugo, Proust, Dostoïevski)',
 ]
 
 const AUTEURS = [
@@ -58,7 +76,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', "Devine l'auteur", 'Top 3 auteur', 'Depuis vidéo', 'Script animé']
+const FORMATS = ['Carrousel', 'Depuis vidéo']
 
 async function fetchPexelsImages(query, count) {
   try {
@@ -166,7 +184,6 @@ async function callAPI(endpoint, body) {
 export default function App() {
   const [format, setFormat] = useState(0)
   const [theme, setTheme] = useState(THEMES[0])
-  const [auteur, setAuteur] = useState(AUTEURS[0])
   const [transcription, setTranscription] = useState('')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -181,12 +198,15 @@ export default function App() {
     try {
       let result
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
-      else if (format === 1) result = await callAPI('/api/generate-devine', { theme, style: 'sombre' })
-      else if (format === 2) result = await callAPI('/api/generate-top3', { auteur, style: 'sombre' })
-      else if (format === 3) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
-      else result = await callAPI('/api/generate-script', { transcription, style: 'sombre' })
+      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       setData(result)
-      const keyword = AESTHETIC_KEYWORDS[Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)]
+      const usedIdx = parseInt(localStorage.getItem('lastKeywordIdx') || '-1')
+      let keywordIdx = Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)
+      while (keywordIdx === usedIdx && AESTHETIC_KEYWORDS.length > 1) {
+        keywordIdx = Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)
+      }
+      localStorage.setItem('lastKeywordIdx', keywordIdx)
+      const keyword = AESTHETIC_KEYWORDS[keywordIdx]
       const rawImgs = await fetchImages(keyword, (result.slides || []).length)
       const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
@@ -231,7 +251,7 @@ export default function App() {
       </div>
 
       <div className="controls">
-        {(format === 0 || format === 1) && (
+        {format === 0 && (
           <div className="ctrl">
             <label>Thème</label>
             <select value={theme} onChange={e => setTheme(e.target.value)}>
@@ -239,17 +259,9 @@ export default function App() {
             </select>
           </div>
         )}
-        {format === 2 && (
-          <div className="ctrl">
-            <label>Auteur</label>
-            <select value={auteur} onChange={e => setAuteur(e.target.value)}>
-              {AUTEURS.map(a => <option key={a} value={a}>{a}</option>)}
-            </select>
-          </div>
-        )}
-        {(format === 3 || format === 4) && (
+        {format === 1 && (
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
-            <label>{format === 3 ? 'Colle ta transcription' : 'Colle ta transcription (script animé)'}</label>
+            <label>Colle ta transcription</label>
             <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5}
               placeholder="Colle ici la transcription de ta vidéo YouTube..."
               style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
