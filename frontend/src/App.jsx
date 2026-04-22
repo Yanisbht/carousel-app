@@ -22,17 +22,17 @@ const THEMES = [
   'philosophie indienne (Veda, Upanishad, Gandhi)',
   'sagesse chinoise (Confucius, Lao Tseu, Zhuangzi)',
   'philosophie latine (Cicéron, Virgile, Horace)',
-  "philosophie médiévale (Thomas d'Aquin, Ibn Rushd)",
+  'philosophie médiévale (Thomas d'Aquin, Ibn Rushd)',
   'philosophie des Lumières (Voltaire, Rousseau, Montesquieu)',
   'philosophie allemande (Kant, Hegel, Schopenhauer)',
   'citations de scientifiques (Einstein, Feynman, Curie)',
   'sagesse des peuples du monde (proverbes universels)',
   'philosophie politique (Machiavel, Hobbes, Locke)',
-  "philosophie de l'amour et des relations",
+  'philosophie de l'amour et des relations',
   'philosophie de la mort et du temps',
   'philosophie du bonheur et de la joie',
   'sagesse des nomades et des voyageurs',
-  "philosophie de la créativité et de l'art",
+  'philosophie de la créativité et de l'art',
   'citations littéraires (Hugo, Proust, Dostoïevski)',
 ]
 
@@ -96,9 +96,9 @@ async function fetchUnsplashImages(query, count) {
   return Array(count).fill(null)
 }
 
-async function fetchSerperImages(query, count) {
+async function fetchSerperImages(query, count, start = 0) {
   try {
-    const res = await fetch(`${API_BASE}/api/images?query=${encodeURIComponent(query)}&count=${count}`)
+    const res = await fetch(`${API_BASE}/api/images?query=${encodeURIComponent(query)}&count=${count}&start=${start}`)
     const data = await res.json()
     if (data.images?.length > 0) return data.images
   } catch (e) {}
@@ -113,8 +113,8 @@ async function toBase64(url) {
   } catch (e) { return url }
 }
 
-async function fetchImages(query, count) {
-  const serper = await fetchSerperImages(query, count)
+async function fetchImages(query, count, start = 0) {
+  const serper = await fetchSerperImages(query, count, start)
   const valid = serper.filter(Boolean)
   if (valid.length >= count) return serper
   const pexels = await fetchPexelsImages(query, count)
@@ -200,14 +200,12 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       setData(result)
-      const usedIdx = parseInt(localStorage.getItem('lastKeywordIdx') || '-1')
-      let keywordIdx = Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)
-      while (keywordIdx === usedIdx && AESTHETIC_KEYWORDS.length > 1) {
-        keywordIdx = Math.floor(Math.random() * AESTHETIC_KEYWORDS.length)
-      }
-      localStorage.setItem('lastKeywordIdx', keywordIdx)
+      const genCount = parseInt(localStorage.getItem('genCount') || '0')
+      localStorage.setItem('genCount', genCount + 1)
+      const keywordIdx = genCount % AESTHETIC_KEYWORDS.length
+      const start = Math.floor(genCount / AESTHETIC_KEYWORDS.length) * 10
       const keyword = AESTHETIC_KEYWORDS[keywordIdx]
-      const rawImgs = await fetchImages(keyword, (result.slides || []).length)
+      const rawImgs = await fetchImages(keyword, (result.slides || []).length, start)
       const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
