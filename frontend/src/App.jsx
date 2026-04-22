@@ -136,7 +136,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
   const words = (main || '').split(' ').length
-  const fontSize = words <= 3 ? 52 : words <= 5 ? 38 : words <= 7 ? 28 : words <= 10 ? 22 : 18
+  const chars = (main || '').length
+  const fontSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
 
   return (
     <div id={id} style={{
@@ -168,6 +169,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
           letterSpacing: '-0.02em',
           textTransform: 'uppercase',
           wordBreak: 'break-word',
+          overflowWrap: 'break-word',
           width: '100%',
           margin: 0,
         }}>{main}</p>}
@@ -239,7 +241,7 @@ export default function App() {
     setExporting(false)
   }
 
-  const slides = data?.slides || []
+  const slides = (data?.slides || []).slice(0, 3)
 
   return (
     <div className="app">
