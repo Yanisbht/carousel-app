@@ -22,17 +22,17 @@ const THEMES = [
   'philosophie indienne (Veda, Upanishad, Gandhi)',
   'sagesse chinoise (Confucius, Lao Tseu, Zhuangzi)',
   'philosophie latine (Cicéron, Virgile, Horace)',
-  "philosophie médiévale (Thomas d'Aquin, Ibn Rushd)",
+  'philosophie médiévale (Thomas d'Aquin, Ibn Rushd)',
   'philosophie des Lumières (Voltaire, Rousseau, Montesquieu)',
   'philosophie allemande (Kant, Hegel, Schopenhauer)',
   'citations de scientifiques (Einstein, Feynman, Curie)',
   'sagesse des peuples du monde (proverbes universels)',
   'philosophie politique (Machiavel, Hobbes, Locke)',
-  "philosophie de l'amour et des relations",
+  'philosophie de l'amour et des relations',
   'philosophie de la mort et du temps',
   'philosophie du bonheur et de la joie',
   'sagesse des nomades et des voyageurs',
-  "philosophie de la créativité et de l'art",
+  'philosophie de la créativité et de l'art',
   'citations littéraires (Hugo, Proust, Dostoïevski)',
 ]
 
@@ -200,13 +200,14 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       setData(result)
-      const genCount = parseInt(localStorage.getItem('genCount') || '0')
-      localStorage.setItem('genCount', genCount + 1)
-      const keywordIdx = genCount % AESTHETIC_KEYWORDS.length
-      const start = Math.floor(genCount / AESTHETIC_KEYWORDS.length) * 10
-      const keyword = AESTHETIC_KEYWORDS[keywordIdx]
-      const rawImgs = await fetchImages(keyword, (result.slides || []).length, start)
-      const imgs = await Promise.all(rawImgs.map(img => img ? toBase64(img) : null))
+      const slideCount = (result.slides || []).length
+      const shuffled = [...AESTHETIC_KEYWORDS].sort(() => Math.random() - 0.5)
+      const rawImgs = await Promise.all(
+        Array.from({ length: slideCount }, (_, i) => 
+          fetchImages(shuffled[i % shuffled.length], 1)
+        )
+      )
+      const imgs = await Promise.all(rawImgs.map(arr => arr[0] ? toBase64(arr[0]) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
