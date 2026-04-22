@@ -26,14 +26,14 @@ const AUTEURS = [
 ]
 
 const AESTHETIC_KEYWORDS = [
-  'green meadow landscape',
-  'green field nature landscape',
-  'green hills landscape',
-  'countryside green landscape',
-  'green grass landscape nature',
-  'meadow landscape nature',
-  'green valley landscape',
-  'nature landscape green peaceful',
+  'aesthetic nature pinterest',
+  'aesthetic landscape pinterest',
+  'aesthetic sky pinterest',
+  'aesthetic meadow pinterest',
+  'aesthetic sunset pinterest',
+  'aesthetic nature photography pinterest',
+  'aesthetic landscape photography pinterest',
+  'aesthetic countryside pinterest',
 ]
 
 const THEME_STYLE = {
@@ -96,14 +96,14 @@ async function toBase64(url) {
 }
 
 async function fetchImages(query, count) {
+  const serper = await fetchSerperImages(query, count)
+  const valid = serper.filter(Boolean)
+  if (valid.length >= count) return serper
   const pexels = await fetchPexelsImages(query, count)
-  const hasAll = pexels.every(Boolean)
-  if (hasAll) return pexels
-  const unsplash = await fetchUnsplashImages(query, count)
-  const merged = pexels.map((img, i) => img || unsplash[i] || null)
-  const valid = merged.filter(Boolean)
-  if (valid.length === 0) return Array(count).fill(null)
-  return merged.map(img => img || valid[Math.floor(Math.random() * valid.length)])
+  const merged = serper.map((img, i) => img || pexels[i] || null)
+  const validMerged = merged.filter(Boolean)
+  if (validMerged.length === 0) return Array(count).fill(null)
+  return merged.map(img => img || validMerged[Math.floor(Math.random() * validMerged.length)])
 }
 
 function cap(text, max) {
