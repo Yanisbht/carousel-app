@@ -157,18 +157,52 @@ function getSlideContent(slide) {
 
 function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
-  const overlay = themeStyle?.color || 'rgba(20,20,20,0.6)'
-  const accent = themeStyle?.accent || '#ffffff'
+
+  // Calcule la taille du texte selon la longueur — plus court = plus grand
+  const words = (main || '').split(' ').length
+  const fontSize = words <= 3 ? 52 : words <= 5 ? 38 : words <= 7 ? 28 : words <= 10 ? 22 : 18
 
   return (
-    <div id={id} style={{ flexShrink: 0, width: 180, height: 320, borderRadius: 10, position: 'relative', overflow: 'hidden', background: '#080810', border: '0.5px solid rgba(255,255,255,0.06)' }}>
-      {bgImage && <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0, filter: 'brightness(0.85) saturate(0.9)' }} />}
-      <div style={{ position: 'absolute', inset: 0, background: overlay, zIndex: 1 }} />
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)', zIndex: 2 }} />
-      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.35)', zIndex: 4 }}>{index + 1}/{total}</span>
-      <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '44px 16px 28px', textAlign: 'center', gap: 12, boxSizing: 'border-box' }}>
-        {main && <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 800, color: '#FFFFFF', lineHeight: 1.3, textShadow: '0 1px 12px rgba(0,0,0,0.95), 0 2px 24px rgba(0,0,0,0.8)', textWrap: 'balance' }}>{main}</p>}
-        {sub && <p style={{ fontSize: 10, color: accent, lineHeight: 1.4, fontStyle: 'italic', opacity: 0.9 }}>{sub}</p>}
+    <div id={id} style={{
+      flexShrink: 0, width: 180, height: 320, borderRadius: 10,
+      position: 'relative', overflow: 'hidden', background: '#111',
+      border: '0.5px solid rgba(255,255,255,0.06)',
+    }}>
+      {bgImage && <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0,
+        filter: 'brightness(0.5) saturate(0.7)',
+      }} />}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 1 }} />
+      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.3)', zIndex: 4 }}>{index + 1}/{total}</span>
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 3,
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', alignItems: 'flex-start',
+        padding: '44px 14px 28px',
+        gap: 10,
+      }}>
+        {main && <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: fontSize,
+          fontWeight: 900,
+          color: '#FFFFFF',
+          lineHeight: 0.95,
+          letterSpacing: '-0.02em',
+          textTransform: 'uppercase',
+          wordBreak: 'break-word',
+          width: '100%',
+          margin: 0,
+        }}>{main}</p>}
+        {sub && <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 9, fontWeight: 400,
+          color: 'rgba(255,255,255,0.6)',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          marginTop: 8,
+        }}>{sub}</p>}
       </div>
     </div>
   )
