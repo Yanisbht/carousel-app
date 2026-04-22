@@ -216,9 +216,9 @@ public class CarouselController {
     }
 
     @GetMapping("/images")
-    public ResponseEntity<?> getImages(@RequestParam String query, @RequestParam(defaultValue = "5") int count) {
+    public ResponseEntity<?> getImages(@RequestParam String query, @RequestParam(defaultValue = "5") int count, @RequestParam(defaultValue = "0") int start) {
         try {
-            String result = carouselService.fetchImages(query, count);
+            String result = carouselService.fetchImages(query, count, start);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
