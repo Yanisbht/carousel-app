@@ -111,7 +111,7 @@ function getSlideContent(slide) {
     case 'hook': return { main: cap(slide.citation, 4), sub: slide.auteur || null }
     case 'intrigue': return { main: cap(slide.question, 4) }
     case 'context': return { main: cap(slide.corps, 10) }
-    case 'lesson': return { main: cap(slide.corps, 4) }
+    case 'lesson': return { main: cap(slide.corps, 6) }
     case 'cta': return { main: cap(slide.question, 10) }
     case 'devine_question': return { main: cap(slide.question, 8) }
     case 'devine_citation': return { main: `"${cap(slide.citation, 12)}"` }
@@ -135,9 +135,10 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
-  const words = (main || '').split(' ').length
   const chars = (main || '').length
-  const fontSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
+  const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
+  const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.55
+  const fontSize = Math.round(baseSize * sizeMultiplier)
 
   return (
     <div id={id} style={{
