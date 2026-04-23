@@ -45,6 +45,10 @@ public class CarouselService {
     }
 
     public String fetchImages(String query, int count) throws Exception {
+        return fetchImages(query, count, 0);
+    }
+
+    public String fetchImages(String query, int count, int start) throws Exception {
         String safeQuery = query.replace("\"", "\\\"");
         String requestBody = "{\"q\": \"" + safeQuery + "\", \"num\": 20}";
 
