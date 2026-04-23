@@ -67,12 +67,12 @@ public class CarouselService {
         java.util.List<String> urls = new java.util.ArrayList<>();
         int idx = 0;
         while (urls.size() < count) {
-            int start = body.indexOf("\"imageUrl\":\"", idx);
-            if (start == -1) break;
-            start += 12;
-            int end = body.indexOf("\"", start);
+            int startIdx = body.indexOf("\"imageUrl\":\"", idx);
+            if (startIdx == -1) break;
+            startIdx += 12;
+            int end = body.indexOf("\"", startIdx);
             if (end == -1) break;
-            String url = body.substring(start, end);
+            String url = body.substring(startIdx, end);
             if (!url.contains(".gif")) urls.add(url);
             idx = end + 1;
         }
