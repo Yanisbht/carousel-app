@@ -94,10 +94,20 @@ const QUERIES = [
 
 async function fetchImages(query, count) {
   const shuffled = [...QUERIES].sort(() => Math.random() - 0.5)
+  // Générer count+3 images et trier par qualité (on prend les meilleures)
+  const extra = count + 3
   const results = await Promise.all(
-    Array.from({ length: count }, (_, i) => fetchOneUnsplashRandom(shuffled[i % shuffled.length]))
+    Array.from({ length: extra }, (_, i) => fetchOneUnsplashRandom(shuffled[i % shuffled.length]))
   )
-  return results
+  const valid = results.filter(Boolean)
+  // Trier : préférer les images avec des mots-clés de qualité dans l'URL (landscape, sky, mountain)
+  const quality = ['landscape', 'sky', 'mountain', 'ocean', 'sunset', 'forest']
+  const sorted = [...valid].sort((a, b) => {
+    const aScore = quality.some(q => a.includes(q)) ? 1 : 0
+    const bScore = quality.some(q => b.includes(q)) ? 1 : 0
+    return bScore - aScore
+  })
+  return sorted.slice(0, count)
 }
 
 function cap(text, max) {
@@ -137,7 +147,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   // Calcule la taille du texte selon la longueur — plus court = plus grand
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
-  const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.55
+  const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.70
   const fontSize = Math.round(baseSize * sizeMultiplier)
 
   return (
