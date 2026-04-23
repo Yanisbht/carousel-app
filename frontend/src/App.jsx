@@ -108,10 +108,10 @@ function cap(text, max) {
 
 function getSlideContent(slide) {
   switch (slide.type) {
-    case 'hook': return { main: cap(slide.citation, 4), sub: slide.auteur || null }
-    case 'intrigue': return { main: cap(slide.question, 4) }
+    case 'hook': return { main: cap(slide.citation, 5), sub: slide.auteur || null }
+    case 'intrigue': return { main: cap(slide.question, 5) }
     case 'context': return { main: cap(slide.corps, 10) }
-    case 'lesson': return { main: cap(slide.corps, 6) }
+    case 'lesson': return { main: cap(slide.corps, 7) }
     case 'cta': return { main: cap(slide.question, 10) }
     case 'devine_question': return { main: cap(slide.question, 8) }
     case 'devine_citation': return { main: `"${cap(slide.citation, 12)}"` }
