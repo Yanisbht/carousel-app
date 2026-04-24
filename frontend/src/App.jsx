@@ -133,10 +133,10 @@ function getSlideContent(slide) {
     case 'top3_intro': return { main: slide.auteur, sub: cap(slide.description, 10) }
     case 'top3_citation': return { main: `"${cap(slide.citation, 12)}"`, sub: cap(slide.explication, 7) }
     case 'top3_cta': return { main: cap(slide.texte, 7), sub: slide.question }
-    case 'video_hook': return { main: cap(slide.accroche, 10) }
-    case 'video_explication': return { main: cap(slide.corps, 10) }
+    case 'video_hook': return { main: cap(slide.accroche, 6) }
+    case 'video_explication': return { main: cap(slide.corps, 8) }
     case 'video_exemple': return { main: cap(slide.exemple, 10) }
-    case 'video_cta': return { main: cap(slide.texte, 8), sub: cap(slide.question, 8) }
+    case 'video_cta': return { main: cap(slide.texte, 8) }
     default: return { main: '' }
   }
 }
