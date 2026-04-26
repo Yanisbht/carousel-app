@@ -65,6 +65,8 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
+const ELEVEN_KEY = 'sk_06c242de0700d16b65f168fd10913efdeea6f1df8d219c9b'
+const ELEVEN_VOICE_ID = 'pNInz6obpgDQGcFmaJgB' // Adam — voix masculine charismatique
 const FORMATS = ['Carrousel', 'Depuis vidéo', 'One Shot']
 
 async function toBase64(url) {
@@ -229,6 +231,8 @@ export default function App() {
   const [data, setData] = useState(null)
   const [bgImages, setBgImages] = useState([])
   const [error, setError] = useState(null)
+  const [audioUrl, setAudioUrl] = useState(null)
+  const [generatingAudio, setGeneratingAudio] = useState(false)
 
   const themeStyle = THEME_STYLE[theme] || DEFAULT_STYLE
 
@@ -250,6 +254,35 @@ export default function App() {
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
+  }
+
+  const generateAudio = async () => {
+    if (!data?.slides) return
+    setGeneratingAudio(true)
+    setAudioUrl(null)
+    try {
+      const script = (data.slides || [])
+        .map(s => getSlideContent(s).main || '')
+        .filter(Boolean)
+        .join('... ')
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
+        method: 'POST',
+        headers: {
+          'xi-api-key': ELEVEN_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: script,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: { stability: 0.4, similarity_boost: 0.85, style: 0.5, use_speaker_boost: true }
+        })
+      })
+      if (!res.ok) throw new Error('Erreur ElevenLabs')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      setAudioUrl(url)
+    } catch (e) { alert('Erreur audio: ' + e.message) }
+    setGeneratingAudio(false)
   }
 
   const downloadAll = async () => {
@@ -349,7 +382,20 @@ export default function App() {
             ))}
           </div>
           <div className="hashtags">{(data.hashtags || []).map(tag => <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>)}</div>
-          <button className="dl-btn" onClick={downloadAll} disabled={exporting}>{exporting ? 'Export en cours...' : 'Télécharger les slides (PNG)'}</button>
+          <div style={{display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 8}}>
+            <button className="dl-btn" onClick={downloadAll} disabled={exporting}>{exporting ? 'Export en cours...' : 'Télécharger les slides (PNG)'}</button>
+            <button className="dl-btn" onClick={generateAudio} disabled={generatingAudio}
+              style={{background: 'var(--color-background-secondary)', color: 'var(--color-text-primary)', border: '0.5px solid var(--color-border-secondary)'}}>
+              {generatingAudio ? 'Génération audio...' : '🎙️ Générer la voix'}
+            </button>
+          </div>
+          {audioUrl && (
+            <div style={{marginTop: 12, background: 'var(--color-background-secondary)', borderRadius: 12, padding: '12px 16px'}}>
+              <p style={{fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 8}}>VOIX GÉNÉRÉE — ajoute ce MP3 dans CapCut</p>
+              <audio controls src={audioUrl} style={{width: '100%'}} />
+              <a href={audioUrl} download="voix.mp3" style={{display: 'block', marginTop: 8, fontSize: 12, color: 'var(--color-text-secondary)'}}>⬇️ Télécharger le MP3</a>
+            </div>
+          )}
         </>
       )}
     </div>
