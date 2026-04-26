@@ -72,6 +72,16 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-oneshot")
+    public ResponseEntity<?> generateOneShot(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generateOneShot(
+                body.getOrDefault("style", "sombre"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-video")
     public ResponseEntity<?> generateVideo(@RequestBody Map<String, String> body) {
         try {
