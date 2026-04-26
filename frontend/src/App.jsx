@@ -265,19 +265,15 @@ export default function App() {
         .map(s => getSlideContent(s).main || '')
         .filter(Boolean)
         .join('... ')
-      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
+      const res = await fetch(`${API_BASE}/api/generate-audio`, {
         method: 'POST',
-        headers: {
-          'xi-api-key': ELEVEN_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: script,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: { stability: 0.4, similarity_boost: 0.85, style: 0.5, use_speaker_boost: true }
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: script })
       })
-      if (!res.ok) throw new Error('Erreur ElevenLabs')
+      if (!res.ok) {
+        const errText = await res.text()
+        throw new Error('Audio ' + res.status + ': ' + errText.slice(0, 100))
+      }
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       setAudioUrl(url)
