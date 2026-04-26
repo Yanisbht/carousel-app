@@ -89,6 +89,11 @@ public class CarouselService {
         return callGemini(buildPromptScript(transcription, style));
     }
 
+    public String generateOneShot(String style) throws Exception {
+        String prompt = "Genere une phrase motivante courte pour TikTok lifestyle. Style : simple, universel, impactant. Comme 'Mon but est d'etre meilleur qu'hier, pas que les autres.' ou 'Travaille en silence, laisse le succes faire le bruit.' ou 'Chaque jour est une nouvelle chance.'. La phrase doit toucher tout le monde, pas de jargon. MAX 15 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"motivation\",\"mindset\",\"lifestyle\",\"fyp\",\"citation\",\"tiktok\"],\"slides\":[{\"type\":\"oneshot\",\"phrase\":\"phrase motivante MAX 15 MOTS\"}]}";
+        return callGemini(prompt);
+    }
+
     public String generateVideo(String transcription, String style) throws Exception {
         return callGemini(buildPromptVideo(transcription, style));
     }
