@@ -89,6 +89,20 @@ public class CarouselService {
         return callGemini(buildPromptScript(transcription, style));
     }
 
+    public byte[] generateAudio(String text) throws Exception {
+        String requestBody = "{\"text\": \"" + text.replace(""", "\\"") + "\", \"model_id\": \"eleven_multilingual_v2\", \"voice_settings\": {\"stability\": 0.4, \"similarity_boost\": 0.85, \"style\": 0.5, \"use_speaker_boost\": true}}";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB"))
+            .header("Content-Type", "application/json")
+            .header("xi-api-key", "sk_06c242de0700d16b65f168fd10913efdeea6f1df8d219c9b")
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        if (response.statusCode() != 200) throw new RuntimeException("ElevenLabs error: " + response.statusCode());
+        return response.body();
+    }
+
     public String generateOneShot(String style) throws Exception {
         String prompt = "Genere une phrase motivante courte pour TikTok lifestyle. Style : simple, universel, impactant. Comme 'Mon but est d'etre meilleur qu'hier, pas que les autres.' ou 'Travaille en silence, laisse le succes faire le bruit.' ou 'Chaque jour est une nouvelle chance.'. La phrase doit toucher tout le monde, pas de jargon. MAX 15 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"motivation\",\"mindset\",\"lifestyle\",\"fyp\",\"citation\",\"tiktok\"],\"slides\":[{\"type\":\"oneshot\",\"phrase\":\"phrase motivante MAX 15 MOTS\"}]}";
         return callGemini(prompt);
