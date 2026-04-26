@@ -73,14 +73,15 @@ public class CarouselController {
     }
 
     @PostMapping("/generate-audio")
-    public ResponseEntity<?> generateAudio(@RequestBody Map<String, String> body) {
+    public org.springframework.http.ResponseEntity<byte[]> generateAudio(@RequestBody Map<String, String> body) {
         try {
             byte[] audio = carouselService.generateAudio(body.getOrDefault("text", ""));
-            return ResponseEntity.ok()
-                .header("Content-Type", "audio/mpeg")
-                .body(audio);
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.set("Content-Type", "audio/mpeg");
+            headers.set("Access-Control-Allow-Origin", "*");
+            return new org.springframework.http.ResponseEntity<>(audio, headers, org.springframework.http.HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+            return org.springframework.http.ResponseEntity.internalServerError().build();
         }
     }
 
