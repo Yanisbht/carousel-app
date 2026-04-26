@@ -218,7 +218,6 @@ public class CarouselController {
             String contentType = url.contains(".png") ? "image/png" : "image/jpeg";
             return ResponseEntity.ok()
                 .header("Content-Type", contentType)
-                .header("Access-Control-Allow-Origin", "*")
                 .body(imageData);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
