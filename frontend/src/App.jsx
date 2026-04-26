@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo']
+const FORMATS = ['Carrousel', 'Depuis vidéo', 'One Shot']
 
 async function toBase64(url) {
   try {
@@ -86,6 +86,19 @@ async function fetchOneUnsplashRandom(query) {
   } catch (e) {}
   return null
 }
+
+const LIFESTYLE_QUERIES = [
+  'luxury lifestyle desert aesthetic',
+  'man quad bike desert aesthetic',
+  'luxury car desert aesthetic',
+  'athlete training aesthetic',
+  'rooftop city view aesthetic',
+  'sunset luxury lifestyle aesthetic',
+  'sport motivation aesthetic dark',
+  'luxury watch aesthetic',
+  'mountain hike aesthetic',
+  'ocean luxury lifestyle aesthetic',
+]
 
 const QUERIES = [
   'landscape nature', 'sky clouds', 'mountain', 'forest', 'ocean',
@@ -137,6 +150,7 @@ function getSlideContent(slide) {
     case 'video_explication': return { main: cap(slide.corps, 8) }
     case 'video_exemple': return { main: cap(slide.exemple, 10) }
     case 'video_cta': return { main: cap(slide.texte, 8) }
+    case 'oneshot': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
 }
@@ -145,6 +159,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
+  const isOneShot = slide.type === 'oneshot'
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
   const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.70
@@ -167,18 +182,19 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: 'flex-start',
-        padding: '44px 14px 28px',
+        justifyContent: 'center', alignItems: isOneShot ? 'center' : 'flex-start',
+        padding: isOneShot ? '44px 20px' : '44px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
           fontFamily: "'Montserrat', sans-serif",
           fontSize: fontSize,
-          fontWeight: 900,
+          fontWeight: isOneShot ? 700 : 900,
           color: '#FFFFFF',
-          lineHeight: 0.95,
-          letterSpacing: '-0.02em',
-          textTransform: 'uppercase',
+          lineHeight: isOneShot ? 1.3 : 0.95,
+          letterSpacing: isOneShot ? '-0.01em' : '-0.02em',
+          textTransform: isOneShot ? 'none' : 'uppercase',
+          textAlign: isOneShot ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           width: '100%',
@@ -221,10 +237,15 @@ export default function App() {
     try {
       let result
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
-      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
+      else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
+      else result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
       setData(result)
       const slideCount = (result.slides || []).length
-      const rawImgs = await fetchImages('', slideCount)
+      const isOneShot = format === 2
+      const imgQuery = isOneShot
+        ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
+        : ''
+      const rawImgs = await fetchImages(imgQuery, slideCount)
       const imgs = await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
@@ -283,6 +304,9 @@ export default function App() {
               placeholder="Colle ici la transcription de ta vidéo YouTube..."
               style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
           </div>
+        )}
+        {format === 2 && (
+          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>Une phrase motivante + image lifestyle. Génère et télécharge directement.</p>
         )}
         <button className="gen-btn" onClick={generate} disabled={loading}>{loading ? 'Génération...' : 'Générer'}</button>
       </div>
