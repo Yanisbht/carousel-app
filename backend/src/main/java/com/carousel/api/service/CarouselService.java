@@ -80,7 +80,7 @@ public class CarouselService {
             .header("xi-api-key", "sk_06c242de0700d16b65f168fd10913efdeea6f1df8d219c9b")
             .POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-        if (response.statusCode() != 200) throw new RuntimeException("ElevenLabs error: " + response.statusCode());
+        if (response.statusCode() != 200) throw new RuntimeException("ElevenLabs error: " + response.statusCode() + " - " + new String(response.body()));
         return response.body();
     }
 
