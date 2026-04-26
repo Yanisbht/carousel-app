@@ -1,6 +1,8 @@
 package com.carousel.api.controller;
 
 import com.carousel.api.service.CarouselService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +10,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
 public class CarouselController {
 
     private final CarouselService carouselService;
@@ -73,15 +74,14 @@ public class CarouselController {
     }
 
     @PostMapping("/generate-audio")
-    public org.springframework.http.ResponseEntity<byte[]> generateAudio(@RequestBody Map<String, String> body) {
+    public ResponseEntity<byte[]> generateAudio(@RequestBody Map<String, String> body) {
         try {
             byte[] audio = carouselService.generateAudio(body.getOrDefault("text", ""));
-            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "audio/mpeg");
-            headers.set("Access-Control-Allow-Origin", "*");
-            return new org.springframework.http.ResponseEntity<>(audio, headers, org.springframework.http.HttpStatus.OK);
+            return new ResponseEntity<>(audio, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return org.springframework.http.ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -225,15 +225,14 @@ public class CarouselController {
     }
 
     @GetMapping("/proxy-image")
-    public ResponseEntity<?> proxyImage(@RequestParam String url) {
+    public ResponseEntity<byte[]> proxyImage(@RequestParam String url) {
         try {
             byte[] imageData = carouselService.proxyImage(url);
-            String contentType = url.contains(".png") ? "image/png" : "image/jpeg";
-            return ResponseEntity.ok()
-                .header("Content-Type", contentType)
-                .body(imageData);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", url.contains(".png") ? "image/png" : "image/jpeg");
+            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.internalServerError().build();
         }
     }
 
