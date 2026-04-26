@@ -72,6 +72,18 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-audio")
+    public ResponseEntity<?> generateAudio(@RequestBody Map<String, String> body) {
+        try {
+            byte[] audio = carouselService.generateAudio(body.getOrDefault("text", ""));
+            return ResponseEntity.ok()
+                .header("Content-Type", "audio/mpeg")
+                .body(audio);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-oneshot")
     public ResponseEntity<?> generateOneShot(@RequestBody Map<String, String> body) {
         try {
