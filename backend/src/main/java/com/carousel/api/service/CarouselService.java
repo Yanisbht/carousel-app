@@ -75,7 +75,7 @@ public class CarouselService {
         String requestBody = "{\"text\": \"" + safeText + "\", \"model_id\": \"eleven_multilingual_v2\", \"voice_settings\": {\"stability\": 0.4, \"similarity_boost\": 0.85, \"style\": 0.5, \"use_speaker_boost\": true}}";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB"))
+            .uri(URI.create("https://api.elevenlabs.io/v1/text-to-speech/GPAQQPp9dazaB2bl4zg9"))
             .header("Content-Type", "application/json")
             .header("xi-api-key", "sk_06c242de0700d16b65f168fd10913efdeea6f1df8d219c9b")
             .POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
