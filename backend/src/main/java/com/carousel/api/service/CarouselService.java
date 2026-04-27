@@ -84,6 +84,11 @@ public class CarouselService {
         return response.body();
     }
 
+    public String generateEmotionnel(String theme, String style) throws Exception {
+        String prompt = "Tu crees un carrousel TikTok qui touche profondement. 3 slides. L objectif : que le viewer se sente VU et COMPRIS. Pas d information, que des emotions. Style : poetique, direct, intime. Comme une pensee que tout le monde a eu mais que personne dit. SLIDE 1 (MAX 8 MOTS) : une observation sur la vie qui fait dire oui c est exactement ca. Ex : t as jamais dit a personne ce que tu ressentais vraiment. ou certaines nuits tu te demandes si tu vas bien. SLIDE 2 (MAX 8 MOTS) : la verite philosophique derriere cette emotion, simple et directe. SLIDE 3 (MAX 8 MOTS) : une phrase qui libere ou qui donne de l espoir. Pas de ponctuation excessive. Pas de majuscules inutiles. Theme : " + theme + ". Retourne UNIQUEMENT ce JSON sans backticks : {"hashtags":["philosophie","emotion","pensee","vrai","tiktok","fyp"],"slides":[{"type":"hook","citation":"observation MAX 8 MOTS","auteur":"","origine":""},{"type":"intrigue","question":"verite MAX 8 MOTS"},{"type":"lesson","titre":"","corps":"liberation MAX 8 MOTS"}]}";
+        return callGemini(prompt);
+    }
+
     public String generateOneShot(String style) throws Exception {
         String prompt = "Genere une phrase motivante courte pour TikTok lifestyle. Style : simple, universel, impactant. MAX 15 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"motivation\",\"mindset\",\"lifestyle\",\"fyp\",\"citation\",\"tiktok\"],\"slides\":[{\"type\":\"oneshot\",\"phrase\":\"phrase motivante MAX 15 MOTS\"}]}";
         return callGemini(prompt);
@@ -161,7 +166,7 @@ public class CarouselService {
     }
 
     private String buildPrompt(String theme, String style) {
-        return "Tu crees un carrousel TikTok mini-histoire philosophique avec humour en 3 slides. SLIDE 1 hook drole MAX 5 MOTS sur un philosophe reel. SLIDE 2 anecdote surprenante MAX 6 MOTS. SLIDE 3 lecon actionnable MAX 7 MOTS. Theme : " + theme + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"histoire\",\"sagesse\",\"tiktok\",\"fyp\",\"mindset\"],\"slides\":[{\"type\":\"hook\",\"citation\":\"hook MAX 5 MOTS\",\"auteur\":\"\",\"origine\":\"\"},{\"type\":\"intrigue\",\"question\":\"anecdote MAX 6 MOTS\"},{\"type\":\"lesson\",\"titre\":\"\",\"corps\":\"lecon MAX 7 MOTS\"}]}";
+        return "Tu crees un carrousel TikTok style Roman Frayssinet — humour + philosophie + emotion. Les 3 slides doivent faire rire ET ressentir. Pas de dev perso. Pas de lecon moralisatrice. Juste une observation absurde ou decalee sur la condition humaine qui fait sourire et se reconnaitre en meme temps. SLIDE 1 (MAX 6 MOTS) : fait reel sur un philosophe ou observation absurde sur la vie. Doit etre drole ou surprenant. Ex : Diogene refusait tout ce qu on lui offrait. ou Epictete etait esclave et plus libre que toi. ou On passe sa vie a vouloir ce qu on veut plus. SLIDE 2 (MAX 7 MOTS) : le twist philosophique qui donne du sens a l absurde. Pas une lecon — une revelation legere. SLIDE 3 (MAX 8 MOTS) : la chute. Une phrase qui fait sourire ET qui reste. Qui fait se reconnaitre sans pointer du doigt. Ex : On est tous a chercher ce dont on aurait pas besoin si on arretait de chercher. Theme : " + theme + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"humour\",\"pensee\",\"tiktok\",\"fyp\",\"vrai\"],\"slides\":[{\"type\":\"hook\",\"citation\":\"observation absurde MAX 6 MOTS\",\"auteur\":\"\",\"origine\":\"\"},{\"type\":\"intrigue\",\"question\":\"twist philo MAX 7 MOTS\"},{\"type\":\"lesson\",\"titre\":\"\",\"corps\":\"chute qui reste MAX 8 MOTS\"}]}";
     }
 
     private String buildPromptDevine(String theme, String style) {
@@ -183,7 +188,7 @@ public class CarouselService {
 
     private String buildPromptVideo(String transcription, String style) {
         String excerpt = transcription.length() > 1500 ? transcription.substring(0, 1500) : transcription;
-        return "Carrousel TikTok viral depuis transcription. 3 slides. SLIDE 1 hook drole MAX 6 MOTS. SLIDE 2 reponse surprenante MAX 8 MOTS. SLIDE 3 lecon MAX 8 MOTS. Transcription : " + excerpt + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"psychologie\",\"developpementperso\",\"mindset\",\"philosophie\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"video_hook\",\"concept\":\"2 mots\",\"accroche\":\"MAX 6 MOTS\"},{\"type\":\"video_explication\",\"titre\":\"2 MOTS\",\"corps\":\"MAX 8 MOTS\"},{\"type\":\"video_cta\",\"texte\":\"MAX 8 MOTS\",\"question\":\"\"}]}";
+        return "Tu transformes cette transcription en carrousel TikTok style Roman Frayssinet. 3 slides. Extrais l idee principale et reformule la avec humour et emotion — une observation drole et vraie sur la condition humaine. Pas de dev perso direct. Pas de conseil. Une observation, un twist, une chute. SLIDE 1 (MAX 6 MOTS) : l observation drole ou absurde tiree de la transcription. SLIDE 2 (MAX 8 MOTS) : le fond philosophique dit simplement. SLIDE 3 (MAX 8 MOTS) : la chute qui fait sourire et rester. Transcription : " + excerpt + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"humour\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"video_hook\",\"concept\":\"2 mots\",\"accroche\":\"MAX 6 MOTS\"},{\"type\":\"video_explication\",\"titre\":\"2 MOTS\",\"corps\":\"MAX 8 MOTS\"},{\"type\":\"video_cta\",\"texte\":\"MAX 8 MOTS\",\"question\":\"\"}]}";
     }
 
     private String buildPromptTop3(String auteur, String style) {
