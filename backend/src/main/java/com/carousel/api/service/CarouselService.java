@@ -71,7 +71,7 @@ public class CarouselService {
     }
 
     public byte[] generateAudio(String text) throws Exception {
-        String safeText = text.replace("\"", "\\\"").replace("\n", " ");
+        String safeText = text.replace("\\", "").replace("\"", "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").trim();
         String requestBody = "{\"text\": \"" + safeText + "\", \"model_id\": \"eleven_multilingual_v2\", \"voice_settings\": {\"stability\": 0.5, \"similarity_boost\": 0.75}}";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
