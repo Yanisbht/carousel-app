@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot']
+const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Football']
 
 async function toBase64(url) {
   try {
@@ -86,6 +86,17 @@ async function fetchOneUnsplashRandom(query) {
   } catch (e) {}
   return null
 }
+
+const FOOTBALL_QUERIES = [
+  'football stadium night aesthetic',
+  'soccer player celebration aesthetic',
+  'football training aesthetic dark',
+  'stadium lights aesthetic',
+  'soccer ball aesthetic dark',
+  'football player silhouette',
+  'champions league aesthetic',
+  'football pitch aerial view',
+]
 
 const LIFESTYLE_QUERIES = [
   'luxury lifestyle desert aesthetic',
@@ -151,6 +162,7 @@ function getSlideContent(slide) {
     case 'video_exemple': return { main: cap(slide.exemple, 10) }
     case 'video_cta': return { main: cap(slide.texte, 8) }
     case 'oneshot': return { main: cap(slide.phrase, 15) }
+    case 'football': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
 }
@@ -159,7 +171,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
-  const isOneShot = slide.type === 'oneshot'
+  const isOneShot = slide.type === 'oneshot' || slide.type === 'football'
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
   const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.70
@@ -239,11 +251,15 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre' })
-      else result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
+      else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
+      else result = await callAPI('/api/generate-football', { style: 'sombre' })
       setData(result)
       const slideCount = (result.slides || []).length
-      const isOneShot = format === 2
-      const imgQuery = isOneShot
+      const isOneShot = format === 3
+      const isFootball = format === 4
+      const imgQuery = isFootball
+        ? FOOTBALL_QUERIES[Math.floor(Math.random() * FOOTBALL_QUERIES.length)]
+        : isOneShot
         ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
         : ''
       const rawImgs = await fetchImages(imgQuery, slideCount)
@@ -302,6 +318,11 @@ export default function App() {
         {format === 2 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
             Phrases qui font ressentir. Choisis un thème ou laisse comme ça.
+          </p>
+        )}
+        {format === 4 && (
+          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
+            1 image + phrase virale football. Pour ton compte foot.
           </p>
         )}
         {format === 1 && (
