@@ -77,7 +77,7 @@ public class CarouselService {
     }
 
     public String generateFootball(String style) throws Exception {
-        String prompt = "Genere une phrase virale sur le football pour TikTok. 1 slide. Style : courte, directe, universelle. Comme les phrases qui font des millions de vues sur les comptes football. Exemples PARFAITS : Mon but est simple. Gagner. ou Le foot t apprend que tout peut changer en 1 seconde. ou Certains naissent avec le ballon. Les autres l apprennent. ou Le travail silencieux fait le bruit le plus fort. ou Un but peut changer une vie. Demande-le a Zidane. Ton : passion, intensite, emotion. Pas de cliche trop facile. MAX 15 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {"hashtags":["football","foot","soccer","motivation","fyp","tiktok"],"slides":[{"type":"football","phrase":"phrase virale football MAX 15 MOTS"}]}";
+        String prompt = "Genere une phrase virale universelle pour TikTok. 1 slide. Style : courte, directe, percutante. Pas de mention au football. Phrases de vie universelles. Exemples : Mon but est d etre meilleur qu hier, pas que les autres. ou Le travail silencieux fait le bruit le plus fort. ou Certains attendent leur chance. Les autres la creent. ou Personne se souvient de ceux qui ont abandonne. MAX 15 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"motivation\",\"mindset\",\"lifestyle\",\"fyp\",\"citation\",\"tiktok\"],\"slides\":[{\"type\":\"football\",\"phrase\":\"phrase virale MAX 15 MOTS\"}]}";
         return callGemini(prompt);
     }
 
