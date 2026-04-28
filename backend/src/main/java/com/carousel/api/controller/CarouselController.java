@@ -74,15 +74,15 @@ public class CarouselController {
         }
     }
 
-    @PostMapping("/generate-audio")
-    public ResponseEntity<byte[]> generateAudio(@RequestBody Map<String, String> body) {
+
+    @PostMapping("/generate-emotionnel")
+    public ResponseEntity<?> generateEmotionnel(@RequestBody Map<String, String> body) {
         try {
-            byte[] audio = carouselService.generateAudio(body.getOrDefault("text", ""));
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "audio/mpeg");
-            return new ResponseEntity<>(audio, headers, HttpStatus.OK);
+            return ResponseEntity.ok(Map.of("data", carouselService.generateEmotionnel(
+                body.getOrDefault("theme", "philosophie stoïcienne"),
+                body.getOrDefault("style", "sombre"))));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
 
