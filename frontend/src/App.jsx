@@ -88,14 +88,14 @@ async function fetchOneUnsplashRandom(query) {
 }
 
 const FOOTBALL_QUERIES = [
-  'football stadium night aesthetic',
-  'soccer player celebration aesthetic',
-  'football training aesthetic dark',
-  'stadium lights aesthetic',
-  'soccer ball aesthetic dark',
-  'football player silhouette',
-  'champions league aesthetic',
-  'football pitch aerial view',
+  'football pitch green night',
+  'soccer match aerial view',
+  'football stadium grass',
+  'soccer training field dark',
+  'football corner flag pitch',
+  'stadium green grass aerial',
+  'football match night lights',
+  'soccer field empty night',
 ]
 
 const LIFESTYLE_QUERIES = [
@@ -171,7 +171,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
   const { main, sub } = getSlideContent(slide)
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
-  const isOneShot = slide.type === 'oneshot' || slide.type === 'football'
+  const isOneShot = slide.type === 'oneshot'
+  const isFootball = slide.type === 'football'
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
   const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.70
@@ -194,19 +195,19 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: isOneShot ? 'center' : 'flex-start',
-        padding: isOneShot ? '44px 20px' : '44px 14px 28px',
+        justifyContent: 'center', alignItems: (isOneShot || isFootball) ? 'center' : 'flex-start',
+        padding: isFootball ? '44px 24px' : isOneShot ? '44px 20px' : '44px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
-          fontFamily: "'Montserrat', sans-serif",
+          fontFamily: isFootball ? "'Georgia', serif" : "'Montserrat', sans-serif",
           fontSize: fontSize,
-          fontWeight: isOneShot ? 700 : 900,
+          fontWeight: isFootball ? 400 : isOneShot ? 700 : 900,
           color: '#FFFFFF',
-          lineHeight: isOneShot ? 1.3 : 0.95,
-          letterSpacing: isOneShot ? '-0.01em' : '-0.02em',
-          textTransform: isOneShot ? 'none' : 'uppercase',
-          textAlign: isOneShot ? 'center' : 'left',
+          lineHeight: isFootball ? 1.5 : isOneShot ? 1.3 : 0.95,
+          letterSpacing: isFootball ? '0.01em' : isOneShot ? '-0.01em' : '-0.02em',
+          textTransform: (isOneShot || isFootball) ? 'none' : 'uppercase',
+          textAlign: (isOneShot || isFootball) ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           width: '100%',
