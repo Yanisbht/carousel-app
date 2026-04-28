@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Football']
+const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot']
 
 async function toBase64(url) {
   try {
@@ -87,16 +87,16 @@ async function fetchOneUnsplashRandom(query) {
   return null
 }
 
-const FOOTBALL_QUERIES = [
-  'football stadium night dark',
-  'soccer stadium night crowd dark',
-  'football match night lights dark',
-  'stadium night aerial dark',
-  'champions league night stadium dark',
-  'football crowd night stadium',
-  'soccer night game stadium lights',
-  'football stadium darkness night',
+// IDs Unsplash fixes de vrais stades la nuit
+const FOOTBALL_IMAGES = [
+  'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1080&q=80',
+  'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1080&q=80',
+  'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1080&q=80',
+  'https://images.unsplash.com/photo-1551280857-2b9bbe52acf4?w=1080&q=80',
+  'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1080&q=80',
+  'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=1080&q=80',
 ]
+const FOOTBALL_QUERIES = ['football stadium night dark']
 
 const LIFESTYLE_QUERIES = [
   'luxury lifestyle desert aesthetic',
@@ -195,19 +195,19 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: (isOneShot || isFootball) ? 'center' : 'flex-start',
-        padding: isFootball ? '44px 24px' : isOneShot ? '44px 20px' : '44px 14px 28px',
+        justifyContent: 'center', alignItems: isOneShot ? 'center' : 'flex-start',
+        padding: isOneShot ? '44px 24px' : '44px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
-          fontFamily: isFootball ? "'Helvetica Neue', Helvetica, sans-serif" : "'Montserrat', sans-serif",
-          fontSize: isFootball ? 14 : fontSize,
-          fontWeight: isFootball ? 300 : isOneShot ? 700 : 900,
+          fontFamily: "'Helvetica Neue', Helvetica, sans-serif",
+          fontSize: fontSize,
+          fontWeight: isOneShot ? 300 : 900,
           color: '#FFFFFF',
-          lineHeight: isFootball ? 1.6 : isOneShot ? 1.3 : 0.95,
-          letterSpacing: isFootball ? '0.02em' : isOneShot ? '-0.01em' : '-0.02em',
-          textTransform: (isOneShot || isFootball) ? 'none' : 'uppercase',
-          textAlign: (isOneShot || isFootball) ? 'center' : 'left',
+          lineHeight: isOneShot ? 1.6 : 0.95,
+          letterSpacing: isOneShot ? '0.01em' : '-0.02em',
+          textTransform: isOneShot ? 'none' : 'uppercase',
+          textAlign: isOneShot ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           width: '100%',
@@ -252,19 +252,23 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre' })
-      else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
-      else result = await callAPI('/api/generate-football', { style: 'sombre' })
+      else result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
       setData(result)
       const slideCount = (result.slides || []).length
       const isOneShot = format === 3
       const isFootball = format === 4
-      const imgQuery = isFootball
-        ? FOOTBALL_QUERIES[Math.floor(Math.random() * FOOTBALL_QUERIES.length)]
-        : isOneShot
-        ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
-        : ''
-      const rawImgs = await fetchImages(imgQuery, slideCount)
-      const imgs = await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
+      let rawImgs
+      if (isFootball) {
+        const fixedUrl = FOOTBALL_IMAGES[Math.floor(Math.random() * FOOTBALL_IMAGES.length)]
+        const b64 = await toBase64(fixedUrl)
+        rawImgs = [b64]
+      } else {
+        const imgQuery = isOneShot
+          ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
+          : ''
+        rawImgs = await fetchImages(imgQuery, slideCount)
+      }
+      const imgs = isFootball ? rawImgs : await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
