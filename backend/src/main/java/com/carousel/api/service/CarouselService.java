@@ -70,19 +70,6 @@ public class CarouselService {
         return json.toString();
     }
 
-    public byte[] generateAudio(String text) throws Exception {
-        String safeText = text.replace("\\", "").replace("\"", "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").trim();
-        String requestBody = "{\"text\": \"" + safeText + "\", \"model_id\": \"eleven_multilingual_v2\", \"voice_settings\": {\"stability\": 0.5, \"similarity_boost\": 0.75}}";
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.elevenlabs.io/v1/text-to-speech/GPAQQPp9dazaB2bl4zg9"))
-            .header("Content-Type", "application/json")
-            .header("xi-api-key", "sk_06c242de0700d16b65f168fd10913efdeea6f1df8d219c9b")
-            .POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
-        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-        if (response.statusCode() != 200) throw new RuntimeException("ElevenLabs error: " + response.statusCode() + " body: " + new String(response.body()));
-        return response.body();
-    }
 
     public String generateEmotionnel(String theme, String style) throws Exception {
         String prompt = "Tu crees un carrousel TikTok style Roman Frayssinet. 3 slides. Observation drole et touchante sur la condition humaine. Pas de dev perso. SLIDE 1 MAX 7 MOTS : pensee universelle que personne dit. SLIDE 2 MAX 7 MOTS : fond philo simple. SLIDE 3 MAX 8 MOTS : chute drole et touchante. Theme : " + theme + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"humour\",\"emotion\",\"vrai\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"hook\",\"citation\":\"MAX 7 MOTS\",\"auteur\":\"\",\"origine\":\"\"},{\"type\":\"intrigue\",\"question\":\"MAX 7 MOTS\"},{\"type\":\"lesson\",\"titre\":\"\",\"corps\":\"MAX 8 MOTS\"}]}";
@@ -188,7 +175,7 @@ public class CarouselService {
 
     private String buildPromptVideo(String transcription, String style) {
         String excerpt = transcription.length() > 1500 ? transcription.substring(0, 1500) : transcription;
-        return "Tu transformes cette transcription en carrousel TikTok 3 slides. REGLE ABSOLUE : la slide 2 ne doit PAS repondre a la question de la slide 1. Elle doit contredire ou surprendre pour forcer le swipe vers la slide 3. SLIDE 1 (MAX 6 MOTS) : question ou observation incomplete qui cree la tension. Finit par ... SLIDE 2 (MAX 6 MOTS) : contradiction ou revelation qui dit ce que c est PAS ou qui choque. Ex : C est pas de la paresse. ou Ton cerveau te ment. ou Les grecs avaient tout faux. — ouvre un nouveau suspense, ne ferme PAS la slide 1. SLIDE 3 (MAX 8 MOTS) : la vraie reponse, la chute qui reste. Transcription : " + excerpt + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie",\"humour\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"video_hook\",\"concept\":\"2 mots\",\"accroche\":\"MAX 6 MOTS avec ...\"},{\"type\":\"video_explication\",\"titre\":\"2 MOTS\",\"corps\":\"contradiction MAX 6 MOTS\"},{\"type\":\"video_cta\",\"texte\":\"vraie reponse MAX 8 MOTS\",\"question\":\"\"}]}";
+        return "Tu transformes cette transcription en carrousel TikTok 3 slides. REGLE ABSOLUE : la slide 2 ne doit PAS repondre a la question de la slide 1. Elle doit contredire ou surprendre pour forcer le swipe vers la slide 3. SLIDE 1 (MAX 6 MOTS) : question ou observation incomplete qui cree la tension. Finit par ... SLIDE 2 (MAX 6 MOTS) : contradiction ou revelation qui dit ce que c est PAS ou qui choque. Ex : C est pas de la paresse. ou Ton cerveau te ment. — ouvre un nouveau suspense, ne ferme PAS la slide 1. SLIDE 3 (MAX 8 MOTS) : la vraie reponse, la chute qui reste. Transcription : " + excerpt + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"humour\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"video_hook\",\"concept\":\"2 mots\",\"accroche\":\"MAX 6 MOTS\"},{\"type\":\"video_explication\",\"titre\":\"2 MOTS\",\"corps\":\"contradiction MAX 6 MOTS\"},{\"type\":\"video_cta\",\"texte\":\"vraie reponse MAX 8 MOTS\",\"question\":\"\"}]}";
     }
 
     private String buildPromptTop3(String auteur, String style) {
