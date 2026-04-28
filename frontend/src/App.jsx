@@ -88,14 +88,14 @@ async function fetchOneUnsplashRandom(query) {
 }
 
 const FOOTBALL_QUERIES = [
-  'football pitch green night',
-  'soccer match aerial view',
-  'football stadium grass',
-  'soccer training field dark',
-  'football corner flag pitch',
-  'stadium green grass aerial',
-  'football match night lights',
-  'soccer field empty night',
+  'football stadium night dark',
+  'soccer stadium night crowd dark',
+  'football match night lights dark',
+  'stadium night aerial dark',
+  'champions league night stadium dark',
+  'football crowd night stadium',
+  'soccer night game stadium lights',
+  'football stadium darkness night',
 ]
 
 const LIFESTYLE_QUERIES = [
@@ -200,12 +200,12 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         gap: 10,
       }}>
         {main && <p style={{
-          fontFamily: isFootball ? "'Georgia', serif" : "'Montserrat', sans-serif",
-          fontSize: fontSize,
-          fontWeight: isFootball ? 400 : isOneShot ? 700 : 900,
+          fontFamily: isFootball ? "'Helvetica Neue', Helvetica, sans-serif" : "'Montserrat', sans-serif",
+          fontSize: isFootball ? 14 : fontSize,
+          fontWeight: isFootball ? 300 : isOneShot ? 700 : 900,
           color: '#FFFFFF',
-          lineHeight: isFootball ? 1.5 : isOneShot ? 1.3 : 0.95,
-          letterSpacing: isFootball ? '0.01em' : isOneShot ? '-0.01em' : '-0.02em',
+          lineHeight: isFootball ? 1.6 : isOneShot ? 1.3 : 0.95,
+          letterSpacing: isFootball ? '0.02em' : isOneShot ? '-0.01em' : '-0.02em',
           textTransform: (isOneShot || isFootball) ? 'none' : 'uppercase',
           textAlign: (isOneShot || isFootball) ? 'center' : 'left',
           wordBreak: 'break-word',
