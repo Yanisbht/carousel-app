@@ -356,6 +356,7 @@ export default function App() {
             ))}
           </div>
           <div className="hashtags">{(data.hashtags || []).map(tag => <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>)}</div>
+          <button className="dl-btn" onClick={downloadAll} disabled={exporting}>{exporting ? 'Export en cours...' : 'Télécharger les slides (PNG)'}</button>
                   </>
       )}
     </div>
