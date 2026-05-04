@@ -201,13 +201,13 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
       <div style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 1 }} />
 
       {decorImage && (
-        <img src={decorImage} alt="" crossOrigin="anonymous" style={{ position: 'absolute', bottom: 12, right: 12, width: 110, height: 110, objectFit: 'contain', zIndex: 4 }} />
+        <img src={decorImage} alt="" crossOrigin="anonymous" style={{ position: 'absolute', bottom: 60, right: 12, width: 110, height: 110, objectFit: 'contain', zIndex: 4 }} />
       )}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'flex-start', alignItems: isOneShot ? 'center' : 'flex-start',
-        padding: isPenseeSlide ? '44px 24px 100px 24px' : isOneShot ? '44px 24px' : '44px 14px 28px',
+        padding: isPenseeSlide ? '80px 24px 100px 24px' : isOneShot ? '80px 24px' : '80px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
