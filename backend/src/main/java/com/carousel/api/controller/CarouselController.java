@@ -96,6 +96,16 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-pensee")
+    public ResponseEntity<?> generatePensee(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generatePensee(
+                body.getOrDefault("texte", ""))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-oneshot")
     public ResponseEntity<?> generateOneShot(@RequestBody Map<String, String> body) {
         try {
