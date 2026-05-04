@@ -174,7 +174,7 @@ function getSlideContent(slide) {
   }
 }
 
-function Slide({ slide, index, total, bgImage, themeStyle, id }) {
+function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
   const { main, sub } = getSlideContent(slide)
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
@@ -200,11 +200,14 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
       }} />}
       <div style={{ position: 'absolute', inset: 0, background: slide.type === 'pensee' ? '#fff' : 'rgba(0,0,0,0.35)', zIndex: 1 }} />
       <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: slide.type === 'pensee' ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)', zIndex: 4 }}>{index + 1}/{total}</span>
+      {slide.type === 'pensee' && decorImage && (
+        <img src={decorImage} alt="" style={{ position: 'absolute', bottom: 10, right: 10, width: 70, height: 70, objectFit: 'contain', zIndex: 4, mixBlendMode: 'multiply' }} />
+      )}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: (isOneShot || isPenseeSlide) ? 'center' : 'flex-start',
-        padding: (isOneShot || isPenseeSlide) ? '44px 24px' : '44px 14px 28px',
+        justifyContent: isPenseeSlide ? 'flex-start' : 'center', alignItems: isOneShot ? 'center' : 'flex-start',
+        padding: isPenseeSlide ? '44px 24px 100px 24px' : isOneShot ? '44px 24px' : '44px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
@@ -215,7 +218,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
           lineHeight: isPenseeSlide ? 1.7 : isOneShot ? 1.6 : 0.95,
           letterSpacing: isPenseeSlide ? '0.02em' : isOneShot ? '0.01em' : '-0.02em',
           textTransform: (isOneShot || isPenseeSlide) ? 'none' : 'uppercase',
-          textAlign: (isOneShot || isPenseeSlide) ? 'center' : 'left',
+          textAlign: isOneShot ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           width: '100%',
@@ -246,6 +249,7 @@ export default function App() {
   const [theme, setTheme] = useState(THEMES[0])
   const [transcription, setTranscription] = useState('')
   const [pensee, setPensee] = useState('')
+  const [decorImage, setDecorImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -332,12 +336,30 @@ export default function App() {
           </p>
         )}
         {format === 4 && (
+          <>
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
             <label>Ta pensée</label>
             <textarea value={pensee} onChange={e => setPensee(e.target.value)} rows={4}
-              placeholder="Écris ta pensée ici, l'app la coupe en 3 slides sans la modifier..."
+              placeholder="Écris ta pensée ici, l'app la coupe en 5 slides sans la modifier..."
               style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
           </div>
+          <div className="ctrl" style={{ flex: '1 1 100%' }}>
+            <label>Image décorative (optionnel — coin bas droite)</label>
+            <input type="file" accept="image/*" onChange={e => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = ev => setDecorImage(ev.target.result)
+              reader.readAsDataURL(file)
+            }} style={{ width: '100%', padding: '8px', color: 'var(--color-text-primary)', fontSize: 12 }} />
+            {decorImage && (
+              <div style={{display: 'flex', alignItems: 'center', gap: 8, marginTop: 4}}>
+                <img src={decorImage} alt="aperçu" style={{width: 40, height: 40, objectFit: 'cover', borderRadius: 4}} />
+                <button onClick={() => setDecorImage(null)} style={{fontSize: 11, padding: '4px 8px', background: 'transparent', border: '0.5px solid var(--color-border-secondary)', color: 'var(--color-text-secondary)', borderRadius: 4, cursor: 'pointer'}}>Retirer</button>
+              </div>
+            )}
+          </div>
+          </>
         )}
         {format === 4 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
