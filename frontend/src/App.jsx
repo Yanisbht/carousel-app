@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot']
+const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Ma pensée']
 
 async function toBase64(url) {
   try {
@@ -168,6 +168,7 @@ function getSlideContent(slide) {
     case 'video_exemple': return { main: cap(slide.exemple, 10) }
     case 'video_cta': return { main: cap(slide.texte, 8) }
     case 'oneshot': return { main: cap(slide.phrase, 15) }
+    case 'pensee': return { main: slide.texte || '' }
     case 'football': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
@@ -243,6 +244,7 @@ export default function App() {
   const [format, setFormat] = useState(0)
   const [theme, setTheme] = useState(THEMES[0])
   const [transcription, setTranscription] = useState('')
+  const [pensee, setPensee] = useState('')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -258,23 +260,23 @@ export default function App() {
       if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre' })
-      else result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
+      else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
+      else result = await callAPI('/api/generate-pensee', { texte: pensee })
       setData(result)
       const slideCount = (result.slides || []).length
       const isOneShot = format === 3
       const isFootball = format === 4
+      const isPensee = format === 4
       let rawImgs
-      if (isFootball) {
-        const fixedUrl = FOOTBALL_IMAGES[Math.floor(Math.random() * FOOTBALL_IMAGES.length)]
-        const b64 = await toBase64(fixedUrl)
-        rawImgs = [b64]
+      if (isPensee) {
+        rawImgs = Array(slideCount).fill(null)
       } else {
         const imgQuery = isOneShot
           ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
           : ''
         rawImgs = await fetchImages(imgQuery, slideCount)
       }
-      const imgs = isFootball ? rawImgs : await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
+      const imgs = isPensee ? rawImgs : await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
@@ -299,7 +301,7 @@ export default function App() {
     setExporting(false)
   }
 
-  const slides = (data?.slides || []).slice(0, 3)
+  const slides = format === 4 ? (data?.slides || []) : (data?.slides || []).slice(0, 3)
 
   return (
     <div className="app">
@@ -327,6 +329,14 @@ export default function App() {
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
             Phrases qui font ressentir. Choisis un thème ou laisse comme ça.
           </p>
+        )}
+        {format === 4 && (
+          <div className="ctrl" style={{ flex: '1 1 100%' }}>
+            <label>Ta pensée</label>
+            <textarea value={pensee} onChange={e => setPensee(e.target.value)} rows={4}
+              placeholder="Écris ta pensée ici, l'app la coupe en 3 slides sans la modifier..."
+              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
+          </div>
         )}
         {format === 4 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
