@@ -83,7 +83,7 @@ public class CarouselService {
 
     public String generatePensee(String texte) throws Exception {
         String safeTexte = escapeJson(texte);
-        String prompt = "Coupe ce texte en exactement 3 parties pour 3 slides TikTok. Ne modifie PAS le texte, ne reformule PAS, ne resumes PAS. Coupe juste en 3 morceaux logiques qui se lisent dans l ordre. Texte : " + safeTexte + ". Retourne UNIQUEMENT ce JSON sans backticks : {"hashtags":["philosophie","pensee","vrai","tiktok","fyp","citation"],"slides":[{"type":"pensee","texte":"premiere partie du texte"},{"type":"pensee","texte":"deuxieme partie du texte"},{"type":"pensee","texte":"troisieme partie du texte"}]}";
+        String prompt = "Coupe ce texte en exactement 5 parties pour 5 slides TikTok. Ne modifie PAS le texte, ne reformule PAS, ne resumes PAS. Coupe juste en 5 morceaux logiques qui se lisent dans l ordre. Texte : " + safeTexte + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\",\"citation\"],\"slides\":[{\"type\":\"pensee\",\"texte\":\"partie 1\"},{\"type\":\"pensee\",\"texte\":\"partie 2\"},{\"type\":\"pensee\",\"texte\":\"partie 3\"},{\"type\":\"pensee\",\"texte\":\"partie 4\"},{\"type\":\"pensee\",\"texte\":\"partie 5\"}]}";
         return callGemini(prompt);
     }
 
