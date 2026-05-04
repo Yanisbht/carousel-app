@@ -278,20 +278,17 @@ export default function App() {
   const downloadAll = async () => {
     setExporting(true)
     try {
-      const slideContents = (data?.slides || []).map(slide => { const { main, sub } = getSlideContent(slide); return { main, sub, type: slide.type } })
-      const res = await fetch(`${PUPPET_URL}/screenshot`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        signal: AbortSignal.timeout(120000),
-        body: JSON.stringify({ slides: slideContents, bgImages, themeColor: themeStyle?.color, isBasket: false })
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error)
-      json.images.forEach((b64, i) => {
+      const total = (data?.slides || []).slice(0, 3).length
+      for (let i = 0; i < total; i++) {
+        const el = document.getElementById(`slide-${i}`)
+        if (!el) continue
+        const canvas = await window.html2canvas(el, { scale: 6, useCORS: true, allowTaint: true, backgroundColor: '#111' })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
-        link.href = `data:image/png;base64,${b64}`
+        link.href = canvas.toDataURL('image/png')
         link.click()
-      })
+        await new Promise(r => setTimeout(r, 300))
+      }
     } catch (e) { alert('Erreur export: ' + e.message) }
     setExporting(false)
   }
