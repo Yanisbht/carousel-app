@@ -24,7 +24,8 @@ public class CarouselController {
         try {
             return ResponseEntity.ok(Map.of("data", carouselService.generate(
                 body.getOrDefault("theme", "philosophie stoïcienne"),
-                body.getOrDefault("style", "sombre et épuré"))));
+                body.getOrDefault("style", "sombre et épuré"),
+                body.getOrDefault("sujet", ""))));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
@@ -80,7 +81,8 @@ public class CarouselController {
         try {
             return ResponseEntity.ok(Map.of("data", carouselService.generateEmotionnel(
                 body.getOrDefault("theme", "philosophie stoïcienne"),
-                body.getOrDefault("style", "sombre"))));
+                body.getOrDefault("style", "sombre"),
+                body.getOrDefault("sujet", ""))));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
