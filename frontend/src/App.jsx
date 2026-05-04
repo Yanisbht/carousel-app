@@ -199,9 +199,9 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
         filter: 'brightness(0.5) saturate(0.7)',
       }} />}
       <div style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 1 }} />
-      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(0,0,0,0.3)', zIndex: 4 }}>{index + 1}/{total}</span>
+
       {decorImage && (
-        <img src={decorImage} alt="" crossOrigin="anonymous" style={{ position: 'absolute', bottom: 12, right: 12, width: 60, height: 60, objectFit: 'contain', zIndex: 4 }} />
+        <img src={decorImage} alt="" crossOrigin="anonymous" style={{ position: 'absolute', bottom: 12, right: 12, width: 110, height: 110, objectFit: 'contain', zIndex: 4 }} />
       )}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
