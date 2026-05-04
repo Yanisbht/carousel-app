@@ -206,7 +206,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: isPenseeSlide ? 'flex-start' : 'center', alignItems: isOneShot ? 'center' : 'flex-start',
+        justifyContent: 'flex-start', alignItems: isOneShot ? 'center' : 'flex-start',
         padding: isPenseeSlide ? '44px 24px 100px 24px' : isOneShot ? '44px 24px' : '44px 14px 28px',
         gap: 10,
       }}>
