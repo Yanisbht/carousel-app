@@ -112,8 +112,14 @@ const LIFESTYLE_QUERIES = [
 ]
 
 const QUERIES = [
-  'landscape nature', 'sky clouds', 'mountain', 'forest', 'ocean',
-  'sunset', 'meadow', 'desert', 'river', 'night sky',
+  'moon night sky dark',
+  'crescent moon dark sky',
+  'full moon night',
+  'moon clouds night dark',
+  'night sky stars moon',
+  'dark sky moon minimal',
+  'moon rising night',
+  'moonlight dark sky',
 ]
 
 async function fetchImages(query, count) {
