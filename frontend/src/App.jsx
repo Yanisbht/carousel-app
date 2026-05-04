@@ -179,6 +179,7 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
 
   // Calcule la taille du texte selon la longueur — plus court = plus grand
   const isOneShot = slide.type === 'oneshot'
+  const isPenseeSlide = slide.type === 'pensee'
   const isFootball = slide.type === 'football'
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
@@ -197,24 +198,24 @@ function Slide({ slide, index, total, bgImage, themeStyle, id }) {
         backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 0,
         filter: 'brightness(0.5) saturate(0.7)',
       }} />}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 1 }} />
-      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: 'rgba(255,255,255,0.3)', zIndex: 4 }}>{index + 1}/{total}</span>
+      <div style={{ position: 'absolute', inset: 0, background: slide.type === 'pensee' ? '#fff' : 'rgba(0,0,0,0.35)', zIndex: 1 }} />
+      <span style={{ position: 'absolute', top: 10, left: 12, fontSize: 9, color: slide.type === 'pensee' ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)', zIndex: 4 }}>{index + 1}/{total}</span>
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: isOneShot ? 'center' : 'flex-start',
-        padding: isOneShot ? '44px 24px' : '44px 14px 28px',
+        justifyContent: 'center', alignItems: (isOneShot || isPenseeSlide) ? 'center' : 'flex-start',
+        padding: (isOneShot || isPenseeSlide) ? '44px 24px' : '44px 14px 28px',
         gap: 10,
       }}>
         {main && <p style={{
-          fontFamily: "'Helvetica Neue', Helvetica, sans-serif",
+          fontFamily: isPenseeSlide ? "'Georgia', 'Times New Roman', serif" : "'Helvetica Neue', Helvetica, sans-serif",
           fontSize: fontSize,
-          fontWeight: isOneShot ? 300 : 900,
-          color: '#FFFFFF',
-          lineHeight: isOneShot ? 1.6 : 0.95,
-          letterSpacing: isOneShot ? '0.01em' : '-0.02em',
-          textTransform: isOneShot ? 'none' : 'uppercase',
-          textAlign: isOneShot ? 'center' : 'left',
+          fontWeight: isPenseeSlide ? 300 : isOneShot ? 300 : 900,
+          color: isPenseeSlide ? '#000000' : '#FFFFFF',
+          lineHeight: isPenseeSlide ? 1.7 : isOneShot ? 1.6 : 0.95,
+          letterSpacing: isPenseeSlide ? '0.02em' : isOneShot ? '0.01em' : '-0.02em',
+          textTransform: (isOneShot || isPenseeSlide) ? 'none' : 'uppercase',
+          textAlign: (isOneShot || isPenseeSlide) ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
           width: '100%',
