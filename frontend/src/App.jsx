@@ -423,7 +423,7 @@ export default function App() {
           </div>
           <div className="slides-row">
             {slides.map((slide, i) => (
-              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} total={slides.length} bgImage={bgImages[i]} themeStyle={themeStyle} />
+              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} total={slides.length} bgImage={bgImages[i]} themeStyle={themeStyle} decorImage={decorImage} />
             ))}
           </div>
           <div className="hashtags">{(data.hashtags || []).map(tag => <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>)}</div>
