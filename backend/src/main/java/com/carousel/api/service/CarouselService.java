@@ -81,6 +81,12 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String generatePensee(String texte) throws Exception {
+        String safeTexte = escapeJson(texte);
+        String prompt = "Coupe ce texte en exactement 3 parties pour 3 slides TikTok. Ne modifie PAS le texte, ne reformule PAS, ne resumes PAS. Coupe juste en 3 morceaux logiques qui se lisent dans l ordre. Texte : " + safeTexte + ". Retourne UNIQUEMENT ce JSON sans backticks : {"hashtags":["philosophie","pensee","vrai","tiktok","fyp","citation"],"slides":[{"type":"pensee","texte":"premiere partie du texte"},{"type":"pensee","texte":"deuxieme partie du texte"},{"type":"pensee","texte":"troisieme partie du texte"}]}";
+        return callGemini(prompt);
+    }
+
     public String generateOneShot(String style) throws Exception {
         String prompt = "Genere une phrase de vie naturelle et universelle pour TikTok. Style : comme si tu l ecrivais dans un journal intime. Pas de cliche motivationnel. Naturelle, directe, qui fait se reconnaitre. Exemples PARFAITS : Mon but est simplement d etre meilleur qu hier, pas que les autres. ou Certains jours t avancent pas. Ils t apprennent juste a tenir. ou Le silence repond mieux que les excuses parfois. ou On grandit pas en vieillissant. On grandit en perdant. 15 a 25 MOTS. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"motivation\",\"mindset\",\"lifestyle\",\"fyp\",\"citation\",\"tiktok\"],\"slides\":[{\"type\":\"oneshot\",\"phrase\":\"phrase naturelle 15-25 MOTS\"}]}";
         return callGemini(prompt);
