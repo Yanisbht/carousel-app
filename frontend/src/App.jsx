@@ -250,6 +250,7 @@ export default function App() {
   const [transcription, setTranscription] = useState('')
   const [pensee, setPensee] = useState('')
   const [decorImage, setDecorImage] = useState(null)
+  const [sujet, setSujet] = useState('')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -262,9 +263,9 @@ export default function App() {
     setLoading(true); setError(null); setData(null); setBgImages([])
     try {
       let result
-      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre' })
+      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
-      else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre' })
+      else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
       else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
       else result = await callAPI('/api/generate-pensee', { texte: pensee })
       setData(result)
@@ -323,12 +324,20 @@ export default function App() {
 
       <div className="controls">
         {(format === 0 || format === 2) && (
+          <>
           <div className="ctrl">
             <label>Thème</label>
             <select value={theme} onChange={e => setTheme(e.target.value)}>
               {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
+          <div className="ctrl">
+            <label>Sujet précis (optionnel)</label>
+            <input type="text" value={sujet} onChange={e => setSujet(e.target.value)}
+              placeholder="ex: Federer, Walter White, Néo..."
+              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
+          </div>
+          </>
         )}
         {format === 2 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
