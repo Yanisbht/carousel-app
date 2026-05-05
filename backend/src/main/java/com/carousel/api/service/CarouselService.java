@@ -82,9 +82,14 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
-    public String generatePensee(String texte) throws Exception {
+    public String generatePensee(String texte, int nbSlides) throws Exception {
         String safeTexte = escapeJson(texte);
-        String prompt = "Coupe ce texte en exactement 5 parties pour 5 slides TikTok. Ne modifie PAS le texte, ne reformule PAS, ne resumes PAS. Coupe juste en 5 morceaux logiques qui se lisent dans l ordre. Texte : " + safeTexte + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\",\"citation\"],\"slides\":[{\"type\":\"pensee\",\"texte\":\"partie 1\"},{\"type\":\"pensee\",\"texte\":\"partie 2\"},{\"type\":\"pensee\",\"texte\":\"partie 3\"},{\"type\":\"pensee\",\"texte\":\"partie 4\"},{\"type\":\"pensee\",\"texte\":\"partie 5\"}]}";
+        StringBuilder slidesJson = new StringBuilder();
+        for (int i = 1; i <= nbSlides; i++) {
+            if (i > 1) slidesJson.append(",");
+            slidesJson.append("{\"type\":\"pensee\",\"texte\":\"partie ").append(i).append("\"}");
+        }
+        String prompt = "Coupe ce texte en exactement " + nbSlides + " parties pour " + nbSlides + " slides TikTok. Ne modifie PAS le texte, ne reformule PAS, ne resumes PAS. Coupe juste en " + nbSlides + " morceaux logiques qui se lisent dans l ordre. Texte : " + safeTexte + ". Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"pensee\",\"vrai\",\"tiktok\",\"fyp\",\"citation\"],\"slides\":[" + slidesJson.toString() + "]}";
         return callGemini(prompt);
     }
 
