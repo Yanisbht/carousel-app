@@ -252,6 +252,7 @@ export default function App() {
   const [pensee, setPensee] = useState('')
   const [decorImage, setDecorImage] = useState(null)
   const [sujet, setSujet] = useState('')
+  const [nbSlides, setNbSlides] = useState(5)
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -268,7 +269,7 @@ export default function App() {
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
       else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
-      else result = await callAPI('/api/generate-pensee', { texte: pensee })
+      else result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
       setData(result)
       const slideCount = (result.slides || []).length
       const isOneShot = format === 3
@@ -308,7 +309,7 @@ export default function App() {
     setExporting(false)
   }
 
-  const slides = format === 4 ? (data?.slides || []) : (data?.slides || []).slice(0, 3)
+  const slides = format === 4 ? (data?.slides || []).slice(0, nbSlides) : (data?.slides || []).slice(0, 3)
 
   return (
     <div className="app">
@@ -350,8 +351,14 @@ export default function App() {
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
             <label>Ta pensée</label>
             <textarea value={pensee} onChange={e => setPensee(e.target.value)} rows={4}
-              placeholder="Écris ta pensée ici, l'app la coupe en 5 slides sans la modifier..."
+              placeholder="Écris ta pensée ici, l'app la coupe en N slides sans la modifier..."
               style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
+          </div>
+          <div className="ctrl">
+            <label>Nombre de slides</label>
+            <select value={nbSlides} onChange={e => setNbSlides(Number(e.target.value))}>
+              {[2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
           </div>
           </>
         )}
