@@ -101,8 +101,9 @@ public class CarouselController {
     @PostMapping("/generate-pensee")
     public ResponseEntity<?> generatePensee(@RequestBody Map<String, String> body) {
         try {
+            int nb = Integer.parseInt(body.getOrDefault("nbSlides", "5"));
             return ResponseEntity.ok(Map.of("data", carouselService.generatePensee(
-                body.getOrDefault("texte", ""))));
+                body.getOrDefault("texte", ""), nb)));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
