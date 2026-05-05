@@ -212,13 +212,13 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
         gap: 10,
       }}>
         {main && <p style={{
-          fontFamily: isPenseeSlide ? "'Georgia', 'Times New Roman', serif" : "'Helvetica Neue', Helvetica, sans-serif",
+          fontFamily: "'Helvetica Neue', Helvetica, sans-serif",
           fontSize: fontSize,
-          fontWeight: isPenseeSlide ? 300 : isOneShot ? 300 : 900,
+          fontWeight: isOneShot ? 300 : 900,
           color: '#000000',
-          lineHeight: isPenseeSlide ? 1.7 : isOneShot ? 1.6 : 0.95,
-          letterSpacing: isPenseeSlide ? '0.02em' : isOneShot ? '0.01em' : '-0.02em',
-          textTransform: (isOneShot || isPenseeSlide) ? 'none' : 'uppercase',
+          lineHeight: isOneShot ? 1.6 : 0.95,
+          letterSpacing: isOneShot ? '0.01em' : '-0.02em',
+          textTransform: isOneShot ? 'none' : 'uppercase',
           textAlign: isOneShot ? 'center' : 'left',
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
