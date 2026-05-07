@@ -357,7 +357,7 @@ export default function App() {
           <div className="ctrl">
             <label>Nombre de slides</label>
             <select value={nbSlides} onChange={e => setNbSlides(Number(e.target.value))}>
-              {[2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
+              {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
           </>
