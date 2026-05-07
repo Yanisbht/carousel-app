@@ -142,9 +142,7 @@ async function fetchImages(query, count) {
 
 function cap(text, max) {
   if (!text) return ''
-  const cleaned = text.replace(/\.{2,}/g, '.').replace(/…/g, '').replace(/\s+\./g, '.').trim()
-  const w = cleaned.split(' ')
-  return w.length > max ? w.slice(0, max).join(' ') + '.' : cleaned
+  return text.replace(/\.{2,}/g, '.').replace(/…/g, '').replace(/\s+\./g, '.').trim()
 }
 
 function getSlideContent(slide) {
