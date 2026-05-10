@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Ma pensée', 'Films']
+const FORMATS = ['Films', 'Ma pensée', 'Carrousel', 'Émotionnel', 'Depuis vidéo']
 
 async function toBase64(url) {
   try {
@@ -265,17 +265,16 @@ export default function App() {
     setLoading(true); setError(null); setData(null); setBgImages([])
     try {
       let result
-      if (format === 0) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
-      else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
-      else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
-      else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
-      else if (format === 4) result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
-      else result = await callAPI('/api/generate-film', { film })
+      if (format === 0) result = await callAPI('/api/generate-film', { film })
+      else if (format === 1) result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
+      else if (format === 2) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
+      else if (format === 3) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
+      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       setData(result)
       const slideCount = (result.slides || []).length
-      const isOneShot = format === 3
+      const isOneShot = false
       const isFootball = format === 4
-      const isPensee = format === 4
+      const isPensee = format === 1 || format === 0
       let rawImgs
       if (isPensee) {
         rawImgs = Array(slideCount).fill(null)
@@ -310,13 +309,13 @@ export default function App() {
     setExporting(false)
   }
 
-  const slides = format === 4 ? (data?.slides || []).slice(0, nbSlides) : (data?.slides || []).slice(0, 3)
+  const slides = format === 1 ? (data?.slides || []).slice(0, nbSlides) : (data?.slides || []).slice(0, 3)
 
   return (
     <div className="app">
       <header>
-        <h1>Carousel Generator</h1>
-        <p className="subtitle">@citationmonde5</p>
+        <h1>Films & Philo</h1>
+        <p className="subtitle">la philosophie des films cultes</p>
       </header>
 
       <div className="format-tabs">
@@ -326,7 +325,7 @@ export default function App() {
       </div>
 
       <div className="controls">
-        {(format === 0 || format === 2) && (
+        {(format === 2 || format === 3) && (
           <>
           <div className="ctrl">
             <label>Thème</label>
@@ -342,12 +341,12 @@ export default function App() {
           </div>
           </>
         )}
-        {format === 2 && (
+        {format === 3 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
             Phrases qui font ressentir. Choisis un thème ou laisse comme ça.
           </p>
         )}
-        {format === 4 && (
+        {format === 1 && (
           <>
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
             <label>Ta pensée</label>
@@ -384,7 +383,7 @@ export default function App() {
             1 image + phrase virale football. Pour ton compte foot.
           </p>
         )}
-        {format === 1 && (
+        {format === 4 && (
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
             <label>Colle ta transcription</label>
             <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5}
