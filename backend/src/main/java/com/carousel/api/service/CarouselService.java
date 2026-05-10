@@ -82,6 +82,11 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String generateFilm(String film) throws Exception {
+        String prompt = "Cree un carrousel TikTok 3 slides sur la philosophie du film " + film + ". Style : cite la replique culte du film, puis explique sa portee philosophique en 2 slides. INTERDICTIONS : aucun ..., chaque slide est une phrase complete avec . ou ! ou ?. SLIDE 1 : la replique iconique du film, citee precisement (MAX 12 MOTS). SLIDE 2 : ce que cette replique dit de la condition humaine (MAX 10 MOTS). SLIDE 3 : la lecon de vie qui en decoule, directe et applicable (MAX 10 MOTS). Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"cinema\",\"film\",\"philosophie\",\"culte\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"film\",\"texte\":\"replique du film\"},{\"type\":\"film\",\"texte\":\"portee philosophique\"},{\"type\":\"film\",\"texte\":\"lecon de vie\"}]}";
+        return callGemini(prompt);
+    }
+
     public String generatePensee(String texte, int nbSlides) throws Exception {
         String safeTexte = escapeJson(texte);
         StringBuilder slidesJson = new StringBuilder();
