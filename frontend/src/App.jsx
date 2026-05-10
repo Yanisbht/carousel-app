@@ -362,6 +362,14 @@ export default function App() {
           </div>
           </>
         )}
+        {format === 0 && (
+          <div className="ctrl">
+            <label>Film culte</label>
+            <input type="text" value={film} onChange={e => setFilm(e.target.value)}
+              placeholder="ex: La Haine, Fight Club, Drive..."
+              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
+          </div>
+        )}
         <div className="ctrl" style={{ flex: '1 1 100%' }}>
           <label>Image décorative (coin bas droite — pour tous les formats)</label>
           <input type="file" accept="image/*" onChange={e => {
