@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Ma pensée']
+const FORMATS = ['Carrousel', 'Depuis vidéo', 'Émotionnel', 'One Shot', 'Ma pensée', 'Films']
 
 async function toBase64(url) {
   try {
@@ -168,6 +168,7 @@ function getSlideContent(slide) {
     case 'video_cta': return { main: cap(slide.texte, 8) }
     case 'oneshot': return { main: cap(slide.phrase, 15) }
     case 'pensee': return { main: slide.texte || '' }
+    case 'film': return { main: cap(slide.texte || '', 20) }
     case 'football': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
@@ -251,6 +252,7 @@ export default function App() {
   const [decorImage, setDecorImage] = useState(null)
   const [sujet, setSujet] = useState('')
   const [nbSlides, setNbSlides] = useState(5)
+  const [film, setFilm] = useState('La Haine')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -267,7 +269,8 @@ export default function App() {
       else if (format === 1) result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
       else if (format === 2) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
       else if (format === 3) result = await callAPI('/api/generate-oneshot', { style: 'sombre' })
-      else result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
+      else if (format === 4) result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
+      else result = await callAPI('/api/generate-film', { film })
       setData(result)
       const slideCount = (result.slides || []).length
       const isOneShot = format === 3
