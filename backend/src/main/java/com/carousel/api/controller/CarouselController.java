@@ -98,6 +98,16 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-film")
+    public ResponseEntity<?> generateFilm(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generateFilm(
+                body.getOrDefault("film", "La Haine"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-pensee")
     public ResponseEntity<?> generatePensee(@RequestBody Map<String, String> body) {
         try {
