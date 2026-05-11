@@ -82,6 +82,11 @@ public class CarouselService {
         return callGemini(prompt);
     }
 
+    public String generatePhilo2026(String philosophe, String sujet) throws Exception {
+        String prompt = "Cree un carrousel TikTok 3 slides drole sur le concept : que dirait " + philosophe + " face a " + sujet + " aujourd hui. Format : humour + philo + reference moderne. EXEMPLES DE TON : Socrate face a Tinder = Et toi, te connais-tu vraiment ? / Nietzsche face a LinkedIn = Ils creent des dieux qu ils appellent recruteurs. / Marc Aurele face aux notifs = Tu deviens ce a quoi tu reponds. / Diogene face a Amazon = Je vivais dans un tonneau, vous vivez dans des cartons. / Camus face au burnout = Il faut imaginer Sisyphe en open space. STRUCTURE : SLIDE 1 = la situation moderne posee en 1 phrase drole MAX 10 MOTS. SLIDE 2 = ce que " + philosophe + " dirait, formule comme une citation moderne MAX 12 MOTS. SLIDE 3 = la lecon directe applicable a aujourd hui MAX 10 MOTS. INTERDICTIONS : aucun ..., phrases completes uniquement. Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"philosophie\",\"humour\",\"2026\",\"culture\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"philo2026\",\"texte\":\"situation moderne\"},{\"type\":\"philo2026\",\"texte\":\"citation du philosophe\"},{\"type\":\"philo2026\",\"texte\":\"lecon de vie\"}]}";
+        return callGemini(prompt);
+    }
+
     public String generateFilm(String film) throws Exception {
         String prompt = "Cree un carrousel TikTok 3 slides sur la philosophie du film " + film + ". Style : cite la replique culte du film, puis explique sa portee philosophique en 2 slides. INTERDICTIONS : aucun ..., chaque slide est une phrase complete avec . ou ! ou ?. SLIDE 1 : la replique iconique du film, citee precisement (MAX 12 MOTS). SLIDE 2 : ce que cette replique dit de la condition humaine (MAX 10 MOTS). SLIDE 3 : la lecon de vie qui en decoule, directe et applicable (MAX 10 MOTS). Retourne UNIQUEMENT ce JSON sans backticks : {\"hashtags\":[\"cinema\",\"film\",\"philosophie\",\"culte\",\"tiktok\",\"fyp\"],\"slides\":[{\"type\":\"film\",\"texte\":\"replique du film\"},{\"type\":\"film\",\"texte\":\"portee philosophique\"},{\"type\":\"film\",\"texte\":\"lecon de vie\"}]}";
         return callGemini(prompt);
