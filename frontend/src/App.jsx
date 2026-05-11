@@ -65,7 +65,7 @@ const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
 const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Films', 'Ma pensée', 'Carrousel', 'Émotionnel', 'Depuis vidéo']
+const FORMATS = ['Philosophes 2026', 'Ma pensée', 'Films', 'Carrousel', 'Émotionnel']
 
 async function toBase64(url) {
   try {
@@ -169,6 +169,7 @@ function getSlideContent(slide) {
     case 'oneshot': return { main: cap(slide.phrase, 15) }
     case 'pensee': return { main: slide.texte || '' }
     case 'film': return { main: cap(slide.texte || '', 20) }
+    case 'philo2026': return { main: cap(slide.texte || '', 20) }
     case 'football': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
@@ -253,6 +254,8 @@ export default function App() {
   const [sujet, setSujet] = useState('')
   const [nbSlides, setNbSlides] = useState(5)
   const [film, setFilm] = useState('La Haine')
+  const [philosophe, setPhilosophe] = useState('Socrate')
+  const [sujetModerne, setSujetModerne] = useState('Tinder')
   const [loading, setLoading] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [data, setData] = useState(null)
@@ -265,16 +268,16 @@ export default function App() {
     setLoading(true); setError(null); setData(null); setBgImages([])
     try {
       let result
-      if (format === 0) result = await callAPI('/api/generate-film', { film })
+      if (format === 0) result = await callAPI('/api/generate-philo2026', { philosophe, sujet: sujetModerne })
       else if (format === 1) result = await callAPI('/api/generate-pensee', { texte: pensee, nbSlides: String(nbSlides) })
-      else if (format === 2) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
-      else if (format === 3) result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
-      else result = await callAPI('/api/generate-video', { transcription, style: 'sombre' })
+      else if (format === 2) result = await callAPI('/api/generate-film', { film })
+      else if (format === 3) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
+      else result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
       setData(result)
       const slideCount = (result.slides || []).length
       const isOneShot = false
       const isFootball = format === 4
-      const isPensee = format === 1 || format === 0
+      const isPensee = true
       let rawImgs
       if (isPensee) {
         rawImgs = Array(slideCount).fill(null)
@@ -314,8 +317,8 @@ export default function App() {
   return (
     <div className="app">
       <header>
-        <h1>Films & Philo</h1>
-        <p className="subtitle">la philosophie des films cultes</p>
+        <h1>Philosophes 2026</h1>
+        <p className="subtitle">la philo face au monde moderne</p>
       </header>
 
       <div className="format-tabs">
@@ -325,7 +328,7 @@ export default function App() {
       </div>
 
       <div className="controls">
-        {(format === 2 || format === 3) && (
+        {(format === 3 || format === 4) && (
           <>
           <div className="ctrl">
             <label>Thème</label>
@@ -341,7 +344,7 @@ export default function App() {
           </div>
           </>
         )}
-        {format === 3 && (
+        {format === 4 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
             Phrases qui font ressentir. Choisis un thème ou laisse comme ça.
           </p>
@@ -363,6 +366,42 @@ export default function App() {
           </>
         )}
         {format === 0 && (
+          <>
+          <div className="ctrl">
+            <label>Philosophe</label>
+            <select value={philosophe} onChange={e => setPhilosophe(e.target.value)}>
+              <option>Socrate</option>
+              <option>Platon</option>
+              <option>Aristote</option>
+              <option>Diogène</option>
+              <option>Épictète</option>
+              <option>Marc Aurèle</option>
+              <option>Sénèque</option>
+              <option>Nietzsche</option>
+              <option>Schopenhauer</option>
+              <option>Kant</option>
+              <option>Hegel</option>
+              <option>Sartre</option>
+              <option>Camus</option>
+              <option>Simone de Beauvoir</option>
+              <option>Foucault</option>
+              <option>Deleuze</option>
+              <option>Spinoza</option>
+              <option>Descartes</option>
+              <option>Pascal</option>
+              <option>Confucius</option>
+              <option>Lao Tseu</option>
+            </select>
+          </div>
+          <div className="ctrl">
+            <label>Sujet moderne</label>
+            <input type="text" value={sujetModerne} onChange={e => setSujetModerne(e.target.value)}
+              placeholder="ex: Tinder, LinkedIn, les notifs, Amazon..."
+              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
+          </div>
+          </>
+        )}
+        {format === 2 && (
           <div className="ctrl">
             <label>Film culte</label>
             <input type="text" value={film} onChange={e => setFilm(e.target.value)}
@@ -386,7 +425,7 @@ export default function App() {
             </div>
           )}
         </div>
-        {format === 4 && (
+        {format === 99 && (
           <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
             1 image + phrase virale football. Pour ton compte foot.
           </p>
