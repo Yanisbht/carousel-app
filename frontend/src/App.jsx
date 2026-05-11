@@ -133,9 +133,12 @@ function getSlideContent(slide) {
 
 // ---- SLIDE PHILO 2026 — Option C (image plein cadre + bande blanche) ----
 function SlidePhilo2026({ slide, bgImage, id }) {
-  const philosophe = slide.philosophe || ''
-  const sujet = slide.sujet || ''
-  const teaser = slide.teaser || cap(slide.texte || '', 20)
+  const philosophe = (slide.philosophe || '').toUpperCase()
+  const sujet = (slide.sujet || '').toUpperCase()
+  const teaser = slide.teaser || slide.texte || ''
+
+  // Hauteur bande blanche : 42% de 320px = ~135px
+  const bandH = 135
 
   return (
     <div id={id} style={{
@@ -145,88 +148,88 @@ function SlidePhilo2026({ slide, bgImage, id }) {
       borderRadius: 10,
       position: 'relative',
       overflow: 'hidden',
-      background: '#1a1a1a',
-      border: '0.5px solid rgba(0,0,0,0.08)',
+      background: '#222',
+      border: '0.5px solid rgba(0,0,0,0.12)',
     }}>
-      {/* Image plein cadre N&B */}
-      {bgImage && (
-        <img
-          src={bgImage}
-          alt=""
-          crossOrigin="anonymous"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center top',
-            filter: 'grayscale(100%) contrast(1.15) brightness(0.82)',
-          }}
-        />
-      )}
 
-      {/* Degrade image -> blanc */}
+      {/* IMAGE PLEIN CADRE — toute la slide */}
+      {bgImage
+        ? <img src={bgImage} alt="" style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center 20%',
+            filter: 'grayscale(100%) contrast(1.2) brightness(0.8)',
+            zIndex: 1,
+          }} />
+        : <div style={{
+            position: 'absolute', inset: 0, zIndex: 1,
+            background: 'linear-gradient(160deg, #2a2a2a 0%, #111 100%)',
+          }} />
+      }
+
+      {/* DEGRADE haut de la bande vers transparent */}
       <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '52%',
-        background: 'linear-gradient(to bottom, transparent 0%, #ffffff 50%)',
-        pointerEvents: 'none',
+        position: 'absolute', bottom: bandH - 30, left: 0, right: 0,
+        height: 60,
+        background: 'linear-gradient(to bottom, transparent, #fff)',
+        zIndex: 2,
       }} />
 
-      {/* Bande blanche bas */}
+      {/* BANDE BLANCHE BAS */}
       <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        height: bandH,
         background: '#fff',
-        padding: '10px 12px 14px',
+        zIndex: 3,
+        padding: '10px 12px 12px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
       }}>
-        {/* Tag */}
-        <p style={{
-          fontFamily: "'Montserrat', sans-serif",
-          fontSize: 7,
-          fontWeight: 700,
-          letterSpacing: '0.16em',
-          color: '#aaa',
-          textTransform: 'uppercase',
-          margin: '0 0 4px',
-        }}>Philo x Modernite</p>
 
-        {/* Titre PHILOSOPHE / FACE A / SUJET */}
-        <p style={{
-          fontFamily: "'Montserrat', sans-serif",
-          fontSize: 20,
+        {/* Tag catégorie */}
+        <span style={{
+          fontSize: 6.5,
+          fontWeight: 700,
+          letterSpacing: '0.18em',
+          color: '#bbb',
+          textTransform: 'uppercase',
+          display: 'block',
+          marginBottom: 5,
+          fontFamily: 'sans-serif',
+        }}>PHILO × MODERNITÉ</span>
+
+        {/* Titre principal */}
+        <div style={{
+          fontSize: 18,
           fontWeight: 900,
-          lineHeight: 0.92,
-          letterSpacing: '-0.03em',
+          lineHeight: 0.93,
+          letterSpacing: '-0.02em',
           color: '#000',
           textTransform: 'uppercase',
-          margin: '0 0 7px',
+          marginBottom: 7,
+          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
           wordBreak: 'break-word',
         }}>
-          {philosophe}<br />
-          FACE A<br />
+          {philosophe}<br/>
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#888' }}>FACE À</span><br/>
           {sujet}
-        </p>
+        </div>
 
-        {/* Regle deco */}
-        <div style={{ width: 22, height: 1.5, background: '#000', margin: '0 0 6px' }} />
+        {/* Règle */}
+        <div style={{ width: 20, height: 2, background: '#000', marginBottom: 6 }} />
 
-        {/* Description */}
-        <p style={{
-          fontFamily: "'Montserrat', sans-serif",
+        {/* Teaser */}
+        <div style={{
           fontSize: 7.5,
           fontWeight: 400,
-          lineHeight: 1.45,
-          color: '#666',
+          lineHeight: 1.4,
+          color: '#555',
           fontStyle: 'italic',
-          margin: 0,
-        }}>{teaser}</p>
+          fontFamily: 'sans-serif',
+          overflow: 'hidden',
+        }}>{teaser}</div>
+
       </div>
     </div>
   )
@@ -234,8 +237,8 @@ function SlidePhilo2026({ slide, bgImage, id }) {
 
 // ---- SLIDE GENERIQUE ----
 function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
-  // Rendu special pour philo2026
-  if (slide.type === 'philo2026') {
+  // Rendu special pour philo2026 — détection par type OU par présence du champ philosophe
+  if (slide.type === 'philo2026' || slide.philosophe) {
     return <SlidePhilo2026 slide={slide} bgImage={bgImage} id={id} />
   }
 
