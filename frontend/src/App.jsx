@@ -131,115 +131,65 @@ function getSlideContent(slide) {
   }
 }
 
-// ---- SLIDE PHILO 2026 — Option C (image plein cadre + bande blanche) ----
-function SlidePhilo2026({ slide, bgImage, id }) {
-  const philosophe = (slide.philosophe || '').toUpperCase()
-  const sujet = (slide.sujet || '').toUpperCase()
-  const teaser = slide.teaser || slide.texte || ''
-
-  // Hauteur bande blanche : 42% de 320px = ~135px
-  const bandH = 135
-
-  return (
-    <div id={id} style={{
-      flexShrink: 0,
-      width: 180,
-      height: 320,
-      borderRadius: 10,
-      position: 'relative',
-      overflow: 'hidden',
-      background: '#222',
-      border: '0.5px solid rgba(0,0,0,0.12)',
-    }}>
-
-      {/* IMAGE PLEIN CADRE — toute la slide */}
-      {bgImage
-        ? <img src={bgImage} alt="" style={{
-            position: 'absolute', top: 0, left: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center 20%',
-            filter: 'grayscale(100%) contrast(1.2) brightness(0.8)',
-            zIndex: 1,
-          }} />
-        : <div style={{
-            position: 'absolute', inset: 0, zIndex: 1,
-            background: 'linear-gradient(160deg, #2a2a2a 0%, #111 100%)',
-          }} />
-      }
-
-      {/* DEGRADE haut de la bande vers transparent */}
-      <div style={{
-        position: 'absolute', bottom: bandH - 30, left: 0, right: 0,
-        height: 60,
-        background: 'linear-gradient(to bottom, transparent, #fff)',
-        zIndex: 2,
-      }} />
-
-      {/* BANDE BLANCHE BAS */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        height: bandH,
-        background: '#fff',
-        zIndex: 3,
-        padding: '10px 12px 12px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-      }}>
-
-        {/* Tag catégorie */}
-        <span style={{
-          fontSize: 6.5,
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          color: '#bbb',
-          textTransform: 'uppercase',
-          display: 'block',
-          marginBottom: 5,
-          fontFamily: 'sans-serif',
-        }}>PHILO × MODERNITÉ</span>
-
-        {/* Titre principal */}
-        <div style={{
-          fontSize: 18,
-          fontWeight: 900,
-          lineHeight: 0.93,
-          letterSpacing: '-0.02em',
-          color: '#000',
-          textTransform: 'uppercase',
-          marginBottom: 7,
-          fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-          wordBreak: 'break-word',
-        }}>
-          {philosophe}<br/>
-          <span style={{ fontSize: 12, fontWeight: 700, color: '#888' }}>FACE À</span><br/>
-          {sujet}
-        </div>
-
-        {/* Règle */}
-        <div style={{ width: 20, height: 2, background: '#000', marginBottom: 6 }} />
-
-        {/* Teaser */}
-        <div style={{
-          fontSize: 7.5,
-          fontWeight: 400,
-          lineHeight: 1.4,
-          color: '#555',
-          fontStyle: 'italic',
-          fontFamily: 'sans-serif',
-          overflow: 'hidden',
-        }}>{teaser}</div>
-
-      </div>
-    </div>
-  )
-}
+// ---- SLIDE PHILO 2026 — texte seul, typo originale ----
+// Slide 0 : PHILOSOPHE / FACE A / SUJET (le hook)
+// Slide 1-2 : le teaser (accroche puis chute)
+// L'image vient du decorImage uploadé par l'utilisateur
 
 // ---- SLIDE GENERIQUE ----
 function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
-  // Rendu special pour philo2026 — détection par type OU par présence du champ philosophe
+  // Philo 2026 : typo originale, pas de decoration, juste le texte
   if (slide.type === 'philo2026' || slide.philosophe) {
-    return <SlidePhilo2026 slide={slide} bgImage={bgImage} id={id} />
+    const isHook = index === 0
+    const rawText = isHook
+      ? ((slide.philosophe || '') + '\nFACE À\n' + (slide.sujet || ''))
+      : (slide.teaser || slide.texte || '')
+    const chars = rawText.replace(/\n/g, ' ').length
+    const baseSize = chars <= 10 ? 46 : chars <= 18 ? 34 : chars <= 28 ? 24 : 18
+    const fontSize = Math.round(baseSize * (index === 0 ? 1 : index === 1 ? 0.88 : 0.82))
+    return (
+      <div id={id} style={{
+        flexShrink: 0, width: 180, height: 320, borderRadius: 10,
+        position: 'relative', overflow: 'hidden', background: '#fff',
+        border: '0.5px solid rgba(0,0,0,0.08)',
+      }}>
+        {decorImage && (
+          <img src={decorImage} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center top',
+            filter: 'grayscale(100%) contrast(1.1) brightness(0.85)',
+            zIndex: 0,
+          }} />
+        )}
+        {decorImage && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 30%, rgba(255,255,255,0.15) 100%)',
+            zIndex: 1,
+          }} />
+        )}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 2,
+          display: 'flex', flexDirection: 'column',
+          justifyContent: 'flex-end',
+          padding: '14px 14px 20px',
+        }}>
+          <p style={{
+            fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+            fontSize, fontWeight: 900,
+            color: decorImage ? '#fff' : '#000',
+            lineHeight: 0.93,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            textAlign: 'left',
+            whiteSpace: 'pre-line',
+            wordBreak: 'break-word',
+            margin: 0,
+            textShadow: decorImage ? '0 1px 8px rgba(0,0,0,0.5)' : 'none',
+          }}>{rawText}</p>
+        </div>
+      </div>
+    )
   }
 
   const { main, sub } = getSlideContent(slide)
@@ -467,8 +417,8 @@ export default function App() {
           </>
         )}
 
-        {/* Image decorative — tous formats sauf Philo 2026 */}
-        {format !== 0 && (
+        {/* Image decorative — tous formats */}
+        {(
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
             <label>Image decorative (coin bas droite)</label>
             <input type="file" accept="image/*" onChange={e => {
@@ -504,7 +454,7 @@ export default function App() {
             {slides.map((slide, i) => (
               <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
                 total={slides.length} bgImage={bgImages[i]}
-                themeStyle={themeStyle} decorImage={format !== 0 ? decorImage : null} />
+                themeStyle={themeStyle} decorImage={decorImage} />
             ))}
           </div>
           <div className="hashtags">
