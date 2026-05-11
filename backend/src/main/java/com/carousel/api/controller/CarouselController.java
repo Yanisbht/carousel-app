@@ -98,6 +98,17 @@ public class CarouselController {
         }
     }
 
+    @PostMapping("/generate-philo2026")
+    public ResponseEntity<?> generatePhilo2026(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(Map.of("data", carouselService.generatePhilo2026(
+                body.getOrDefault("philosophe", "Socrate"),
+                body.getOrDefault("sujet", "Tinder"))));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/generate-film")
     public ResponseEntity<?> generateFilm(@RequestBody Map<String, String> body) {
         try {
