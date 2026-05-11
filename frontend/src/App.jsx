@@ -17,13 +17,13 @@ const THEMES = [
   'spiritualité soufie (Rumi, Ibn Arabi)',
   'philosophie grecque antique (Socrate, Platon)',
   'philosophie existentialiste (Camus, Sartre, Beauvoir)',
-  'philosophie nietzschéenne',
+  'philosophie nietzscheenne',
   'bouddhisme et pleine conscience',
   'philosophie indienne (Veda, Upanishad, Gandhi)',
   'sagesse chinoise (Confucius, Lao Tseu, Zhuangzi)',
-  'philosophie latine (Cicéron, Virgile, Horace)',
-  "philosophie médiévale (Thomas d'Aquin, Ibn Rushd)",
-  'philosophie des Lumières (Voltaire, Rousseau, Montesquieu)',
+  'philosophie latine (Ciceron, Virgile, Horace)',
+  "philosophie medievale (Thomas d'Aquin, Ibn Rushd)",
+  'philosophie des Lumieres (Voltaire, Rousseau, Montesquieu)',
   'philosophie allemande (Kant, Hegel, Schopenhauer)',
   'citations de scientifiques (Einstein, Feynman, Curie)',
   'sagesse des peuples du monde (proverbes universels)',
@@ -32,40 +32,23 @@ const THEMES = [
   'philosophie de la mort et du temps',
   'philosophie du bonheur et de la joie',
   'sagesse des nomades et des voyageurs',
-  "philosophie de la créativité et de l'art",
-  'citations littéraires (Hugo, Proust, Dostoïevski)',
+  "philosophie de la creativite et de l'art",
+  'citations litteraires (Hugo, Proust, Dostoievski)',
 ]
 
 const AUTEURS = [
-  'Marc Aurèle', 'Épictète', 'Sénèque', 'Socrate', 'Platon', 'Aristote',
+  'Marc Aurele', 'Epictete', 'Seneque', 'Socrate', 'Platon', 'Aristote',
   'Rumi', 'Ibn Khaldoun', 'Confucius', 'Lao Tseu', 'Sun Tzu', 'Miyamoto Musashi',
   'Nelson Mandela', 'Malcolm X', 'Simone de Beauvoir', 'Maya Angelou',
   'Nietzsche', 'Camus', 'Sartre',
 ]
 
-const THEME_STYLE = {
-  'philosophie stoïcienne':                                 { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'sagesse africaine':                                      { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'philosophie orientale':                                  { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'leaders et révolutionnaires':                            { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'philosophie arabe et islamique':                         { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'développement personnel moderne':                        { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'sagesse amérindienne':                                   { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'philosophie japonaise (Musashi, Mishima)':               { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'citations de prison et résilience (Mandela, Malcolm X)': { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'femmes philosophes (Beauvoir, Angelou)':                 { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'sagesse berbère et maghrébine':                          { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'citations de guerriers (Sun Tzu, Spartiate)':            { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'spiritualité soufie (Rumi, Ibn Arabi)':                  { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-  'philosophie grecque antique (Socrate, Platon)':          { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' },
-}
+const THEME_STYLE = {}
 const DEFAULT_STYLE = { color: 'rgba(0,0,0,0.25)', accent: '#ffffff' }
 
-const PEXELS_KEY = 'UHgkq1JFa5yzly6gsz5SIYIacRwUqwnTVRBeKzo99Jw4pzH5ovRoMr10'
 const UNSPLASH_KEY = 'yJiL3y_23RkNOFzreNI894AYyKaYB8UnS8pbqDYH1KU'
 const API_BASE = import.meta.env.VITE_API_URL || ''
-const PUPPET_URL = import.meta.env.VITE_PUPPET_URL || 'http://localhost:3001'
-const FORMATS = ['Philosophes 2026', 'Ma pensée', 'Films', 'Carrousel', 'Émotionnel']
+const FORMATS = ['Philosophes 2026', 'Ma pensee', 'Films', 'Carrousel', 'Emotionnel']
 
 async function toBase64(url) {
   try {
@@ -87,62 +70,36 @@ async function fetchOneUnsplashRandom(query) {
   return null
 }
 
-// IDs Unsplash fixes de vrais stades la nuit
-const FOOTBALL_IMAGES = [
-  'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1080&q=80',
-  'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1080&q=80',
-  'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1080&q=80',
-  'https://images.unsplash.com/photo-1551280857-2b9bbe52acf4?w=1080&q=80',
-  'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1080&q=80',
-  'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=1080&q=80',
-]
-const FOOTBALL_QUERIES = ['football stadium night dark']
-
-const LIFESTYLE_QUERIES = [
-  'luxury lifestyle desert aesthetic',
-  'man quad bike desert aesthetic',
-  'luxury car desert aesthetic',
-  'athlete training aesthetic',
-  'rooftop city view aesthetic',
-  'sunset luxury lifestyle aesthetic',
-  'sport motivation aesthetic dark',
-  'luxury watch aesthetic',
-  'mountain hike aesthetic',
-  'ocean luxury lifestyle aesthetic',
-]
-
-const QUERIES = [
+const MOON_QUERIES = [
   'moon night sky dark',
   'crescent moon dark sky',
   'full moon night',
   'moon clouds night dark',
   'night sky stars moon',
-  'dark sky moon minimal',
-  'moon rising night',
   'moonlight dark sky',
 ]
 
+const LIFESTYLE_QUERIES = [
+  'luxury lifestyle desert aesthetic',
+  'athlete training aesthetic',
+  'rooftop city view aesthetic',
+  'sunset luxury lifestyle aesthetic',
+  'sport motivation aesthetic dark',
+]
+
 async function fetchImages(query, count) {
-  const shuffled = [...QUERIES].sort(() => Math.random() - 0.5)
-  // Générer count+3 images et trier par qualité (on prend les meilleures)
-  const extra = count + 3
+  const shuffled = [...MOON_QUERIES].sort(() => Math.random() - 0.5)
   const results = await Promise.all(
-    Array.from({ length: extra }, (_, i) => fetchOneUnsplashRandom(shuffled[i % shuffled.length]))
+    Array.from({ length: count }, (_, i) =>
+      fetchOneUnsplashRandom(query || shuffled[i % shuffled.length])
+    )
   )
-  const valid = results.filter(Boolean)
-  // Trier : préférer les images avec des mots-clés de qualité dans l'URL (landscape, sky, mountain)
-  const quality = ['landscape', 'sky', 'mountain', 'ocean', 'sunset', 'forest']
-  const sorted = [...valid].sort((a, b) => {
-    const aScore = quality.some(q => a.includes(q)) ? 1 : 0
-    const bScore = quality.some(q => b.includes(q)) ? 1 : 0
-    return bScore - aScore
-  })
-  return sorted.slice(0, count)
+  return results.filter(Boolean)
 }
 
 function cap(text, max) {
   if (!text) return ''
-  return text.replace(/\.{2,}/g, '.').replace(/…/g, '').replace(/\s+\./g, '.').trim()
+  return text.replace(/\.{2,}/g, '.').replace(/\u2026/g, '').replace(/\s+\./g, '.').trim()
 }
 
 function getSlideContent(slide) {
@@ -170,18 +127,121 @@ function getSlideContent(slide) {
     case 'pensee': return { main: slide.texte || '' }
     case 'film': return { main: cap(slide.texte || '', 20) }
     case 'philo2026': return { main: cap(slide.texte || '', 20) }
-    case 'football': return { main: cap(slide.phrase, 15) }
     default: return { main: '' }
   }
 }
 
-function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
-  const { main, sub } = getSlideContent(slide)
+// ---- SLIDE PHILO 2026 — Option C (image plein cadre + bande blanche) ----
+function SlidePhilo2026({ slide, bgImage, id }) {
+  const philosophe = slide.philosophe || ''
+  const sujet = slide.sujet || ''
+  const teaser = slide.teaser || cap(slide.texte || '', 20)
 
-  // Calcule la taille du texte selon la longueur — plus court = plus grand
+  return (
+    <div id={id} style={{
+      flexShrink: 0,
+      width: 180,
+      height: 320,
+      borderRadius: 10,
+      position: 'relative',
+      overflow: 'hidden',
+      background: '#1a1a1a',
+      border: '0.5px solid rgba(0,0,0,0.08)',
+    }}>
+      {/* Image plein cadre N&B */}
+      {bgImage && (
+        <img
+          src={bgImage}
+          alt=""
+          crossOrigin="anonymous"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            filter: 'grayscale(100%) contrast(1.15) brightness(0.82)',
+          }}
+        />
+      )}
+
+      {/* Degrade image -> blanc */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '52%',
+        background: 'linear-gradient(to bottom, transparent 0%, #ffffff 50%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Bande blanche bas */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: '#fff',
+        padding: '10px 12px 14px',
+      }}>
+        {/* Tag */}
+        <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 7,
+          fontWeight: 700,
+          letterSpacing: '0.16em',
+          color: '#aaa',
+          textTransform: 'uppercase',
+          margin: '0 0 4px',
+        }}>Philo x Modernite</p>
+
+        {/* Titre PHILOSOPHE / FACE A / SUJET */}
+        <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 20,
+          fontWeight: 900,
+          lineHeight: 0.92,
+          letterSpacing: '-0.03em',
+          color: '#000',
+          textTransform: 'uppercase',
+          margin: '0 0 7px',
+          wordBreak: 'break-word',
+        }}>
+          {philosophe}<br />
+          FACE A<br />
+          {sujet}
+        </p>
+
+        {/* Regle deco */}
+        <div style={{ width: 22, height: 1.5, background: '#000', margin: '0 0 6px' }} />
+
+        {/* Description */}
+        <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 7.5,
+          fontWeight: 400,
+          lineHeight: 1.45,
+          color: '#666',
+          fontStyle: 'italic',
+          margin: 0,
+        }}>{teaser}</p>
+      </div>
+    </div>
+  )
+}
+
+// ---- SLIDE GENERIQUE ----
+function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
+  // Rendu special pour philo2026
+  if (slide.type === 'philo2026') {
+    return <SlidePhilo2026 slide={slide} bgImage={bgImage} id={id} />
+  }
+
+  const { main, sub } = getSlideContent(slide)
   const isOneShot = slide.type === 'oneshot'
   const isPenseeSlide = slide.type === 'pensee'
-  const isFootball = slide.type === 'football'
   const chars = (main || '').length
   const baseSize = chars <= 8 ? 52 : chars <= 14 ? 40 : chars <= 20 ? 30 : chars <= 30 ? 22 : 16
   const sizeMultiplier = index === 0 ? 1 : index === 1 ? 0.82 : 0.70
@@ -190,8 +250,8 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
   return (
     <div id={id} style={{
       flexShrink: 0, width: 180, height: 320, borderRadius: 10,
-      position: 'relative', overflow: 'hidden', background: '#111',
-      border: '0.5px solid rgba(255,255,255,0.06)',
+      position: 'relative', overflow: 'hidden', background: '#fff',
+      border: '0.5px solid rgba(0,0,0,0.08)',
     }}>
       {bgImage && <div style={{
         position: 'absolute', inset: 0,
@@ -200,9 +260,11 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
         filter: 'brightness(0.5) saturate(0.7)',
       }} />}
       <div style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 1 }} />
-
       {decorImage && (
-        <img src={decorImage} alt="" crossOrigin="anonymous" style={{ position: 'absolute', bottom: 60, right: 12, width: 110, height: 110, objectFit: 'contain', zIndex: 4 }} />
+        <img src={decorImage} alt="" crossOrigin="anonymous" style={{
+          position: 'absolute', bottom: 60, right: 12,
+          width: 110, height: 110, objectFit: 'contain', zIndex: 4,
+        }} />
       )}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 3,
@@ -213,22 +275,19 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
       }}>
         {main && <p style={{
           fontFamily: "'Helvetica Neue', Helvetica, sans-serif",
-          fontSize: fontSize,
-          fontWeight: isOneShot ? 300 : 900,
+          fontSize, fontWeight: isOneShot ? 300 : 900,
           color: '#000000',
           lineHeight: isOneShot ? 1.6 : 0.95,
           letterSpacing: isOneShot ? '0.01em' : '-0.02em',
           textTransform: isOneShot ? 'none' : 'uppercase',
           textAlign: isOneShot ? 'center' : 'left',
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-          width: '100%',
-          margin: 0,
+          wordBreak: 'break-word', overflowWrap: 'break-word',
+          width: '100%', margin: 0,
         }}>{main}</p>}
         {sub && <p style={{
           fontFamily: "'Montserrat', sans-serif",
           fontSize: 9, fontWeight: 400,
-          color: 'rgba(255,255,255,0.6)',
+          color: 'rgba(0,0,0,0.4)',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           marginTop: 8,
@@ -239,7 +298,11 @@ function Slide({ slide, index, total, bgImage, themeStyle, id, decorImage }) {
 }
 
 async function callAPI(endpoint, body) {
-  const res = await fetch(`${API_BASE}${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
   const json = await res.json()
   if (!res.ok) throw new Error(json.error || 'Erreur serveur')
   return typeof json.data === 'string' ? JSON.parse(json.data) : json.data
@@ -273,26 +336,27 @@ export default function App() {
       else if (format === 2) result = await callAPI('/api/generate-film', { film })
       else if (format === 3) result = await callAPI('/api/generate', { theme, style: 'sombre', sujet })
       else result = await callAPI('/api/generate-emotionnel', { theme, style: 'sombre', sujet })
+
       setData(result)
       const slideCount = (result.slides || []).length
-      const isOneShot = false
-      const isFootball = format === 4
-      const isPensee = true
-      let rawImgs
+      const isPensee = format === 1
+
+      let imgs
       if (isPensee) {
-        rawImgs = Array(slideCount).fill(null)
+        imgs = Array(slideCount).fill(null)
+      } else if (format === 0) {
+        // Format Philo 2026 : image de buste / statue du philosophe
+        const philoQuery = `${philosophe} ancient philosopher marble bust statue`
+        const raw = await fetchImages(philoQuery, slideCount)
+        imgs = await Promise.all(raw.map(url => url ? toBase64(url) : null))
       } else {
-        const imgQuery = isOneShot
-          ? LIFESTYLE_QUERIES[Math.floor(Math.random() * LIFESTYLE_QUERIES.length)]
-          : ''
-        rawImgs = await fetchImages(imgQuery, slideCount)
+        const raw = await fetchImages('', slideCount)
+        imgs = await Promise.all(raw.map(url => url ? toBase64(url) : null))
       }
-      const imgs = isPensee ? rawImgs : await Promise.all(rawImgs.map(url => url ? toBase64(url) : null))
       setBgImages(imgs)
     } catch (e) { setError(e.message) }
     setLoading(false)
   }
-
 
   const downloadAll = async () => {
     setExporting(true)
@@ -301,7 +365,7 @@ export default function App() {
       for (let i = 0; i < total; i++) {
         const el = document.getElementById(`slide-${i}`)
         if (!el) continue
-        const canvas = await window.html2canvas(el, { scale: 6, useCORS: true, allowTaint: true, backgroundColor: '#111' })
+        const canvas = await window.html2canvas(el, { scale: 6, useCORS: true, allowTaint: true, backgroundColor: '#fff' })
         const link = document.createElement('a')
         link.download = `slide-${i + 1}.png`
         link.href = canvas.toDataURL('image/png')
@@ -312,7 +376,9 @@ export default function App() {
     setExporting(false)
   }
 
-  const slides = format === 1 ? (data?.slides || []).slice(0, nbSlides) : (data?.slides || []).slice(0, 3)
+  const slides = format === 1
+    ? (data?.slides || []).slice(0, nbSlides)
+    : (data?.slides || []).slice(0, 3)
 
   return (
     <div className="app">
@@ -323,84 +389,54 @@ export default function App() {
 
       <div className="format-tabs">
         {FORMATS.map((f, i) => (
-          <button key={i} className={`ftab${format === i ? ' active' : ''}`} onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>{f}</button>
+          <button key={i} className={`ftab${format === i ? ' active' : ''}`}
+            onClick={() => { setFormat(i); setData(null); setError(null); setBgImages([]) }}>
+            {f}
+          </button>
         ))}
       </div>
 
       <div className="controls">
-        {(format === 3 || format === 4) && (
-          <>
-          <div className="ctrl">
-            <label>Thème</label>
-            <select value={theme} onChange={e => setTheme(e.target.value)}>
-              {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-          <div className="ctrl">
-            <label>Sujet précis (optionnel)</label>
-            <input type="text" value={sujet} onChange={e => setSujet(e.target.value)}
-              placeholder="ex: Federer, Walter White, Néo..."
-              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
-          </div>
-          </>
-        )}
-        {format === 4 && (
-          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
-            Phrases qui font ressentir. Choisis un thème ou laisse comme ça.
-          </p>
-        )}
-        {format === 1 && (
-          <>
-          <div className="ctrl" style={{ flex: '1 1 100%' }}>
-            <label>Ta pensée</label>
-            <textarea value={pensee} onChange={e => setPensee(e.target.value)} rows={4}
-              placeholder="Écris ta pensée ici, l'app la coupe en N slides sans la modifier..."
-              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
-          </div>
-          <div className="ctrl">
-            <label>Nombre de slides</label>
-            <select value={nbSlides} onChange={e => setNbSlides(Number(e.target.value))}>
-              {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </div>
-          </>
-        )}
+        {/* Format 0 — Philosophes 2026 */}
         {format === 0 && (
           <>
-          <div className="ctrl">
-            <label>Philosophe</label>
-            <select value={philosophe} onChange={e => setPhilosophe(e.target.value)}>
-              <option>Socrate</option>
-              <option>Platon</option>
-              <option>Aristote</option>
-              <option>Diogène</option>
-              <option>Épictète</option>
-              <option>Marc Aurèle</option>
-              <option>Sénèque</option>
-              <option>Nietzsche</option>
-              <option>Schopenhauer</option>
-              <option>Kant</option>
-              <option>Hegel</option>
-              <option>Sartre</option>
-              <option>Camus</option>
-              <option>Simone de Beauvoir</option>
-              <option>Foucault</option>
-              <option>Deleuze</option>
-              <option>Spinoza</option>
-              <option>Descartes</option>
-              <option>Pascal</option>
-              <option>Confucius</option>
-              <option>Lao Tseu</option>
-            </select>
-          </div>
-          <div className="ctrl">
-            <label>Sujet moderne</label>
-            <input type="text" value={sujetModerne} onChange={e => setSujetModerne(e.target.value)}
-              placeholder="ex: Tinder, LinkedIn, les notifs, Amazon..."
-              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
-          </div>
+            <div className="ctrl">
+              <label>Philosophe</label>
+              <select value={philosophe} onChange={e => setPhilosophe(e.target.value)}>
+                {['Socrate','Platon','Aristote','Diogene','Epictete','Marc Aurele','Seneque',
+                  'Nietzsche','Schopenhauer','Kant','Hegel','Sartre','Camus',
+                  'Simone de Beauvoir','Foucault','Deleuze','Spinoza','Descartes',
+                  'Pascal','Confucius','Lao Tseu'].map(p => <option key={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="ctrl">
+              <label>Sujet moderne</label>
+              <input type="text" value={sujetModerne} onChange={e => setSujetModerne(e.target.value)}
+                placeholder="ex: Tinder, LinkedIn, les notifs, Amazon..."
+                style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
+            </div>
           </>
         )}
+
+        {/* Format 1 — Ma pensee */}
+        {format === 1 && (
+          <>
+            <div className="ctrl" style={{ flex: '1 1 100%' }}>
+              <label>Ta pensee</label>
+              <textarea value={pensee} onChange={e => setPensee(e.target.value)} rows={4}
+                placeholder="Ecris ta pensee ici, l'app la coupe en N slides sans la modifier..."
+                style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
+            </div>
+            <div className="ctrl">
+              <label>Nombre de slides</label>
+              <select value={nbSlides} onChange={e => setNbSlides(Number(e.target.value))}>
+                {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+          </>
+        )}
+
+        {/* Format 2 — Films */}
         {format === 2 && (
           <div className="ctrl">
             <label>Film culte</label>
@@ -409,81 +445,74 @@ export default function App() {
               style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
           </div>
         )}
-        <div className="ctrl" style={{ flex: '1 1 100%' }}>
-          <label>Image décorative (coin bas droite — pour tous les formats)</label>
-          <input type="file" accept="image/*" onChange={e => {
-            const file = e.target.files?.[0]
-            if (!file) return
-            const reader = new FileReader()
-            reader.onload = ev => setDecorImage(ev.target.result)
-            reader.readAsDataURL(file)
-          }} style={{ width: '100%', padding: '8px', color: 'var(--color-text-primary)', fontSize: 12 }} />
-          {decorImage && (
-            <div style={{display: 'flex', alignItems: 'center', gap: 8, marginTop: 4}}>
-              <img src={decorImage} alt="aperçu" style={{width: 40, height: 40, objectFit: 'cover', borderRadius: 4}} />
-              <button onClick={() => setDecorImage(null)} style={{fontSize: 11, padding: '4px 8px', background: 'transparent', border: '0.5px solid var(--color-border-secondary)', color: 'var(--color-text-secondary)', borderRadius: 4, cursor: 'pointer'}}>Retirer</button>
+
+        {/* Format 3 & 4 — Carrousel / Emotionnel */}
+        {(format === 3 || format === 4) && (
+          <>
+            <div className="ctrl">
+              <label>Theme</label>
+              <select value={theme} onChange={e => setTheme(e.target.value)}>
+                {THEMES.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
             </div>
-          )}
-        </div>
-        {format === 99 && (
-          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 4 }}>
-            1 image + phrase virale football. Pour ton compte foot.
-          </p>
+            <div className="ctrl">
+              <label>Sujet precis (optionnel)</label>
+              <input type="text" value={sujet} onChange={e => setSujet(e.target.value)}
+                placeholder="ex: Federer, Walter White, Neo..."
+                style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)' }} />
+            </div>
+          </>
         )}
-        {format === 4 && (
+
+        {/* Image decorative — tous formats sauf Philo 2026 */}
+        {format !== 0 && (
           <div className="ctrl" style={{ flex: '1 1 100%' }}>
-            <label>Colle ta transcription</label>
-            <textarea value={transcription} onChange={e => setTranscription(e.target.value)} rows={5}
-              placeholder="Colle ici la transcription de ta vidéo YouTube..."
-              style={{ width: '100%', background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-secondary)', borderRadius: 8, padding: '8px 12px', color: 'var(--color-text-primary)', fontSize: 13, fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
+            <label>Image decorative (coin bas droite)</label>
+            <input type="file" accept="image/*" onChange={e => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = ev => setDecorImage(ev.target.result)
+              reader.readAsDataURL(file)
+            }} style={{ width: '100%', padding: '8px', color: 'var(--color-text-primary)', fontSize: 12 }} />
+            {decorImage && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <img src={decorImage} alt="apercu" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }} />
+                <button onClick={() => setDecorImage(null)}
+                  style={{ fontSize: 11, padding: '4px 8px', background: 'transparent', border: '0.5px solid var(--color-border-secondary)', color: 'var(--color-text-secondary)', borderRadius: 4, cursor: 'pointer' }}>
+                  Retirer
+                </button>
+              </div>
+            )}
           </div>
         )}
-        {format === 2 && (
-          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>Une phrase motivante + image lifestyle. Génère et télécharge directement.</p>
-        )}
-        <button className="gen-btn" onClick={generate} disabled={loading}>{loading ? 'Génération...' : 'Générer'}</button>
+
+        <button className="gen-btn" onClick={generate} disabled={loading}>
+          {loading ? 'Generation...' : 'Generer'}
+        </button>
       </div>
 
       {error && <div className="error">{error}</div>}
-      {loading && <div className="status">Création du carrousel...</div>}
-
-      {data && data.scenes && (
-        <div style={{ marginTop: '1rem' }}>
-          {data.citation_principale && (
-            <div style={{ background: 'var(--color-background-secondary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 16, textAlign: 'center' }}>
-              <p style={{ fontSize: 10, color: 'var(--color-text-tertiary)', letterSpacing: '0.1em', marginBottom: 6 }}>CITATION PRINCIPALE</p>
-              <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 4 }}>"{data.citation_principale}"</p>
-              <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>— {data.auteur}</p>
-            </div>
-          )}
-          {data.scenes.map((scene, i) => (
-            <div key={i} style={{ background: 'var(--color-background-secondary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)' }}>MOMENT {scene.moment} — {scene.duree}</span>
-              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)', margin: '8px 0' }}>"{scene.citation}"</p>
-              <div style={{ background: 'var(--color-background-tertiary)', borderRadius: 8, padding: '10px 12px' }}>
-                <p style={{ fontSize: 10, color: 'var(--color-text-tertiary)', marginBottom: 4 }}>PROMPT KLING AI</p>
-                <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>{scene.prompt_kling}</p>
-              </div>
-            </div>
-          ))}
-          <div className="hashtags">{(data.hashtags || []).map(tag => <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>)}</div>
-        </div>
-      )}
+      {loading && <div className="status">Creation du carrousel...</div>}
 
       {data && data.slides && (
         <>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 12px' }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: themeStyle.accent }}></div>
-            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{theme}</span>
-          </div>
           <div className="slides-row">
             {slides.map((slide, i) => (
-              <Slide key={i} id={`slide-${i}`} slide={slide} index={i} total={slides.length} bgImage={bgImages[i]} themeStyle={themeStyle} decorImage={decorImage} />
+              <Slide key={i} id={`slide-${i}`} slide={slide} index={i}
+                total={slides.length} bgImage={bgImages[i]}
+                themeStyle={themeStyle} decorImage={format !== 0 ? decorImage : null} />
             ))}
           </div>
-          <div className="hashtags">{(data.hashtags || []).map(tag => <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>)}</div>
-          <button className="dl-btn" onClick={downloadAll} disabled={exporting}>{exporting ? 'Export en cours...' : 'Télécharger les slides (PNG)'}</button>
-                  </>
+          <div className="hashtags">
+            {(data.hashtags || []).map(tag => (
+              <span key={tag} className="tag">#{tag.replace(/^#+/, '')}</span>
+            ))}
+          </div>
+          <button className="dl-btn" onClick={downloadAll} disabled={exporting}>
+            {exporting ? 'Export en cours...' : 'Telecharger les slides (PNG)'}
+          </button>
+        </>
       )}
     </div>
   )
